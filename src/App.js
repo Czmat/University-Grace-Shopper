@@ -2,7 +2,18 @@ import React, { useState, useEffect } from 'react';
 import qs from 'qs';
 import axios from 'axios';
 import Login from './Login';
+import Orders from './Orders';
+import Cart from './Cart';
+import Products from './Products';
 
+const headers = ()=> {
+  const token = window.localStorage.getItem('token');
+  return {
+    headers: {
+      authorization: token
+    }
+  };
+};
 
 const App = ()=> {
   const [ params, setParams ] = useState(qs.parse(window.location.hash.slice(1)));
@@ -12,8 +23,6 @@ const App = ()=> {
   const [ products, setProducts ] = useState([]);
   const [ lineItems, setLineItems ] = useState([]);
 
-
-
   useEffect(()=> {
     axios.get('/api/products')
       .then( response => setProducts(response.data));
@@ -22,11 +31,7 @@ const App = ()=> {
   useEffect(()=> {
     if(auth.id){
       const token = window.localStorage.getItem('token');
-      axios.get('/api/getLineItems', {
-        headers: {
-          authorization: token
-        }
-      })
+      axios.get('/api/getLineItems', headers())
       .then( response => {
         setLineItems(response.data);
       });
@@ -35,12 +40,7 @@ const App = ()=> {
   
   useEffect(()=> {
     if(auth.id){
-      const token = window.localStorage.getItem('token');
-      axios.get('/api/getCart', {
-        headers: {
-          authorization: token
-        }
-      })
+      axios.get('/api/getCart', headers())
       .then( response => {
         setCart(response.data);
       });
@@ -49,12 +49,7 @@ const App = ()=> {
 
   useEffect(()=> {
     if(auth.id){
-      const token = window.localStorage.getItem('token');
-      axios.get('/api/getOrders', {
-        headers: {
-          authorization: token
-        }
-      })
+      axios.get('/api/getOrders', headers())
       .then( response => {
         setOrders(response.data);
       });
@@ -68,12 +63,7 @@ const App = ()=> {
   };
 
   const exchangeTokenForAuth = async()=> {
-    const token = window.localStorage.getItem('token');
-    const response = await axios.get('/api/auth', {
-      headers: {
-        authorization: token
-      }
-    });
+    const response = await axios.get('/api/auth', headers());
     setAuth(response.data);
 
   };
@@ -95,19 +85,11 @@ const App = ()=> {
 
   const createOrder = ()=> {
     const token = window.localStorage.getItem('token');
-    axios.post('/api/createOrder', null , {
-      headers: {
-        authorization: token
-      }
-    })
+    axios.post('/api/createOrder', null , headers())
     .then( response => {
       setOrders([response.data, ...orders]);
       const token = window.localStorage.getItem('token');
-      return axios.get('/api/getCart', {
-        headers: {
-          authorization: token
-        }
-      })
+      return axios.get('/api/getCart', headers())
     })
     .then( response => {
       setCart(response.data);
@@ -115,12 +97,7 @@ const App = ()=> {
   };
 
   const addToCart = (productId)=> {
-    const token = window.localStorage.getItem('token');
-    axios.post('/api/addToCart', { productId }, {
-      headers: {
-        authorization: token
-      }
-    })
+    axios.post('/api/addToCart', { productId }, headers())
     .then( response => {
       const lineItem = response.data;
       const found = lineItems.find( _lineItem => _lineItem.id === lineItem.id);
@@ -135,12 +112,7 @@ const App = ()=> {
   };
 
   const removeFromCart = (lineItemId)=> {
-    const token = window.localStorage.getItem('token');
-    axios.delete(`/api/removeFromCart/${lineItemId}`, {
-      headers: {
-        authorization: token
-      }
-    })
+    axios.delete(`/api/removeFromCart/${lineItemId}`, headers())
     .then( () => {
       setLineItems(lineItems.filter(_lineItem => _lineItem.id !== lineItemId ));
     });
@@ -159,84 +131,9 @@ const App = ()=> {
         <h1>Foo, Bar, Bazz.. etc Store</h1>
         <button onClick={ logout }>Logout { auth.username } </button>
         <div className='horizontal'>
-          <div>
-            <h2>Products</h2>
-            <ul>
-              {
-                products.map( product => {
-                  return (
-                    <li key={ product.id }>
-                      <span>
-                      { product.name }
-                      </span>
-                      <span>
-                      ${
-                        Number(product.price).toFixed(2)
-                      }
-                      </span>
-                      <button onClick={ ()=> addToCart(product.id)}>Add to Cart</button>
-                    </li>
-                  );
-                })
-              }
-            </ul>
-          </div>
-          <div>
-            <h2>Cart - { cart.id && cart.id.slice(0, 4) }</h2>
-            <button disabled={ !lineItems.find( lineItem => lineItem.orderId === cart.id )} onClick={ createOrder }>Create Order</button>
-            <ul>
-              {
-                lineItems.filter( lineItem => lineItem.orderId === cart.id ).map( lineItem => {
-                  const product = products.find( product => product.id === lineItem.productId);
-                  return (
-                    <li key={ lineItem.id }>
-                      { product && product.name}
-                      { ' ' }
-                      <span className='quantity'>{ lineItem.quantity }</span>
-                      <button onClick={ ()=> removeFromCart(lineItem.id)}>Remove From Cart</button>
-                    </li>
-                  );
-                })
-              }
-            </ul>
-          </div>
-          <div>
-            <h2>Orders</h2>
-            <ul>
-              {
-                orders.map( order => {
-                  const _lineItems = lineItems.filter( lineItem => lineItem.orderId === order.id);
-                  return (
-                    <li key={ order.id }>
-                      <div>
-                        OrderID: { order.id.slice(0, 4) }
-                        
-                      </div>
-                      <ul>
-                        {
-                          _lineItems.map( lineItem => {
-                            const product = products.find( product => product.id === lineItem.productId);
-                            return (
-                              <li key={ lineItem.id}>
-                                {
-                                  product && product.name
-                                }
-                                <span className='quantity'>
-                                  {
-                                    lineItem.quantity
-                                  }
-                                </span>
-                              </li>
-                            );
-                          })
-                        }
-                      </ul>
-                    </li>
-                  );
-                })
-              }
-            </ul>
-          </div>
+          <Products addToCart={ addToCart } products={ products } />
+          <Cart lineItems={ lineItems } removeFromCart={ removeFromCart } cart={ cart } createOrder={ createOrder } products={ products }/>
+          <Orders lineItems={ lineItems } products={ products } orders={ orders }/>
         </div>
       </div>
     );

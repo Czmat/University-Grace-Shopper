@@ -90,30 +90,18 @@ const sync = async()=> {
     }
   };
 
-  const moesCart = await getCart(moe.id);
-  //console.log(moesCart);
-  await addToCart({ productId: foo.id, userId: moe.id });
-  await addToCart({ productId: foo.id, userId: moe.id });
-  await addToCart({ productId: foo.id, userId: moe.id });
-  await addToCart({ productId: bar.id, userId: moe.id });
-  await addToCart({ productId: bar.id, userId: moe.id });
-  await addToCart({ productId: bazz.id, userId: moe.id });
-  //await removeFromCart({ productId: bar.id, userId: moe.id});
-  await getLineItems(moe.id);
-  await createOrder(moe.id);
-  await addToCart({ productId: foo.id, userId: moe.id });
-  await addToCart({ productId: foo.id, userId: moe.id });
-  await addToCart({ productId: foo.id, userId: moe.id });
-  await createOrder(moe.id);
-  /*
-  const [moeOrder, lucyOrder] = await Promise.all(Object.values(_orders).map( order => orders.create(order)));
-
-  await lineItems.create({ productId: foo.id, orderId: moeOrder.id });
-  await lineItems.create({ productId: foo.id, orderId: moeOrder.id });
-  await lineItems.create({ productId: foo.id, orderId: moeOrder.id });
-
-  console.log(await findUserFromToken(await authenticate(_users.lucy)));
-  */
+  const userMap = (await users.read()).reduce((acc, user)=> {
+    acc[user.username] = user;
+    return acc;
+  }, {});
+  const productMap = (await products.read()).reduce((acc, product)=> {
+    acc[product.name] = product;
+    return acc;
+  }, {});
+  return {
+    users: userMap,
+    products: productMap
+  };
 };
 
 const products = {
@@ -137,23 +125,19 @@ const users = {
 };
 
 const orders = {
-  read: async({ user })=> {
-    return (await client.query('SELECT * from orders WHERE "userId"=$1', [ user.id ])).rows;
+  read: async()=> {
+    return (await client.query('SELECT * from orders')).rows;
   },
-  create: async({ userId, user })=> {
+  create: async({ userId })=> {
     console.log(user);
     const SQL = `INSERT INTO orders("userId") values($1) returning *`;
-    return (await client.query(SQL, [userId || user.id])).rows[0];
+    return (await client.query(SQL, [userId])).rows[0];
   },
 };
 
 const lineItems = {
-  read: async({ user })=> {
-    return (await client.query(`
-      SELECT "lineItems".* from "lineItems"
-      JOIN orders ON orders.id = "lineItems"."orderId"
-      WHERE orders."userId" = $1
-    `, [ user.id ])).rows;
+  read: async()=> {
+    return (await client.query('SELECT * from "lineItems"')).rows;
   },
   create: async({ orderId, productId })=> {
     const SQL = `INSERT INTO "lineItems" ("orderId", "productId") values($1, $2) returning *`;
@@ -211,12 +195,6 @@ const getLineItems = async(userId)=> {
   return ( await client.query(SQL, [ userId ])).rows;
 };
 
-//getCart(passed in user)
-//getOrders(passed in user)
-//getLineItems(passed in user)
-//createOrder(passed in cart)
-//addToCart(passed in a product)
-//removeFromCart(passed in a product)
 
 const models = {
   users,
