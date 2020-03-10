@@ -1,0 +1,47 @@
+body {
+  font-family: sans-serif;
+}
+
+input,button {
+  padding: 0.5rem;
+}
+
+form {
+  border: solid 1px black;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+form > * {
+  margin: 1rem;
+}
+
+.horizontal {
+  display: flex;
+}
+
+.horizontal > * {
+  flex: 1;
+  margin: 1rem;
+}
+
+ul {
+  padding: 0;
+}
+
+li {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  border-bottom: solid 1px teal;
+}
+li > * {
+  margin-bottom: 1rem;
+}
+
+.quantity {
+  color: teal;
+}
+
+
