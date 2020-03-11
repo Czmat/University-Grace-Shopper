@@ -48,7 +48,11 @@ app.get('/', (req, res, next)=> res.sendFile(path.join(__dirname, 'index.html'))
 app.post('/api/auth', (req, res, next)=> {
   db.authenticate(req.body)
     .then( token => res.send({ token }))
-    .catch( next );
+    .catch( ()=> {
+      const error = Error('not authorized');
+      error.status = 401;
+      next(error);
+    } );
 });
 
 app.get('/api/auth', isLoggedIn, (req, res, next)=> {
