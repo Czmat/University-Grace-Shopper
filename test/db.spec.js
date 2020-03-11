@@ -43,8 +43,13 @@ describe('db', ()=> {
       it('adding a new item adds new line item', async()=> {
         await db.addToCart({ userId: moesCart.userId, productId: products.foo.id });
         await db.addToCart({ userId: moesCart.userId, productId: products.bar.id });
+        await db.addToCart({ userId: moesCart.userId, productId: products.bar.id });
         const lineItems = await db.getLineItems(moesCart.userId);
         expect(lineItems.length).to.eq(2);
+        const bars = lineItems.find( li => li.productId === products.bar.id);
+        const foos = lineItems.find( li => li.productId === products.foo.id);
+        expect(bars.quantity).to.equal(2);
+        expect(foos.quantity).to.equal(1);
       });
     });
 
