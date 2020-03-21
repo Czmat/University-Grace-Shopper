@@ -16,7 +16,6 @@ const headers = () => {
 }
 
 const App = () => {
-  console.log("HELLO CHAISE!!!")
   const [params, setParams] = useState(qs.parse(window.location.hash.slice(1)))
   const [auth, setAuth] = useState({})
   const [orders, setOrders] = useState([])
@@ -26,7 +25,6 @@ const App = () => {
 
   useEffect(() => {
     axios.get("/api/products").then(response => {
-      console.log(response)
       setProducts(response.data)
     })
   }, [])
