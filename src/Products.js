@@ -14,6 +14,7 @@ const Products = ({ products, addToCart }) => {
               <img src={product.image}></img>
               <span>
                 <a href="">{product.name}</a>
+                <div>{product.quantity}</div>
               </span>
               {product.details}
               <span>${Number(product.price).toFixed(2)}</span>

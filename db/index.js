@@ -37,6 +37,7 @@ const sync = async () => {
       price DECIMAL NOT NULL,
       details VARCHAR DEFAULT 'great product',
       image VARCHAR,
+      quantity INTEGER DEFAULT 2,
       CHECK (char_length(name) > 0)
     );
     CREATE TABLE orders(
@@ -110,6 +111,7 @@ const sync = async () => {
       image: faker.random.image()
     }
   }
+  console.log(_products)
 
   const [lucy, moe] = await Promise.all(
     Object.values(_users).map(user => users.create(user))
