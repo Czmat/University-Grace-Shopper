@@ -44,7 +44,7 @@ const Header = ({ params, lineItems, cart }) => {
             console.log('clicked');
           }}
         >
-          <i class="fas fa-shopping-bag"></i>
+          <i className="fas fa-shopping-bag"></i>
           <span>{totalQty}</span>
         </a>
       </div>

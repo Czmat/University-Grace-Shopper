@@ -18,7 +18,7 @@ const Mycart = ({
         const product = products.find(
           product => product.id === lineItem.productId
         );
-        cartTotal = cartTotal + Number(product.price * lineItem.quantity);
+        cartTotal += Number(product.price * lineItem.quantity);
         console.log(cartTotal);
       });
     return cartTotal.toFixed(2);
@@ -33,8 +33,6 @@ const Mycart = ({
           const product = products.find(
             product => product.id === lineItem.productId
           );
-          // cartTotal += Number(product.price * lineItem.quantity).toFixed(2);
-          // console.log(cartTotal);
           return (
             <div key={lineItem.id} className="product-card">
               <button onClick={() => removeFromCart(lineItem.id)}>x</button>
@@ -44,13 +42,13 @@ const Mycart = ({
                 </a>
               </div>
               <div>
-                <h4>
-                  <a href="#">{product && product.name}</a>
-                </h4>
+                <a href="#">
+                  <h4>{product && product.name}</h4>
+                </a>
               </div>
               <div className="">
                 <div>Description of a product</div>
-                <p>more detail Description</p>
+                <p>{product.details}</p>
                 <span>Qty:</span>
                 <select
                   defaultValue={lineItem.quantity}

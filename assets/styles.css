@@ -62,7 +62,7 @@ li > * {
 .header-container > *,
 a {
   margin: 1rem;
-  color: white;
+  color: black;
 }
 
 .cart-container {
@@ -111,11 +111,11 @@ h1 {
   font-size: 1.25em;
   font-family: FontAwesome;
   display: inline-block;
-  content: "\f005";
+  content: '\f005';
 }
 
 .rating > .half:before {
-  content: "\f089";
+  content: '\f089';
   position: absolute;
 }
 
