@@ -25,7 +25,10 @@ const App = () => {
   const [lineItems, setLineItems] = useState([])
 
   useEffect(() => {
-    axios.get("/api/products").then(response => setProducts(response.data))
+    axios.get("/api/products").then(response => {
+      console.log(response)
+      setProducts(response.data)
+    })
   }, [])
 
   useEffect(() => {
