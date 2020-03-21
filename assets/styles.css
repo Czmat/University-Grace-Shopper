@@ -2,7 +2,8 @@ body {
   font-family: sans-serif;
 }
 
-input,button {
+input,
+button {
   padding: 0.5rem;
 }
 
@@ -51,4 +52,7 @@ li > * {
   font-weight: bold;
 }
 
-
+img {
+  height: 150px;
+  width: 150px;
+}
