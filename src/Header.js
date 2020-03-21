@@ -1,7 +1,14 @@
 import React from 'react';
 import qs from 'qs';
 
-const Header = ({ params }) => {
+const Header = ({ params, lineItems, cart }) => {
+  const userCart = lineItems.filter(lineItem => lineItem.orderId === cart.id);
+
+  let totalQty = 0;
+  const count = userCart.forEach(item => {
+    totalQty += item.quantity;
+  });
+
   return (
     <div className="header-container">
       <a href="#">
@@ -12,7 +19,7 @@ const Header = ({ params }) => {
           href={`#${qs.stringify({ view: 'login' })}`}
           className={params.view === 'login' ? 'selected' : ''}
           onClick={e => {
-            console.log('clicked');
+            //console.log('clicked');
           }}
         >
           Login
@@ -23,7 +30,7 @@ const Header = ({ params }) => {
           href={`#${qs.stringify({ view: 'account' })}`}
           className={params.view === 'account' ? 'selected' : ''}
           onClick={e => {
-            console.log('clicked');
+            //console.log('clicked');
           }}
         >
           account
@@ -37,7 +44,8 @@ const Header = ({ params }) => {
             console.log('clicked');
           }}
         >
-          Cart
+          <i className="fas fa-shopping-bag"></i>
+          <span>{totalQty}</span>
         </a>
       </div>
     </div>
