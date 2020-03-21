@@ -46,7 +46,7 @@ const addToCart = async ({ productId, userId, lineItemQuantity }) => {
   let lineItem
   if (response.rows.length) {
     lineItem = response.rows[0]
-    //console.log(lineItem);
+    console.log(lineItem)
     lineItem.quantity = lineItemQuantity
     return (
       await client.query(

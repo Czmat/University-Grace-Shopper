@@ -38,6 +38,7 @@ const sync = async () => {
       details VARCHAR DEFAULT 'great product',
       image VARCHAR,
       quantity INTEGER DEFAULT 2,
+      rating INTEGER DEFAULT 3,
       CHECK (char_length(name) > 0)
     );
     CREATE TABLE orders(
@@ -81,7 +82,9 @@ const sync = async () => {
         faker.commerce.productAdjective() +
         " " +
         faker.commerce.productMaterial(),
-      image: faker.random.image()
+      image: faker.random.image(),
+      quantity: 3,
+      rating: 3
     },
     bar: {
       name: faker.commerce.productName(),
@@ -90,7 +93,9 @@ const sync = async () => {
         faker.commerce.productAdjective() +
         " " +
         faker.commerce.productMaterial(),
-      image: faker.random.image()
+      image: faker.random.image(),
+      quantity: 3,
+      rating: 3
     },
     bazz: {
       name: faker.commerce.productName(),
@@ -99,7 +104,9 @@ const sync = async () => {
         faker.commerce.productAdjective() +
         " " +
         faker.commerce.productMaterial(),
-      image: faker.random.image()
+      image: faker.random.image(),
+      quantity: 3,
+      rating: 3
     },
     quq: {
       name: faker.commerce.productName(),
@@ -108,7 +115,9 @@ const sync = async () => {
         faker.commerce.productAdjective() +
         " " +
         faker.commerce.productMaterial(),
-      image: faker.random.image()
+      image: faker.random.image(),
+      quantity: 3,
+      rating: 3
     }
   }
 
