@@ -10,21 +10,37 @@ const Mycart = ({
   products,
   addToCart,
 }) => {
+  const findCartTotal = () => {
+    let cartTotal = 0;
+    lineItems
+      .filter(lineItem => lineItem.orderId === cart.id)
+      .forEach(lineItem => {
+        const product = products.find(
+          product => product.id === lineItem.productId
+        );
+        cartTotal = cartTotal + Number(product.price * lineItem.quantity);
+        console.log(cartTotal);
+      });
+    return cartTotal.toFixed(2);
+  };
+
   return (
     <div className="cart-container">
-      <h2>Your cart total: $100</h2>
+      <h2>Your cart total: ${findCartTotal()}</h2>
       {lineItems
         .filter(lineItem => lineItem.orderId === cart.id)
         .map(lineItem => {
           const product = products.find(
             product => product.id === lineItem.productId
           );
+          // cartTotal += Number(product.price * lineItem.quantity).toFixed(2);
+          // console.log(cartTotal);
           return (
             <div key={lineItem.id} className="product-card">
               <button onClick={() => removeFromCart(lineItem.id)}>x</button>
               <div>
                 <a href="#">
-                  <img></img>Image
+                  <img src={product.image}></img>
                 </a>
               </div>
               <div>
