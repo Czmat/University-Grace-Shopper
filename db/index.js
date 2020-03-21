@@ -1,8 +1,11 @@
 const client = require('./client');
+const faker = require('faker');
 
 const { authenticate, compare, findUserFromToken, hash } = require('./auth');
 
 const models = ({ products, users, orders, lineItems } = require('./models'));
+
+const fakeProduct = faker.commerce.product();
 
 const {
   getCart,
@@ -32,6 +35,8 @@ const sync = async () => {
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
       name VARCHAR(100) NOT NULL UNIQUE,
       price DECIMAL NOT NULL,
+      details VARCHAR DEFAULT 'great product',
+      image VARCHAR,
       CHECK (char_length(name) > 0)
     );
     CREATE TABLE orders(
@@ -68,28 +73,51 @@ const sync = async () => {
   };
 
   const _products = {
-    foo: {
-      name: 'foo',
-      price: 2,
+    fakeProduct: {
+      name: faker.commerce.productName(),
+      price: faker.commerce.price(),
+      details:
+        faker.commerce.productAdjective() +
+        ' ' +
+        faker.commerce.productMaterial(),
+      image: faker.random.image(),
     },
     bar: {
-      name: 'bar',
-      price: 2,
+      name: faker.commerce.productName(),
+      price: faker.commerce.price(),
+      details:
+        faker.commerce.productAdjective() +
+        ' ' +
+        faker.commerce.productMaterial(),
+      image: faker.random.image(),
     },
     bazz: {
-      name: 'bazz',
-      price: 2.5,
+      name: faker.commerce.productName(),
+      price: faker.commerce.price(),
+      details:
+        faker.commerce.productAdjective() +
+        ' ' +
+        faker.commerce.productMaterial(),
+      image: faker.random.image(),
     },
     quq: {
-      name: 'quq',
-      price: 11.99,
+      name: faker.commerce.productName(),
+      price: faker.commerce.price(),
+      details:
+        faker.commerce.productAdjective() +
+        ' ' +
+        faker.commerce.productMaterial(),
+      image: faker.random.image(),
     },
   };
+
   const [lucy, moe] = await Promise.all(
     Object.values(_users).map(user => users.create(user))
   );
   const [foo, bar, bazz] = await Promise.all(
-    Object.values(_products).map(product => products.create(product))
+    Object.values(_products).map(product => {
+      products.create(product);
+    })
   );
 
   const _orders = {
