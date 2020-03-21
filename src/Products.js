@@ -1,15 +1,15 @@
 import React from "react"
 import faker from "faker"
+import StarRating from "./components/StarRating"
 
 const numArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+var rating = [1, 2, 3, 4, 5]
 
 const Products = ({ products, addToCart }) => {
   return (
     <div>
       <h2>Products</h2>
       <ul>
-        {console.log(products)}
-
         {products.map(product => {
           return (
             <li key={product.id}>
@@ -17,17 +17,11 @@ const Products = ({ products, addToCart }) => {
               <span>
                 <a href="">{product.name}</a>
                 <div>
-                  Rating: {product.rating}
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star"></span>
-                  <span class="fa fa-star"></span>
+                  <StarRating />
                 </div>
                 <select
                   defaultValue={1}
                   onChange={e => {
-                    console.log(e.target.value)
                     e.target.value === "0"
                       ? removeFromCart(lineItem.id)
                       : addToCart(product.id, e.target.value)
