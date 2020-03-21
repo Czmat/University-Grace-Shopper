@@ -2,7 +2,7 @@ const client = require('./client');
 
 const { authenticate, compare, findUserFromToken, hash } = require('./auth');
 
-const models = { products, users, orders, lineItems } = require('./models');
+const models = ({ products, users, orders, lineItems } = require('./models'));
 
 const {
   getCart,
@@ -10,10 +10,10 @@ const {
   addToCart,
   removeFromCart,
   createOrder,
-  getLineItems
+  getLineItems,
 } = require('./userMethods');
 
-const sync = async()=> {
+const sync = async () => {
   const SQL = `
     CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
     DROP TABLE IF EXISTS "lineItems";
@@ -53,61 +53,66 @@ const sync = async()=> {
     lucy: {
       username: 'lucy',
       password: 'LUCY',
-      role: 'ADMIN'
+      role: 'ADMIN',
     },
     moe: {
       username: 'moe',
       password: 'MOE',
-      role: null
+      role: null,
     },
     curly: {
       username: 'larry',
       password: 'LARRY',
-      role: null
+      role: null,
     },
   };
 
   const _products = {
     foo: {
       name: 'foo',
-      price: 2
+      price: 2,
     },
     bar: {
       name: 'bar',
-      price: 2
+      price: 2,
     },
     bazz: {
       name: 'bazz',
-      price: 2.50
+      price: 2.5,
     },
     quq: {
       name: 'quq',
-      price: 11.99 
-    }
+      price: 11.99,
+    },
   };
-  const [lucy, moe] = await Promise.all(Object.values(_users).map( user => users.create(user)));
-  const [foo, bar, bazz] = await Promise.all(Object.values(_products).map( product => products.create(product)));
+  const [lucy, moe] = await Promise.all(
+    Object.values(_users).map(user => users.create(user))
+  );
+  const [foo, bar, bazz] = await Promise.all(
+    Object.values(_products).map(product => products.create(product))
+  );
 
   const _orders = {
     moe: {
-      userId: moe.id
+      userId: moe.id,
     },
     lucy: {
-      userId: lucy.id
-    }
+      userId: lucy.id,
+    },
   };
 
-  const userMap = (await users.read()).reduce((acc, user)=> {
+  const userMap = (await users.read()).reduce((acc, user) => {
     acc[user.username] = user;
     return acc;
   }, {});
-  const productMap = (await products.read()).reduce((acc, product)=> {
+  const productMap = (await products.read()).reduce((acc, product) => {
     acc[product.name] = product;
     return acc;
   }, {});
+  //console.log(userMap, productMap);
   return {
     users: userMap,
-    products: productMap
+    products: productMap,
   };
 };
 
@@ -121,5 +126,5 @@ module.exports = {
   addToCart,
   removeFromCart,
   createOrder,
-  getLineItems
+  getLineItems,
 };

@@ -2,7 +2,8 @@ body {
   font-family: sans-serif;
 }
 
-input,button {
+input,
+button {
   padding: 0.5rem;
 }
 
@@ -51,4 +52,24 @@ li > * {
   font-weight: bold;
 }
 
+.header-container {
+  display: flex;
+  background-color: rgb(110, 87, 87);
+}
 
+.header-container > * {
+  margin: 1rem;
+}
+
+.cart-container {
+  margin: 1.5rem;
+  padding: 0.5rem;
+  border: solid 1px teal;
+}
+
+.product-card {
+  margin: 1.5rem;
+  padding: 0.5rem;
+  border: solid 1px black;
+  box-shadow: 0 0 0.625rem 0.25rem black;
+}
