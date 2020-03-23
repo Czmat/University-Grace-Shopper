@@ -127,7 +127,14 @@ const App = () => {
   const { view } = params
 
   if (!auth.id) {
-    return <Login login={login} />
+    return (
+      <div>
+        <Header params={params} lineItems={lineItems} cart={cart} />
+        {params.view === "login" && <Login login={login} />}
+
+        <Products addToCart={addToCart} products={products} />
+      </div>
+    )
   } else {
     return (
       <div>
