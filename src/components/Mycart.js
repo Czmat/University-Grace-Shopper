@@ -1,4 +1,5 @@
 import React from 'react';
+import SaveForLater from './SaveForLater';
 
 const numArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
@@ -9,6 +10,8 @@ const Mycart = ({
   removeFromCart,
   products,
   addToCart,
+  saveForLater,
+  addToSaveForLater,
 }) => {
   const findCartTotal = () => {
     let cartTotal = 0;
@@ -27,6 +30,12 @@ const Mycart = ({
   return (
     <div className="cart-container">
       <h2>Your cart total: ${findCartTotal()}</h2>
+      <button
+        disabled={!lineItems.find(lineItem => lineItem.orderId === cart.id)}
+        onClick={createOrder}
+      >
+        Create Order
+      </button>
       {lineItems
         .filter(lineItem => lineItem.orderId === cart.id)
         .map(lineItem => {
@@ -69,18 +78,31 @@ const Mycart = ({
                   })}
                 </select>
                 <i>|</i>
-                <input type="submit" value="Save for later"></input>
+                <input
+                  type="submit"
+                  value="Save for later"
+                  onClick={e => {
+                    //e.preventDefault();
+                    addToSaveForLater(product.id);
+                  }}
+                ></input>
                 <div>${Number(product.price).toFixed(2)}</div>
               </div>
             </div>
           );
         })}
-      <button
-        disabled={!lineItems.find(lineItem => lineItem.orderId === cart.id)}
-        onClick={createOrder}
-      >
-        Create Order
-      </button>
+
+      <hr></hr>
+      <SaveForLater
+        lineItems={lineItems}
+        removeFromCart={removeFromCart}
+        cart={cart}
+        createOrder={createOrder}
+        products={products}
+        addToCart={addToCart}
+        saveForLater={saveForLater}
+        addToSaveForLater={addToSaveForLater}
+      />
     </div>
   );
 };

@@ -7,12 +7,15 @@ const SavedForLater = ({
   removeFromCart,
   products,
   addToCart,
+
+  saveForLater,
+  addToSaveForLater,
 }) => {
   return (
     <div className="cart-container">
       <h2>Saved for later ()</h2>
       {lineItems
-        .filter(lineItem => lineItem.orderId === cart.id)
+        .filter(lineItem => lineItem.orderId === saveForLater.id)
         .map(lineItem => {
           const product = products.find(
             product => product.id === lineItem.productId
@@ -22,7 +25,7 @@ const SavedForLater = ({
               <button onClick={() => removeFromCart(lineItem.id)}>x</button>
               <div>
                 <a href="#">
-                  <img></img>Image
+                  <img src={product.image}></img>
                 </a>
               </div>
               <div>
@@ -31,10 +34,6 @@ const SavedForLater = ({
                 </h4>
               </div>
               <div className="">
-                <div>Description of a product</div>
-                <p>more detail Description</p>
-
-                <i>|</i>
                 <input type="submit" value="Move to Cart"></input>
                 <div>${Number(product.price).toFixed(2)}</div>
               </div>
