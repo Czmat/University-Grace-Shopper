@@ -1,6 +1,6 @@
 import React from "react"
 
-const starRating = () => {
+const StarRating = () => {
   return (
     <fieldset className="rating">
       <input type="radio" id="star5" name="rating" value="5" />
@@ -59,4 +59,4 @@ const starRating = () => {
   )
 }
 
-export default starRating
+export default StarRating
