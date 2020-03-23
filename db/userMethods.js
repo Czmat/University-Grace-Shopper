@@ -39,6 +39,7 @@ const createOrder = async userId => {
 const addToCart = async ({ productId, userId, lineItemQuantity }) => {
   //console.log(lineItemQuantity);
   const cart = await getCart(userId);
+  console.log(cart);
   const response = await client.query(
     `SELECT * from "lineItems" WHERE "orderId"=$1 and "productId"=$2`,
     [cart.id, productId]
@@ -57,8 +58,8 @@ const addToCart = async ({ productId, userId, lineItemQuantity }) => {
   } else {
     return (
       await client.query(
-        `INSERT INTO "lineItems"("productId", "orderId") values ($1, $2) returning *`,
-        [productId, cart.id]
+        `INSERT INTO "lineItems"("productId", "orderId", quantity) values ($1, $2, $3) returning *`,
+        [productId, cart.id, lineItemQuantity]
       )
     ).rows[0];
   }

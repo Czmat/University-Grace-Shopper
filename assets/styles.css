@@ -1,5 +1,8 @@
+@import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
+@import url("https://fonts.googleapis.com/css?family=Raleway|Lora|Sen&display=swap");
+
 body {
-  font-family: sans-serif;
+  font-family: "Raleway", sans-serif;
 }
 
 input,
@@ -52,15 +55,6 @@ li > * {
   font-weight: bold;
 }
 
-.header-container {
-  display: flex;
-  background-color: rgb(110, 87, 87);
-}
-
-.header-container > * {
-  margin: 1rem;
-}
-
 .cart-container {
   margin: 1.5rem;
   padding: 0.5rem;
@@ -77,4 +71,88 @@ li > * {
 img {
   height: 150px;
   width: 150px;
+}
+
+fieldset,
+label {
+  margin: 0;
+  padding: 0;
+}
+body {
+  margin: 20px;
+}
+h1 {
+  font-size: 1.5em;
+  margin: 10px;
+}
+
+/**Header CSS*/
+
+.header-container {
+  display: flex;
+  border: 1px solid black;
+  align-items: center;
+  justify-content: center;
+  font-family: "Raleway", sans-serif;
+}
+
+.header-container > *,
+a {
+  margin: 1rem;
+  color: black;
+}
+
+.header-name {
+  flex-direction: row;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.nav-bar {
+  display: flex;
+  flex-direction: row;
+  font-size: 15px;
+}
+
+/****** Style Star Rating Widget *****/
+
+.rating {
+  border: none;
+  float: left;
+}
+
+.rating > input {
+  display: none;
+}
+.rating > label:before {
+  margin: 5px;
+  font-size: 1.25em;
+  font-family: FontAwesome;
+  display: inline-block;
+  content: "\f005";
+}
+
+.rating > .half:before {
+  content: "\f089";
+  position: absolute;
+}
+
+.rating > label {
+  color: #ddd;
+  float: right;
+}
+
+/***** CSS Magic to Highlight Stars on Hover *****/
+
+.rating > input:checked ~ label, /* show gold star when clicked */
+.rating:not(:checked) > label:hover, /* hover current star */
+.rating:not(:checked) > label:hover ~ label {
+  color: #ffd700;
+} /* hover previous stars in list */
+
+.rating > input:checked + label:hover, /* hover current star when changing rating */
+.rating > input:checked ~ label:hover,
+.rating > label:hover ~ input:checked ~ label, /* lighten current selection */
+.rating > input:checked ~ label:hover ~ label {
+  color: #ffed85;
 }
