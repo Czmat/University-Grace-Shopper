@@ -11,7 +11,6 @@ button {
 }
 
 form {
-  border: solid 1px black;
   border-radius: 8px;
   display: flex;
   flex-direction: column;
@@ -90,7 +89,7 @@ h1 {
 
 .header-container {
   display: flex;
-  border: 1px solid black;
+
   align-items: center;
   justify-content: center;
   font-family: "Raleway", sans-serif;
