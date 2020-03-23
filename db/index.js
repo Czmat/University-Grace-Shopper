@@ -122,6 +122,29 @@ const sync = async () => {
       quantity: 3,
       rating: 3,
     },
+    qq: {
+      name: faker.commerce.productName(),
+      price: faker.commerce.price(),
+      details:
+        faker.commerce.productAdjective() +
+        ' ' +
+        faker.commerce.productMaterial(),
+      image: faker.random.image(),
+      quantity: 3,
+      rating: 3,
+    },
+
+    zz: {
+      name: faker.commerce.productName(),
+      price: faker.commerce.price(),
+      details:
+        faker.commerce.productAdjective() +
+        ' ' +
+        faker.commerce.productMaterial(),
+      image: faker.random.image(),
+      quantity: 3,
+      rating: 3,
+    },
   };
 
   const [lucy, moe] = await Promise.all(

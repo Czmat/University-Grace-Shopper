@@ -41,7 +41,7 @@ const addToSaveForLater = async ({ productId, userId }) => {
     // console.log(cartLineItem, 'cartlineitem');
 
     saveLineItem.quantity = saveLineItem.quantity + cartLineItem.quantity;
-    await removeFromCart();
+    //await removeFromCart();
     await client.query(
       `DELETE FROM "lineItems" WHERE id=$1 and "orderId" = $2 returning *`,
       [cartLineItem.id, cart.id]
