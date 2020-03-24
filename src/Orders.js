@@ -29,29 +29,43 @@ const Orders = ({
     console.log(checkoutOrder)
   }
 
-  const Checkout = () => {
-    return (
-      <li key={order.id}>
-        OrderID: {order.id.slice(0, 4)}
-        <ul>
-          {mapCartItems.map(cartItem => {
-            const product = products.find(
-              product => product.id === cartItem.productId
-            )
-            return (
-              <li key={cartItem.id}>
-                {product && product.name}
-                <div>
-                  <StarRating />
-                </div>
-                <span className="quantity">Quantity: {cartItem.quantity}</span>
-              </li>
-            )
-          })}
-        </ul>
-      </li>
-    )
-  }
+  // const Checkout = () => {
+  //   return (
+  //     <li key={order.id}>
+  //       OrderID: {order.id.slice(0, 4)}
+  //       <ul>
+  //         {mapCartItems.map(cartItem => {
+  //           const product = products.find(
+  //             product => product.id === cartItem.productId
+  //           )
+  //           return (
+  //             <li key={cartItem.id}>
+  //               {product && product.name}
+  //               <div>
+  //                 <StarRating />
+  //               </div>
+  //               <span className="quantity">Quantity: {cartItem.quantity}</span>
+  //             </li>
+  //           )
+  //         })}
+  //         <form onClick={submitCheckout}>
+  //           <button
+  //             onClick={e => {
+  //               order.status != "checkout"
+  //                 ? (order.status = "checkout")
+  //                 : (order.status = "ORDER")
+  //               setCheckoutOrder([order])
+  //               setIsSubmitted(true)
+  //             }}
+  //           >
+  //             Checkout
+  //           </button>
+  //           )}
+  //         </form>
+  //       </ul>
+  //     </li>
+  //   )
+  // }
 
   return (
     <div>
@@ -61,10 +75,20 @@ const Orders = ({
           const mapCartItems = cartItems.filter(
             cartItem => cartItem.orderId === order.id
           )
-          if (order.status != "")
+
+          if (order.status != "checkout") {
             return (
               <li key={order.id}>
-                OrderID: {order.id.slice(0, 4)}
+                <button
+                  onClick={() => {
+                    order.status != "checkout"
+                      ? (order.status = "checkout")
+                      : (order.status = "ORDER")
+                    setCheckoutOrder(order)
+                  }}
+                >
+                  OrderID: {order.id.slice(0, 4)}
+                </button>
                 <ul>
                   {mapCartItems.map(cartItem => {
                     const product = products.find(
@@ -82,36 +106,12 @@ const Orders = ({
                       </li>
                     )
                   })}
-
-                  <form onClick={submitCheckout}>
-                    <button
-                      onClick={e => {
-                        order.status != "checkout"
-                          ? (order.status = "checkout")
-                          : (order.status = "ORDER")
-                        setCheckoutOrder([order])
-                        setIsSubmitted(true)
-                      }}
-                    >
-                      Checkout
-                    </button>
-
-                    {isSubmitted && (
-                      <Checkout
-                        cartItems={cartItems}
-                        products={products}
-                        orders={orders}
-                        params={params}
-                        setOrders={setOrders}
-                        auth={auth}
-                        cart={cart}
-                        order={checkoutOrder}
-                      />
-                    )}
-                  </form>
                 </ul>
               </li>
             )
+          } else {
+            return <Checkout order={checkoutOrder} />
+          }
         })}
       </ul>
     </div>

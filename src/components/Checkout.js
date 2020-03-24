@@ -12,29 +12,26 @@ import Header from "../Header"
 const Checkout = ({ cartItems, order, products, params, auth, cart }) => {
   console.log(order)
   return (
-    <div>
+    <div key={order.id}>
       <h2>Checkout</h2>
-      <div key={order.id}>
-        <li>Order {order.id} </li>
-        <h1>Order Summary</h1>
-        <form>
-          1 Shipping Address
-          <input />
-          Name <input />
-          Address
-          <input />
-          City
-          <input />
-          State <input />
-          Zip <input />
-          Phone <input />
-          Country
-          <input type="checkbox" name="address" value="save" />
-          <label htmlFor="address">Add to address book</label>
-          <button>Submit</button>
-        </form>
-      </div>
-      ) } })}
+      <li>Order {order.id.slice(0, 4)} </li>
+      <h1>Order Summary</h1>
+      <form>
+        1 Shipping Address
+        <input />
+        Name <input />
+        Address
+        <input />
+        City
+        <input />
+        State <input />
+        Zip <input />
+        Phone <input />
+        Country
+        <input type="checkbox" name="address" value="save" />
+        <label htmlFor="address">Add to address book</label>
+        <button>Submit</button>
+      </form>
     </div>
   )
 }
