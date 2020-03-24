@@ -41,11 +41,11 @@ const addToSaveForLater = async ({ productId, userId }) => {
     // console.log(cartLineItem, 'cartlineitem');
 
     saveLineItem.quantity = saveLineItem.quantity + cartLineItem.quantity;
-    //await removeFromCart();
-    await client.query(
-      `DELETE FROM "lineItems" WHERE id=$1 and "orderId" = $2 returning *`,
-      [cartLineItem.id, cart.id]
-    );
+    await removeFromCart({ userId: userId, lineItemId: cartLineItem.id });
+    // await client.query(
+    //   `DELETE FROM "lineItems" WHERE id=$1 and "orderId" = $2 returning *`,
+    //   [cartLineItem.id, cart.id]
+    // );
     return (
       await client.query(
         `UPDATE "lineItems" set quantity=$1 WHERE id = $2 returning *`,

@@ -84,6 +84,7 @@ const Mycart = ({
                   onClick={e => {
                     //e.preventDefault();
                     addToSaveForLater(product.id);
+                    //removeFromCart(lineItem.id);
                   }}
                 ></input>
                 <div>${Number(product.price).toFixed(2)}</div>

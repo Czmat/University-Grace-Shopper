@@ -28,7 +28,7 @@ const App = () => {
   const [saveForLater, setSaveForLater] = useState({});
   const [products, setProducts] = useState([]);
   const [lineItems, setLineItems] = useState([]);
-  console.log(orders, 'orders', cart, 'cart', lineItems, 'lineItems');
+  //console.log(orders, 'orders', cart, 'cart', lineItems, 'lineItems');
 
   useEffect(() => {
     axios.get('/api/products').then(response => setProducts(response.data));
@@ -132,16 +132,33 @@ const App = () => {
     axios
       .post('/api/addToSaveForLater', { productId }, headers())
       .then(response => {
+        // debugger;
         const lineItem = response.data;
-        const found = lineItems.find(_lineItem => _lineItem.id === lineItem.id);
+
+        const found = lineItems.find(
+          _lineItem =>
+            _lineItem.productId === lineItem.productId &&
+            _lineItem.orderId === cart.id
+        );
+
+        //console.log(found, 'found', lineItem, 'lineitem');
         // if (!found) {
         //   setLineItems([...lineItems, lineItem]);
         // } else {
-        const updated = lineItems.map(_lineItem =>
-          _lineItem.id === lineItem.id ? lineItem : _lineItem
-        );
-        setLineItems(updated);
+
+        // const updated = lineItems.map(_lineItem => {
+        //   //console.log(_lineItem);
+        //   return _lineItem.id === lineItem.id ? lineItem : _lineItem;
+        // });
+        // const test = updated.filter(li => li.id !== found.id);
+        // console.log(found, 'wow', test);
+        // console.log(updated, 'updated');
+        // setLineItems(test);
+        //setLineItems(lineItems.filter(_lineItem => _lineItem.id !== found.id));
         //}
+        axios.get('/api/getLineItems', headers()).then(response => {
+          setLineItems(response.data);
+        });
       });
   };
 

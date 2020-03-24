@@ -34,7 +34,16 @@ const SavedForLater = ({
                 </h4>
               </div>
               <div className="">
-                <input type="submit" value="Move to Cart"></input>
+                <input
+                  type="submit"
+                  value="Move to cart"
+                  onClick={e => {
+                    //e.preventDefault();
+                    console.log(product, 'product', lineItem, 'lineitem');
+                    addToCart(lineItem.productId, lineItem.quantity);
+                    //removeFromCart(lineItem.id);
+                  }}
+                ></input>
                 <div>${Number(product.price).toFixed(2)}</div>
               </div>
             </div>
