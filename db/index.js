@@ -1,11 +1,11 @@
-const client = require('./client');
-const faker = require('faker');
+const client = require("./client")
+const faker = require("faker")
 
-const { authenticate, compare, findUserFromToken, hash } = require('./auth');
+const { authenticate, compare, findUserFromToken, hash } = require("./auth")
 
-const models = ({ products, users, orders, lineItems } = require('./models'));
+const models = ({ products, users, orders, lineItems } = require("./models"))
 
-const fakeProduct = faker.commerce.product();
+const fakeProduct = faker.commerce.product()
 
 const {
   getCart,
@@ -17,13 +17,15 @@ const {
   getSaveForLater,
   addToSaveForLater,
   addBackToCart,
-} = require('./userMethods');
+  getCheckoutCart
+} = require("./userMethods")
 
 const sync = async () => {
   const SQL = `
     CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
     DROP TABLE IF EXISTS "lineItems";
     DROP TABLE IF EXISTS orders;
+
     DROP TABLE IF EXISTS users;
     DROP TABLE IF EXISTS products;
     CREATE TABLE users(
@@ -41,7 +43,7 @@ const sync = async () => {
       details VARCHAR DEFAULT 'great product',
       image VARCHAR,
       quantity INTEGER DEFAULT 2,
-      rating VARCHAR,
+      rating VARCHAR DEFAULT 3,
       CHECK (char_length(name) > 0)
     );
     CREATE TABLE orders(
@@ -56,26 +58,26 @@ const sync = async () => {
       "productId" UUID REFERENCES products(id) NOT NULL,
       quantity INTEGER DEFAULT 1
     );
-  `;
-  await client.query(SQL);
+  `
+  await client.query(SQL)
 
   const _users = {
     lucy: {
-      username: 'lucy',
-      password: 'LUCY',
-      role: 'ADMIN',
+      username: "lucy",
+      password: "LUCY",
+      role: "ADMIN"
     },
     moe: {
-      username: 'moe',
-      password: 'MOE',
-      role: null,
+      username: "moe",
+      password: "MOE",
+      role: null
     },
     curly: {
-      username: 'larry',
-      password: 'LARRY',
-      role: null,
-    },
-  };
+      username: "larry",
+      password: "LARRY",
+      role: null
+    }
+  }
 
   const _products = {
     fakeProduct: {
@@ -83,55 +85,55 @@ const sync = async () => {
       price: faker.commerce.price(),
       details:
         faker.commerce.productAdjective() +
-        ' ' +
+        " " +
         faker.commerce.productMaterial(),
       image: faker.random.image(),
       quantity: 3,
-      rating: 3,
+      rating: 3
     },
     bar: {
       name: faker.commerce.productName(),
       price: faker.commerce.price(),
       details:
         faker.commerce.productAdjective() +
-        ' ' +
+        " " +
         faker.commerce.productMaterial(),
       image: faker.random.image(),
       quantity: 3,
-      rating: 3,
+      rating: 3
     },
     bazz: {
       name: faker.commerce.productName(),
       price: faker.commerce.price(),
       details:
         faker.commerce.productAdjective() +
-        ' ' +
+        " " +
         faker.commerce.productMaterial(),
       image: faker.random.image(),
       quantity: 3,
-      rating: 3,
+      rating: 3
     },
     quq: {
       name: faker.commerce.productName(),
       price: faker.commerce.price(),
       details:
         faker.commerce.productAdjective() +
-        ' ' +
+        " " +
         faker.commerce.productMaterial(),
       image: faker.random.image(),
       quantity: 3,
-      rating: 3,
+      rating: 3
     },
     qq: {
       name: faker.commerce.productName(),
       price: faker.commerce.price(),
       details:
         faker.commerce.productAdjective() +
-        ' ' +
+        " " +
         faker.commerce.productMaterial(),
       image: faker.random.image(),
       quantity: 3,
-      rating: 3,
+      rating: 3
     },
 
     zz: {
@@ -139,46 +141,46 @@ const sync = async () => {
       price: faker.commerce.price(),
       details:
         faker.commerce.productAdjective() +
-        ' ' +
+        " " +
         faker.commerce.productMaterial(),
       image: faker.random.image(),
       quantity: 3,
-      rating: 3,
-    },
-  };
+      rating: 3
+    }
+  }
 
   const [lucy, moe] = await Promise.all(
     Object.values(_users).map(user => users.create(user))
-  );
+  )
   const [foo, bar, bazz] = await Promise.all(
     Object.values(_products).map(product => {
-      products.create(product);
+      products.create(product)
     })
-  );
+  )
 
   const _orders = {
     moe: {
-      userId: moe.id,
+      userId: moe.id
     },
     lucy: {
-      userId: lucy.id,
-    },
-  };
+      userId: lucy.id
+    }
+  }
 
   const userMap = (await users.read()).reduce((acc, user) => {
-    acc[user.username] = user;
-    return acc;
-  }, {});
+    acc[user.username] = user
+    return acc
+  }, {})
   const productMap = (await products.read()).reduce((acc, product) => {
-    acc[product.name] = product;
-    return acc;
-  }, {});
+    acc[product.name] = product
+    return acc
+  }, {})
   //console.log(userMap, productMap);
   return {
     users: userMap,
-    products: productMap,
-  };
-};
+    products: productMap
+  }
+}
 
 module.exports = {
   sync,
@@ -194,4 +196,5 @@ module.exports = {
   getSaveForLater,
   addToSaveForLater,
   addBackToCart,
-};
+  getCheckoutCart
+}
