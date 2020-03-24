@@ -17,7 +17,8 @@ const {
   getSaveForLater,
   addToSaveForLater,
   addBackToCart,
-  getCheckoutCart
+  getCheckoutCart,
+  getProductRating
 } = require("./userMethods")
 
 const sync = async () => {
