@@ -17,6 +17,9 @@ const {
   getSaveForLater,
   addToSaveForLater,
   addBackToCart,
+  removeFromSave,
+  changeQtyInCart,
+  getProductDetail,
 } = require('./userMethods');
 
 const sync = async () => {
@@ -194,4 +197,7 @@ module.exports = {
   getSaveForLater,
   addToSaveForLater,
   addBackToCart,
+  removeFromSave,
+  changeQtyInCart,
+  getProductDetail,
 };

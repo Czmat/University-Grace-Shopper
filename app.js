@@ -95,9 +95,37 @@ app.get('/api/getLineItems', (req, res, next) => {
     .catch(next);
 });
 
+app.get('/api/products/:id', (req, res, next) => {
+  db.getProductDetail(req.params.id)
+    .then(productDetail => res.send(productDetail))
+    .catch(next);
+});
+
 app.post('/api/addToCart', (req, res, next) => {
   //console.log(req.body);
   db.addToCart({
+    userId: req.user.id,
+    productId: req.body.productId,
+    lineItemQuantity: req.body.quantity,
+  })
+    .then(lineItem => res.send(lineItem))
+    .catch(next);
+});
+
+app.post('/api/addBackToCart', (req, res, next) => {
+  //console.log(req.body);
+  db.addBackToCart({
+    userId: req.user.id,
+    productId: req.body.productId,
+    lineItemQuantity: req.body.quantity,
+  })
+    .then(lineItem => res.send(lineItem))
+    .catch(next);
+});
+
+app.post('/api/changeQtyInCart', (req, res, next) => {
+  //console.log(req.body);
+  db.changeQtyInCart({
     userId: req.user.id,
     productId: req.body.productId,
     lineItemQuantity: req.body.quantity,
@@ -118,6 +146,12 @@ app.post('/api/addToSaveForLater', (req, res, next) => {
 
 app.delete('/api/removeFromCart/:id', (req, res, next) => {
   db.removeFromCart({ userId: req.user.id, lineItemId: req.params.id })
+    .then(() => res.sendStatus(204))
+    .catch(next);
+});
+
+app.delete('/api/removeFromSave/:id', (req, res, next) => {
+  db.removeFromSave({ userId: req.user.id, lineItemId: req.params.id })
     .then(() => res.sendStatus(204))
     .catch(next);
 });

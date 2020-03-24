@@ -1,13 +1,13 @@
-import React from "react"
-import qs from "qs"
+import React from 'react';
+import qs from 'qs';
 
 const Header = ({ params, lineItems, cart }) => {
-  const userCart = lineItems.filter(lineItem => lineItem.orderId === cart.id)
+  const userCart = lineItems.filter(lineItem => lineItem.orderId === cart.id);
 
-  let totalQty = 0
-  const count = userCart.forEach(item => {
-    totalQty += item.quantity
-  })
+  // let totalQty = 0;
+  // const count = userCart.forEach(item => {
+  //   totalQty += item.quantity;
+  // });
 
   return (
     <header className="header-container">
@@ -19,8 +19,8 @@ const Header = ({ params, lineItems, cart }) => {
       <div className="nav-bar">
         <div>
           <a
-            href={`#${qs.stringify({ view: "login" })}`}
-            className={params.view === "login" ? "selected" : ""}
+            href={`#${qs.stringify({ view: 'login' })}`}
+            className={params.view === 'login' ? 'selected' : ''}
             onClick={e => {
               //console.log('clicked');
             }}
@@ -30,8 +30,8 @@ const Header = ({ params, lineItems, cart }) => {
         </div>
         <div>
           <a
-            href={`#${qs.stringify({ view: "account" })}`}
-            className={params.view === "account" ? "selected" : ""}
+            href={`#${qs.stringify({ view: 'account' })}`}
+            className={params.view === 'account' ? 'selected' : ''}
             onClick={e => {
               //console.log('clicked');
             }}
@@ -41,19 +41,19 @@ const Header = ({ params, lineItems, cart }) => {
         </div>
         <div>
           <a
-            href={`#${qs.stringify({ view: "cart" })}`}
-            className={params.view === "cart" ? "selected" : ""}
+            href={`#${qs.stringify({ view: 'cart' })}`}
+            className={params.view === 'cart' ? 'selected' : ''}
             onClick={e => {
-              console.log("clicked")
+              console.log('clicked');
             }}
           >
             <i className="fas fa-shopping-bag"></i>
-            <span>{totalQty}</span>
+            <span>{userCart.length}</span>
           </a>
         </div>
       </div>
     </header>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

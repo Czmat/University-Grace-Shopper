@@ -17,23 +17,30 @@ const getSaveForLater = async userId => {
 };
 
 const addToSaveForLater = async ({ productId, userId }) => {
-  console.log(productId);
+  // console.log(productId);
+  //find save order Id for the user
   const saveForLater = await getSaveForLater(userId);
+  //find cart order Id for the user
   const cart = await getCart(userId);
-  console.log(saveForLater, 'getsaveforlater');
-  console.log(cart, 'getcart');
+  // console.log(saveForLater, 'getsaveforlater');
+  // console.log(cart, 'getcart');
+
+  //filter  lineItems with cart orderId for the product
   const cartLineItem = (
     await client.query(
       `SELECT * from "lineItems" WHERE "orderId"=$1 and "productId"=$2`,
       [cart.id, productId]
     )
   ).rows[0];
-
+  //filter  lineItems with save orderId for the product
   const saveResponse = await client.query(
     `SELECT * from "lineItems" WHERE "orderId"=$1 and "productId"=$2`,
     [saveForLater.id, productId]
   );
   let saveLineItem;
+  // if saveforlater lineitem exists then add quantity to it from cart lineitem quantity
+  // and remove lineitem from cart
+  // and then return updated save lineItem back
   if (saveResponse.rows.length) {
     saveLineItem = saveResponse.rows[0];
 
@@ -53,6 +60,7 @@ const addToSaveForLater = async ({ productId, userId }) => {
       )
     ).rows[0];
   } else {
+    // or if no save lineItem, update cart lineItem with save orderId and return
     return (
       await client.query(
         `UPDATE "lineItems" set "orderId"=$1 WHERE id = $2 returning *`,
@@ -63,23 +71,68 @@ const addToSaveForLater = async ({ productId, userId }) => {
 };
 
 const addBackToCart = async ({ productId, userId, lineItemQuantity }) => {
-  //console.log(lineItemQuantity);
   const saveForLater = await getSaveForLater(userId);
   const cart = await getCart(userId);
-  //console.log(saveForLater);
-  const lineItem = await client.query(
+
+  // const saveLineItem = await client.query(
+  //   `SELECT * from "lineItems" WHERE "orderId"=$1 and "productId"=$2`,
+  //   [saveForLater.id, productId]
+  // );
+
+  const saveResponse = await client.query(
     `SELECT * from "lineItems" WHERE "orderId"=$1 and "productId"=$2`,
     [saveForLater.id, productId]
-  ).rows[0];
+  );
+  let saveLineItem;
+  saveLineItem = saveResponse.rows[0];
+  const cartResponse = await client.query(
+    `SELECT * from "lineItems" WHERE "orderId"=$1 and "productId"=$2`,
+    [cart.id, productId]
+  );
 
-  //console.log(lineItem);
+  let cartLineItem;
+  console.log(cartResponse.rows.length, 'cartResp.lenght');
 
-  return (
-    await client.query(
-      `UPDATE "lineItems" set "orderId"=$1 WHERE id = $2 returning *`,
-      [cart.id, lineItem.id]
-    )
-  ).rows[0];
+  if (cartResponse.rows.length) {
+    cartLineItem = cartResponse.rows[0];
+
+    console.log(cartLineItem, 'cartlineitem');
+    cartLineItem.quantity += Number(saveLineItem.quantity);
+    await removeFromSave({ userId: userId, lineItemId: saveLineItem.id });
+    // if (saveResponse.rows.length) {
+    //   console.log(saveLineItem, 'savelineItem');
+
+    // }
+
+    return (
+      await client.query(
+        `UPDATE "lineItems" set quantity=$1 WHERE id = $2 returning *`,
+        [cartLineItem.quantity, cartLineItem.id]
+      )
+    ).rows[0];
+  } else {
+    // if (saveResponse.rows.length) {
+    //   saveLineItem = saveResponse.rows[0];
+    //   console.log('wow');
+    //   await removeFromCart({ userId: userId, lineItemId: saveLineItem.id });
+    // }
+
+    return (
+      await client.query(
+        `UPDATE "lineItems" set "orderId"=$1 WHERE id = $2 returning *`,
+        [cart.id, saveLineItem.id]
+      )
+    ).rows[0];
+  }
+};
+
+const removeFromSave = async ({ lineItemId, userId }) => {
+  const saveForLater = await getSaveForLater(userId);
+
+  await client.query(
+    `DELETE FROM "lineItems" WHERE id=$1 and "orderId" = $2 returning *`,
+    [lineItemId, saveForLater.id]
+  );
 };
 
 const getCart = async userId => {
@@ -120,26 +173,45 @@ const createOrder = async userId => {
 
 const addToCart = async ({ productId, userId, lineItemQuantity }) => {
   //console.log(lineItemQuantity);
+  //get cart oderId for the user
   const cart = await getCart(userId);
   //console.log(cart);
-  const response = await client.query(
+  const cartResponse = await client.query(
     `SELECT * from "lineItems" WHERE "orderId"=$1 and "productId"=$2`,
     [cart.id, productId]
   );
-  let lineItem;
+
+  // const saveForLater = await getSaveForLater(userId);
+  // const saveResponse = await client.query(
+  //   `SELECT * from "lineItems" WHERE "orderId"=$1 and "productId"=$2`,
+  //   [saveForLater.id, productId]
+  // );
+  // let saveLineItem;
+
+  let cartLineItem;
   //if product in the cart changes quantity
-  if (response.rows.length) {
-    lineItem = response.rows[0];
+  if (cartResponse.rows.length) {
+    cartLineItem = cartResponse.rows[0];
     //console.log(lineItem);
-    lineItem.quantity = lineItemQuantity;
+    cartLineItem.quantity += Number(lineItemQuantity);
+
+    // if (saveResponse.rows.length) {
+    //   saveLineItem = saveResponse.rows[0];
+    //   await removeFromCart({ userId: userId, lineItemId: saveLineItem.id });
+    // }
+
     return (
       await client.query(
         `UPDATE "lineItems" set quantity=$1 WHERE id = $2 returning *`,
-        [lineItem.quantity, lineItem.id]
+        [cartLineItem.quantity, cartLineItem.id]
       )
     ).rows[0];
   } else {
     //else if new product is added
+    // if (saveResponse.rows.length) {
+    //   saveLineItem = saveResponse.rows[0];
+    //   await removeFromCart({ userId: userId, lineItemId: saveLineItem.id });
+    // }
     return (
       await client.query(
         `INSERT INTO "lineItems"("productId", "orderId", quantity) values ($1, $2, $3) returning *`,
@@ -147,6 +219,39 @@ const addToCart = async ({ productId, userId, lineItemQuantity }) => {
       )
     ).rows[0];
   }
+};
+
+const changeQtyInCart = async ({ productId, userId, lineItemQuantity }) => {
+  //console.log(lineItemQuantity);
+  //get cart oderId for the user
+  const cart = await getCart(userId);
+  //console.log(cart);
+  const cartResponse = await client.query(
+    `SELECT * from "lineItems" WHERE "orderId"=$1 and "productId"=$2`,
+    [cart.id, productId]
+  );
+  let cartLineItem;
+  //if product in the cart changes quantity
+  if (cartResponse.rows.length) {
+    cartLineItem = cartResponse.rows[0];
+    //console.log(lineItem);
+    cartLineItem.quantity = Number(lineItemQuantity);
+    return (
+      await client.query(
+        `UPDATE "lineItems" set quantity=$1 WHERE id = $2 returning *`,
+        [cartLineItem.quantity, cartLineItem.id]
+      )
+    ).rows[0];
+  }
+  // else {
+  //   //else if new product is added
+  //   return (
+  //     await client.query(
+  //       `INSERT INTO "lineItems"("productId", "orderId", quantity) values ($1, $2, $3) returning *`,
+  //       [productId, cart.id, lineItemQuantity]
+  //     )
+  //   ).rows[0];
+  // }
 };
 
 const removeFromCart = async ({ lineItemId, userId }) => {
@@ -157,6 +262,11 @@ const removeFromCart = async ({ lineItemId, userId }) => {
   );
 };
 
+const getProductDetail = async productId => {
+  return (await client.query(`SELECT * FROM products WHERE id=$1`, [productId]))
+    .rows[0];
+};
+
 const getLineItems = async userId => {
   const SQL = `
     SELECT "lineItems".*
@@ -165,7 +275,7 @@ const getLineItems = async userId => {
     ON orders.id = "lineItems"."orderId"
     WHERE orders."userId" = $1
   `;
-  console.log((await client.query(SQL, [userId])).rows, 'getlineItem');
+  //console.log((await client.query(SQL, [userId])).rows, 'getlineItem');
   return (await client.query(SQL, [userId])).rows;
 };
 
@@ -179,4 +289,7 @@ module.exports = {
   getSaveForLater,
   addToSaveForLater,
   addBackToCart,
+  removeFromSave,
+  changeQtyInCart,
+  getProductDetail,
 };

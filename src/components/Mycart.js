@@ -1,5 +1,6 @@
 import React from 'react';
 import SaveForLater from './SaveForLater';
+import qs from 'qs';
 
 const numArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
@@ -12,6 +13,11 @@ const Mycart = ({
   addToCart,
   saveForLater,
   addToSaveForLater,
+  removeFromSave,
+  changeQtyInCart,
+  addBackToCart,
+  params,
+  getProductDetail,
 }) => {
   const findCartTotal = () => {
     let cartTotal = 0;
@@ -22,7 +28,7 @@ const Mycart = ({
           product => product.id === lineItem.productId
         );
         cartTotal += Number(product.price * lineItem.quantity);
-        console.log(cartTotal);
+        // console.log(cartTotal);
       });
     return cartTotal.toFixed(2);
   };
@@ -46,26 +52,34 @@ const Mycart = ({
             <div key={lineItem.id} className="product-card">
               <button onClick={() => removeFromCart(lineItem.id)}>x</button>
               <div>
-                <a href="#">
+                <a
+                  href={`#${qs.stringify({ view: 'productDetail' })}`}
+                  className={params.view === 'productDetail' ? 'selected' : ''}
+                  onClick={() => getProductDetail(product.id)}
+                >
                   <img src={product.image}></img>
                 </a>
               </div>
               <div>
-                <a href="#">
+                <a
+                  href={`#${qs.stringify({ view: 'productDetail' })}`}
+                  className={params.view === 'productDetail' ? 'selected' : ''}
+                  onClick={() => getProductDetail(product.id)}
+                >
                   <h4>{product && product.name}</h4>
                 </a>
               </div>
               <div className="">
                 <div>Description of a product</div>
                 <p>{product.details}</p>
-                <span>Qty:</span>
+                <span>Qty:{lineItem.quantity}</span>
                 <select
                   defaultValue={lineItem.quantity}
                   onChange={e => {
-                    console.log(e.target.value);
+                    //console.log(e.target.value);
                     e.target.value === '0'
                       ? removeFromCart(lineItem.id)
-                      : addToCart(product.id, e.target.value);
+                      : changeQtyInCart(product.id, e.target.value);
                   }}
                 >
                   <option value={0}>0 (delete)</option>
@@ -103,6 +117,10 @@ const Mycart = ({
         addToCart={addToCart}
         saveForLater={saveForLater}
         addToSaveForLater={addToSaveForLater}
+        removeFromSave={removeFromSave}
+        addBackToCart={addBackToCart}
+        getProductDetail={getProductDetail}
+        params={params}
       />
     </div>
   );

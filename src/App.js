@@ -8,7 +8,7 @@ import Products from './Products';
 import Header from './Header';
 import Account from './components/Account';
 import Mycart from './components/Mycart';
-import SaveForLater from './components/SaveForLater';
+import ProductDetail from './components/ProductDetail';
 
 const headers = () => {
   const token = window.localStorage.getItem('token');
@@ -27,6 +27,7 @@ const App = () => {
   const [cart, setCart] = useState({});
   const [saveForLater, setSaveForLater] = useState({});
   const [products, setProducts] = useState([]);
+  const [productDetail, setProductDetail] = useState({});
   const [lineItems, setLineItems] = useState([]);
   //console.log(orders, 'orders', cart, 'cart', lineItems, 'lineItems');
 
@@ -111,6 +112,15 @@ const App = () => {
       });
   };
 
+  const getProductDetail = productId => {
+    axios.get(`/api/products/${productId}`).then(response => {
+      setProductDetail(response.data);
+      console.log(productDetail, 'productDetail');
+    });
+  };
+
+  console.log(productDetail, 'productDetail outside');
+
   const addToCart = (productId, quantity) => {
     axios
       .post('/api/addToCart', { productId, quantity }, headers())
@@ -125,6 +135,33 @@ const App = () => {
           );
           setLineItems(updated);
         }
+      });
+  };
+
+  const changeQtyInCart = (productId, quantity) => {
+    axios
+      .post('/api/changeQtyInCart', { productId, quantity }, headers())
+      .then(response => {
+        const lineItem = response.data;
+        const found = lineItems.find(_lineItem => _lineItem.id === lineItem.id);
+        if (!found) {
+          setLineItems([...lineItems, lineItem]);
+        } else {
+          const updated = lineItems.map(_lineItem =>
+            _lineItem.id === lineItem.id ? lineItem : _lineItem
+          );
+          setLineItems(updated);
+        }
+      });
+  };
+
+  const addBackToCart = (productId, quantity) => {
+    axios
+      .post('/api/addBackToCart', { productId, quantity }, headers())
+      .then(response => {
+        axios.get('/api/getLineItems', headers()).then(response => {
+          setLineItems(response.data);
+        });
       });
   };
 
@@ -168,6 +205,12 @@ const App = () => {
     });
   };
 
+  const removeFromSave = lineItemId => {
+    axios.delete(`/api/removeFromSave/${lineItemId}`, headers()).then(() => {
+      setLineItems(lineItems.filter(_lineItem => _lineItem.id !== lineItemId));
+    });
+  };
+
   const { view } = params;
 
   if (!auth.id) {
@@ -176,7 +219,12 @@ const App = () => {
         <Header params={params} lineItems={lineItems} cart={cart} />
         {params.view === 'login' && <Login login={login} />}
 
-        <Products addToCart={addToCart} products={products} />
+        <Products
+          addToCart={addToCart}
+          products={products}
+          getProductDetail={getProductDetail}
+          params={params}
+        />
       </div>
     );
   } else {
@@ -199,10 +247,28 @@ const App = () => {
             addToCart={addToCart}
             saveForLater={saveForLater}
             addToSaveForLater={addToSaveForLater}
+            removeFromSave={removeFromSave}
+            changeQtyInCart={changeQtyInCart}
+            addBackToCart={addBackToCart}
+            getProductDetail={getProductDetail}
+            params={params}
+          />
+        )}
+        {params.view === 'productDetail' && (
+          <ProductDetail
+            addToCart={addToCart}
+            products={products}
+            productDetail={productDetail}
+            params={params}
           />
         )}
         <div className="horizontal">
-          <Products addToCart={addToCart} products={products} />
+          <Products
+            addToCart={addToCart}
+            products={products}
+            getProductDetail={getProductDetail}
+            params={params}
+          />
           <Cart
             lineItems={lineItems}
             removeFromCart={removeFromCart}
