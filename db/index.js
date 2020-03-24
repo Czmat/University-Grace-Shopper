@@ -43,7 +43,7 @@ const sync = async () => {
       details VARCHAR DEFAULT 'great product',
       image VARCHAR,
       quantity INTEGER DEFAULT 2,
-      rating VARCHAR,
+      rating VARCHAR DEFAULT 3,
       CHECK (char_length(name) > 0)
     );
     CREATE TABLE orders(

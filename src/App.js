@@ -12,7 +12,6 @@ import Login from "./Login"
 import Orders from "./Orders"
 import Cart from "./Cart"
 import Products from "./Products"
-import Header from "./Header"
 import Account from "./components/Account"
 import Mycart from "./components/Mycart"
 import SaveForLater from "./components/SaveForLater"
@@ -36,15 +35,7 @@ const App = () => {
   const [saveForLater, setSaveForLater] = useState({})
   const [products, setProducts] = useState([])
   const [lineItems, setLineItems] = useState([])
-  console.log(
-    "From App.js",
-    orders,
-    "orders",
-    cart,
-    "cart",
-    lineItems,
-    "lineItems"
-  )
+  const [isSubmitted, setIsSubmitted] = useState(false)
 
   useEffect(() => {
     axios.get("/api/products").then(response => setProducts(response.data))
@@ -98,7 +89,9 @@ const App = () => {
 
   const logout = () => {
     window.location.hash = "#"
+    window.localStorage.removeItem("token")
     setAuth({})
+
     // console.log('logout', auth);
   }
   //console.log('outside', auth);
@@ -168,80 +161,139 @@ const App = () => {
   }
 
   const { view } = params
+  const userCart = lineItems.filter(lineItem => lineItem.orderId === cart.id)
+
+  let totalQty = 0
+  const count = userCart.forEach(item => {
+    totalQty += item.quantity
+  })
 
   if (!auth.id) {
     return (
-      <div>
-        <Header params={params} lineItems={lineItems} cart={cart} />
-        {params.view === "login" && <Login login={login} />}
-
-        <Products addToCart={addToCart} products={products} />
-      </div>
+      <Router>
+        <div>
+          <nav className="header-container">
+            <Link to="/">
+              <h1 className="header-name">Grace Shopper</h1>
+              <Link to="/products"></Link>
+            </Link>
+            <ul className="nav-bar">
+              <li></li>
+              <li>
+                <Link to="/login">Login</Link>
+              </li>
+              <li>
+                <Link to="/orders">Orders</Link>
+              </li>
+              <li>
+                <Link to="/cart">
+                  <i className="fas fa-shopping-bag"></i>
+                  <span>{totalQty}</span>
+                </Link>
+                <Link to="/checkout"></Link>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        <Switch>
+          <Route path="/" exact>
+            <div className="horizontal">
+              <Products addToCart={addToCart} products={products} />
+            </div>
+          </Route>
+          <Route path="/login">
+            <Login login={login} />
+          </Route>
+          <Route path="/cart">
+            <Mycart
+              lineItems={lineItems}
+              removeFromCart={removeFromCart}
+              cart={cart}
+              createOrder={createOrder}
+              products={products}
+              addToCart={addToCart}
+              saveForLater={saveForLater}
+              addToSaveForLater={addToSaveForLater}
+            />
+          </Route>
+        </Switch>
+      </Router>
     )
   } else {
     return (
-      <div>
-        <div className="header-container">
-          <Header params={params} lineItems={lineItems} cart={cart} />
-          <button onClick={logout}>Logout {auth.username} </button>
+      <Router>
+        <div>
+          <nav className="header-container">
+            <Link to="/">
+              <div>
+                <h1 className="header-name">Grace Shopper</h1>
+              </div>
+            </Link>
+            <ul className="nav-bar">
+              <li>
+                <Link to="/login">Login</Link>
+              </li>
+              <li>
+                <Link to="/account">Account</Link>
+              </li>
+              <li>
+                <Link to="/orders">Orders</Link>
+              </li>
+              <li>
+                <Link to="/cart">
+                  <i className="fas fa-shopping-bag"></i>
+                  <span>{totalQty}</span>
+                </Link>
+              </li>
+            </ul>
+            <button onClick={logout}>Logout {auth.username} </button>
+          </nav>
+          <Link to="/products"></Link>
         </div>
-        {params.view === "account" && (
-          <Account auth={auth} params={params} logout={logout} />
-        )}
-        {params.view === "cart" && (
-          <Mycart
-            lineItems={lineItems}
-            removeFromCart={removeFromCart}
-            cart={cart}
-            createOrder={createOrder}
-            products={products}
-            addToCart={addToCart}
-            saveForLater={saveForLater}
-            addToSaveForLater={addToSaveForLater}
-          />
-        )}
-        <div className="horizontal">
-          <Products addToCart={addToCart} products={products} />
-          <Cart
-            lineItems={lineItems}
-            removeFromCart={removeFromCart}
-            cart={cart}
-            createOrder={createOrder}
-            products={products}
-          />
-          <Router>
-            <div>
-              <ul>
-                <li>
-                  <Link to="/orders">Orders</Link>
-                </li>
-              </ul>
-
-              <Switch>
-                <Route path="/orders">
-                  <Orders
-                    cartItems={lineItems}
-                    products={products}
-                    orders={orders}
-                    params={params}
-                    setOrders={setOrders}
-                    auth={auth}
-                    cart={cart}
-                  />
-                </Route>
-              </Switch>
+        <Switch>
+          <Route path="/" exact>
+            <div className="horizontal">
+              <Products addToCart={addToCart} products={products} />
             </div>
-
-            {/* {params.view === "checkout" && (
-            <Checkout
-            cartItems={lineItems}
-            products={products}
-            orders={orders}
-            params={params}
-          /> */}
-          </Router>
-        </div>
-      </div>
+          </Route>
+          <Route path="/login">
+            <Login login={login} />
+          </Route>
+          <Route path="/products">
+            <Products addToCart={addToCart} products={products} />
+          </Route>
+          <Route path="/account">
+            <Account auth={auth} params={params} logout={logout} />
+          </Route>
+          <Route path="/cart">
+            <Mycart
+              lineItems={lineItems}
+              removeFromCart={removeFromCart}
+              cart={cart}
+              createOrder={createOrder}
+              products={products}
+              addToCart={addToCart}
+              saveForLater={saveForLater}
+              addToSaveForLater={addToSaveForLater}
+              isSubmitted={isSubmitted}
+              setIsSubmitted={setIsSubmitted}
+            />
+          </Route>
+          <Route path="/orders">
+            <Orders
+              cartItems={lineItems}
+              products={products}
+              orders={orders}
+              params={params}
+              setOrders={setOrders}
+              auth={auth}
+              cart={cart}
+              isSubmitted={isSubmitted}
+              setIsSubmitted={setIsSubmitted}
+            />
+          </Route>
+        </Switch>
+      </Router>
     )
   }
 }
