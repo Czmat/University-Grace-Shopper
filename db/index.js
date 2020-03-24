@@ -25,6 +25,7 @@ const sync = async () => {
     CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
     DROP TABLE IF EXISTS "lineItems";
     DROP TABLE IF EXISTS orders;
+
     DROP TABLE IF EXISTS users;
     DROP TABLE IF EXISTS products;
     CREATE TABLE users(

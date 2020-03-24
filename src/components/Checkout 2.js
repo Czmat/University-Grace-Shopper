@@ -21,6 +21,7 @@ const Checkout = ({
   console.log(auth)
   return (
     <div>
+      <Header params={params} lineItems={cartItems} cart={cart} />
       <h2>Checkout</h2>
       {orders.map(order => {
         if (order.status === "checkout") {

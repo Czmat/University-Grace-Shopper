@@ -1,4 +1,11 @@
 import React, { useState, useEffect } from "react"
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useParams
+} from "react-router-dom"
 import qs from "qs"
 import axios from "axios"
 import Login from "./Login"
@@ -174,45 +181,57 @@ const App = () => {
   } else {
     return (
       <div>
-        <Router>
-          <div className="header-container">
-            <Header params={params} lineItems={lineItems} cart={cart} />
-            <button onClick={logout}>Logout {auth.username} </button>
-          </div>
-          {params.view === "account" && (
-            <Account auth={auth} params={params} logout={logout} />
-          )}
-          {params.view === "cart" && (
-            <Mycart
-              lineItems={lineItems}
-              removeFromCart={removeFromCart}
-              cart={cart}
-              createOrder={createOrder}
-              products={products}
-              addToCart={addToCart}
-              saveForLater={saveForLater}
-              addToSaveForLater={addToSaveForLater}
-            />
-          )}
-          <div className="horizontal">
-            <Products addToCart={addToCart} products={products} />
-            <Cart
-              lineItems={lineItems}
-              removeFromCart={removeFromCart}
-              cart={cart}
-              createOrder={createOrder}
-              products={products}
-            />
+        <div className="header-container">
+          <Header params={params} lineItems={lineItems} cart={cart} />
+          <button onClick={logout}>Logout {auth.username} </button>
+        </div>
+        {params.view === "account" && (
+          <Account auth={auth} params={params} logout={logout} />
+        )}
+        {params.view === "cart" && (
+          <Mycart
+            lineItems={lineItems}
+            removeFromCart={removeFromCart}
+            cart={cart}
+            createOrder={createOrder}
+            products={products}
+            addToCart={addToCart}
+            saveForLater={saveForLater}
+            addToSaveForLater={addToSaveForLater}
+          />
+        )}
+        <div className="horizontal">
+          <Products addToCart={addToCart} products={products} />
+          <Cart
+            lineItems={lineItems}
+            removeFromCart={removeFromCart}
+            cart={cart}
+            createOrder={createOrder}
+            products={products}
+          />
+          <Router>
+            <div>
+              <ul>
+                <li>
+                  <Link to="/orders">Orders</Link>
+                </li>
+              </ul>
 
-            <Orders
-              cartItems={lineItems}
-              products={products}
-              orders={orders}
-              params={params}
-              setOrders={setOrders}
-              auth={auth}
-              cart={cart}
-            />
+              <Switch>
+                <Route path="/orders">
+                  <Orders
+                    cartItems={lineItems}
+                    products={products}
+                    orders={orders}
+                    params={params}
+                    setOrders={setOrders}
+                    auth={auth}
+                    cart={cart}
+                  />
+                </Route>
+              </Switch>
+            </div>
+
             {/* {params.view === "checkout" && (
             <Checkout
             cartItems={lineItems}
@@ -220,8 +239,8 @@ const App = () => {
             orders={orders}
             params={params}
           /> */}
-          </div>
-        </Router>
+          </Router>
+        </div>
       </div>
     )
   }
