@@ -1,8 +1,15 @@
-import React from 'react';
-import SaveForLater from './SaveForLater';
-import qs from 'qs';
+import React from "react"
+import SaveForLater from "./SaveForLater"
 
-const numArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useParams
+} from "react-router-dom"
+
+const numArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 const Mycart = ({
   lineItems,
@@ -10,6 +17,7 @@ const Mycart = ({
   createOrder,
   removeFromCart,
   products,
+  productDetail,
   addToCart,
   saveForLater,
   addToSaveForLater,
@@ -17,21 +25,21 @@ const Mycart = ({
   changeQtyInCart,
   addBackToCart,
   params,
-  getProductDetail,
+  getProductDetail
 }) => {
   const findCartTotal = () => {
-    let cartTotal = 0;
+    let cartTotal = 0
     lineItems
       .filter(lineItem => lineItem.orderId === cart.id)
       .forEach(lineItem => {
         const product = products.find(
           product => product.id === lineItem.productId
-        );
-        cartTotal += Number(product.price * lineItem.quantity);
+        )
+        cartTotal += Number(product.price * lineItem.quantity)
         // console.log(cartTotal);
-      });
-    return cartTotal.toFixed(2);
-  };
+      })
+    return cartTotal.toFixed(2)
+  }
 
   return (
     <div className="cart-container">
@@ -47,27 +55,25 @@ const Mycart = ({
         .map(lineItem => {
           const product = products.find(
             product => product.id === lineItem.productId
-          );
+          )
           return (
             <div key={lineItem.id} className="product-card">
               <button onClick={() => removeFromCart(lineItem.id)}>x</button>
               <div>
-                <a
-                  href={`#${qs.stringify({ view: 'productDetail' })}`}
-                  className={params.view === 'productDetail' ? 'selected' : ''}
+                <Link
+                  to="/productDetails"
                   onClick={() => getProductDetail(product.id)}
                 >
                   <img src={product.image}></img>
-                </a>
+                </Link>
               </div>
               <div>
-                <a
-                  href={`#${qs.stringify({ view: 'productDetail' })}`}
-                  className={params.view === 'productDetail' ? 'selected' : ''}
+                <Link
+                  to="/productDetails"
                   onClick={() => getProductDetail(product.id)}
                 >
                   <h4>{product && product.name}</h4>
-                </a>
+                </Link>
               </div>
               <div className="">
                 <div>Description of a product</div>
@@ -77,9 +83,9 @@ const Mycart = ({
                   defaultValue={lineItem.quantity}
                   onChange={e => {
                     //console.log(e.target.value);
-                    e.target.value === '0'
+                    e.target.value === "0"
                       ? removeFromCart(lineItem.id)
-                      : changeQtyInCart(product.id, e.target.value);
+                      : changeQtyInCart(product.id, e.target.value)
                   }}
                 >
                   <option value={0}>0 (delete)</option>
@@ -88,7 +94,7 @@ const Mycart = ({
                       <option key={num} value={num}>
                         {num}
                       </option>
-                    );
+                    )
                   })}
                 </select>
                 <i>|</i>
@@ -97,14 +103,14 @@ const Mycart = ({
                   value="Save for later"
                   onClick={e => {
                     //e.preventDefault();
-                    addToSaveForLater(product.id);
+                    addToSaveForLater(product.id)
                     //removeFromCart(lineItem.id);
                   }}
                 ></input>
                 <div>${Number(product.price).toFixed(2)}</div>
               </div>
             </div>
-          );
+          )
         })}
 
       <hr></hr>
@@ -123,8 +129,8 @@ const Mycart = ({
         params={params}
       />
     </div>
-  );
-};
+  )
+}
 
 {
   /* <h2>Cart - {cart.id && cart.id.slice(0, 4)}</h2>
@@ -154,4 +160,4 @@ const Mycart = ({
 </ul> */
 }
 
-export default Mycart;
+export default Mycart

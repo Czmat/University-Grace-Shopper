@@ -22,7 +22,8 @@ const Orders = ({
   setIsSubmitted,
   isSubmitted
 }) => {
-  const [checkoutOrder, setCheckoutOrder] = useState([])
+  const [checkoutOrder, setCheckoutOrder] = useState()
+  const link = "orders"
 
   const submitCheckout = e => {
     e.preventDefault()
@@ -79,16 +80,16 @@ const Orders = ({
           if (order.status != "checkout") {
             return (
               <li key={order.id}>
-                <button
+                {/* <button
                   onClick={() => {
                     order.status != "checkout"
                       ? (order.status = "checkout")
                       : (order.status = "ORDER")
                     setCheckoutOrder(order)
                   }}
-                >
-                  OrderID: {order.id.slice(0, 4)}
-                </button>
+                > */}
+                {/* </button> */}
+                <Link to="/checkout">OrderID: {order.id.slice(0, 4)}</Link>
                 <ul>
                   {mapCartItems.map(cartItem => {
                     const product = products.find(
@@ -98,7 +99,7 @@ const Orders = ({
                       <li key={cartItem.id}>
                         {product && product.name}
                         <div>
-                          <StarRating />
+                          <StarRating link={link} />
                         </div>
                         <span className="quantity">
                           Quantity: {cartItem.quantity}
@@ -110,7 +111,11 @@ const Orders = ({
               </li>
             )
           } else {
-            return <Checkout order={checkoutOrder} />
+            return (
+              <div key={order.id}>
+                <Checkout order={checkoutOrder} cart={cart} />
+              </div>
+            )
           }
         })}
       </ul>

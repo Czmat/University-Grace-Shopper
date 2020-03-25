@@ -22,12 +22,22 @@ form > * {
 
 .horizontal {
   display: flex;
+  flex-direction: row;
 }
 
 .horizontal > * {
-  flex: 1;
+  flex-direction: row;
   margin: 1rem;
   border: solid 1px dodgerBlue;
+  padding: 1rem;
+}
+.products-box {
+  flex-direction: row;
+}
+
+.products {
+  margin: 1rem;
+
   padding: 1rem;
 }
 
@@ -43,6 +53,9 @@ li {
 
 div > ul > li {
   border-bottom: solid 1px teal;
+}
+.checked {
+  color: orange;
 }
 
 li > * {

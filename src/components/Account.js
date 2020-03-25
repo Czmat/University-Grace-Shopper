@@ -1,5 +1,12 @@
 import React from "react"
-import qs from "qs"
+
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useParams
+} from "react-router-dom"
 
 const Account = ({ logout, auth, params }) => {
   return (
@@ -7,18 +14,8 @@ const Account = ({ logout, auth, params }) => {
       <h1>{auth.username}'s Account</h1>
       <ul>
         <li>
-          <a
-            href={`#${qs.stringify({ view: "profile" })}`}
-            className={params.view === "profile" ? "selected" : ""}
-          >
-            Profile
-          </a>
-          <a
-            href={`#${qs.stringify({ view: "orders" })}`}
-            className={params.view === "profile" ? "selected" : ""}
-          >
-            Orders
-          </a>
+          <Link to="/profile">Profile</Link>
+          <Link to="/orders">Orders</Link>
         </li>
       </ul>
       <button onClick={logout}>Logout {auth.username} </button>
