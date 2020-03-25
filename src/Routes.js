@@ -1,5 +1,5 @@
-import React from "react"
-import Home from "./App"
+import React from 'react';
+import Home from './App';
 // import Account from "./components/Account"
 // import Login from "./Login"
 // import Orders from "./Orders"
@@ -9,7 +9,7 @@ import Home from "./App"
 // import Account from "./components/Account"
 // import Mycart from "./components/Mycart"
 
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
 export default function App() {
   return (
@@ -60,7 +60,7 @@ export default function App() {
         </Route> */}
       </Switch>
     </Router>
-  )
+  );
 }
 
 // const Header = ({ params, lineItems, cart }) => {

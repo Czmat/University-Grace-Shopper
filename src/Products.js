@@ -1,13 +1,14 @@
-import React, { useState } from "react"
-import faker from "faker"
-import StarRating from "./components/StarRating"
+import React, { useState } from 'react';
+import faker from 'faker';
+import qs from 'qs';
+import StarRating from './components/StarRating';
 
-const numArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-var rating = [1, 2, 3, 4, 5]
+const numArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+var rating = [1, 2, 3, 4, 5];
 
-const Products = ({ products, addToCart }) => {
-  const [productQty, setProductQty] = useState(1)
-  console.log(productQty)
+const Products = ({ products, addToCart, getProductDetail, params }) => {
+  const [productQty, setProductQty] = useState(1);
+  console.log(productQty);
   return (
     <div>
       <h2>Products</h2>
@@ -15,11 +16,25 @@ const Products = ({ products, addToCart }) => {
         {products.map(product => {
           return (
             <li key={product.id}>
-              <img src={product.image}></img>
+              <a
+                href={`#${qs.stringify({ view: 'productDetail' })}`}
+                className={params.view === 'productDetail' ? 'selected' : ''}
+                onClick={() => getProductDetail(product.id)}
+              >
+                <img src={product.image}></img>
+              </a>
               <span>
-                <a href="">{product.name}</a>
-
-                <select
+                <a
+                  href={`#${qs.stringify({ view: 'productDetail' })}`}
+                  className={params.view === 'productDetail' ? 'selected' : ''}
+                  onClick={() => getProductDetail(product.id)}
+                >
+                  {product.name}
+                </a>
+                <div>
+                  <StarRating />
+                </div>
+                {/* <select
                   defaultValue={1}
                   onChange={e => {
                     setProductQty(e.target.value)
@@ -32,19 +47,19 @@ const Products = ({ products, addToCart }) => {
                       </option>
                     )
                   })}
-                </select>
+                </select> */}
               </span>
               {product.details}
               <span>${Number(product.price).toFixed(2)}</span>
-              <button onClick={() => addToCart(product.id, productQty)}>
+              {/* <button onClick={() => addToCart(product.id, productQty)}>
                 Add to Cart
-              </button>
+              </button> */}
             </li>
-          )
+          );
         })}
       </ul>
     </div>
-  )
-}
+  );
+};
 
-export default Products
+export default Products;

@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState } from 'react';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Link,
-  useParams
-} from "react-router-dom"
-import qs from "qs"
-import Header from "../Header"
+  useParams,
+} from 'react-router-dom';
+import qs from 'qs';
+import Header from '../Header';
 
 const Checkout = ({ cartItems, order, products, params, auth, cart }) => {
-  console.log(order)
+  console.log(order);
   return (
     <div key={order.id}>
       <h2>Checkout</h2>
@@ -33,10 +33,10 @@ const Checkout = ({ cartItems, order, products, params, auth, cart }) => {
         <button>Submit</button>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default Checkout
+export default Checkout;
 
 //want to create orders page that shows each order and the status - the cart should have a checkout button and once you checkout the order and pay/add a shipping address it will then create an order number which you can then reference on the order page.
 
