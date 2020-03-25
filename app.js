@@ -179,6 +179,14 @@ Object.keys(models).forEach(key => {
   });
 });
 
+//getting the cart and all the items
+
+app.get('/checkout/:id', (req, res, next) => {
+  // console.log(req.params)
+  db.getCheckoutCart(req.params.id).then(response => console.log(response));
+  //res.send(console.log(req, "my backend stuff"))
+});
+
 app.use((req, res, next) => {
   const error = {
     message: `page not found ${req.url} for ${req.method}`,

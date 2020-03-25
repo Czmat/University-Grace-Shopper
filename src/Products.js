@@ -37,7 +37,7 @@ const Products = ({ products, addToCart, getProductDetail, params }) => {
                 {/* <select
                   defaultValue={1}
                   onChange={e => {
-                    setProductQty(e.target.value);
+                    setProductQty(e.target.value)
                   }}
                 >
                   {numArr.map(num => {
@@ -45,7 +45,7 @@ const Products = ({ products, addToCart, getProductDetail, params }) => {
                       <option key={num} value={num}>
                         {num}
                       </option>
-                    );
+                    )
                   })}
                 </select> */}
               </span>

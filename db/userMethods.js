@@ -279,6 +279,17 @@ const getLineItems = async userId => {
   return (await client.query(SQL, [userId])).rows;
 };
 
+const getCheckoutCart = async userId => {
+  console.log(userId);
+  const response = await client.query(
+    `SELECT * FROM orders WHERE status='checkout' and "userId"=$1`,
+    [userId]
+  );
+  console.log(response.rows[0], 'my test for the checkout');
+  return response.rows[0];
+};
+const getProductRating = async () => {};
+
 module.exports = {
   getCart,
   getOrders,
@@ -286,10 +297,12 @@ module.exports = {
   removeFromCart,
   createOrder,
   getLineItems,
+  getCheckoutCart,
   getSaveForLater,
   addToSaveForLater,
   addBackToCart,
   removeFromSave,
   changeQtyInCart,
   getProductDetail,
+  getProductRating,
 };

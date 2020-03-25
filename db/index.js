@@ -20,6 +20,9 @@ const {
   removeFromSave,
   changeQtyInCart,
   getProductDetail,
+
+  getCheckoutCart,
+  getProductRating,
 } = require('./userMethods');
 
 const sync = async () => {
@@ -27,6 +30,7 @@ const sync = async () => {
     CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
     DROP TABLE IF EXISTS "lineItems";
     DROP TABLE IF EXISTS orders;
+
     DROP TABLE IF EXISTS users;
     DROP TABLE IF EXISTS products;
     CREATE TABLE users(
@@ -44,7 +48,7 @@ const sync = async () => {
       details VARCHAR DEFAULT 'great product',
       image VARCHAR,
       quantity INTEGER DEFAULT 2,
-      rating VARCHAR,
+      rating VARCHAR DEFAULT 3,
       CHECK (char_length(name) > 0)
     );
     CREATE TABLE orders(
@@ -200,4 +204,5 @@ module.exports = {
   removeFromSave,
   changeQtyInCart,
   getProductDetail,
+  getCheckoutCart,
 };
