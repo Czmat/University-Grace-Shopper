@@ -4,8 +4,7 @@ import StarRating from "./StarRating"
 
 const ProductDetail = ({ products, addToCart, productDetail, params }) => {
   const [productQty, setProductQty] = useState(1)
-  console.log(productDetail)
-
+  const link = "productDetails"
   const inStockQty = []
   var i
   for (i = 1; i < productDetail.quantity + 1; i++) {
@@ -35,7 +34,7 @@ const ProductDetail = ({ products, addToCart, productDetail, params }) => {
         })}
       </select>
       <div>{productDetail.details}</div>
-      <StarRating product={productDetail} />
+      <StarRating product={productDetail} link={link} />
       <div>${Number(productDetail.price).toFixed(2)}</div>
 
       <button onClick={() => addToCart(productDetail.id, productQty)}>

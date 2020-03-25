@@ -23,6 +23,7 @@ const Orders = ({
   isSubmitted
 }) => {
   const [checkoutOrder, setCheckoutOrder] = useState()
+  const link = "orders"
 
   const submitCheckout = e => {
     e.preventDefault()
@@ -98,7 +99,7 @@ const Orders = ({
                       <li key={cartItem.id}>
                         {product && product.name}
                         <div>
-                          <StarRating />
+                          <StarRating link={link} />
                         </div>
                         <span className="quantity">
                           Quantity: {cartItem.quantity}

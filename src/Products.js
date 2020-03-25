@@ -15,6 +15,7 @@ const Products = ({ products, addToCart, getProductDetail }) => {
       <h2>Products</h2>
       <ul>
         {products.map(product => {
+          console.log(product)
           return (
             <li key={product.id} className="products">
               <Link
@@ -47,7 +48,6 @@ const Products = ({ products, addToCart, getProductDetail }) => {
                   })}
                 </select> */}
               </span>
-              {product.details}
 
               <span>${Number(product.price).toFixed(2)}</span>
               <button onClick={() => addToCart(product.id, productQty)}>

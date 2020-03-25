@@ -54,6 +54,9 @@ li {
 div > ul > li {
   border-bottom: solid 1px teal;
 }
+.checked {
+  color: orange;
+}
 
 li > * {
   margin-bottom: 0.5rem;

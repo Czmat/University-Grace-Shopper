@@ -20,8 +20,7 @@ const {
   removeFromSave,
   changeQtyInCart,
   getProductDetail,
-  getCheckoutCart,
-  getProductRating
+  getCheckoutCart
 } = require("./userMethods")
 
 const sync = async () => {
@@ -47,7 +46,7 @@ const sync = async () => {
       details VARCHAR DEFAULT 'great product',
       image VARCHAR,
       quantity INTEGER DEFAULT 2,
-      rating VARCHAR DEFAULT 3,
+      rating INT ,
       CHECK (char_length(name) > 0)
     );
     CREATE TABLE orders(
@@ -76,9 +75,10 @@ const sync = async () => {
       let newProd = {
         name: prodName,
         price: price,
-        description: text,
+        details: text,
         rating: rating,
-        image: img
+        image: img,
+        quantity: 2
       }
       products.push(newProd)
     }

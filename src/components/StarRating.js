@@ -1,41 +1,62 @@
 import React from "react"
 
-const StarRating = ({ product }) => {
-  console.log(product, "star")
-  //   if (rating.rating < 5) {
-  //     return (
-  //       <div>
-  //         <span className="fa fa-star checked"></span>
-  //         <span className="fa fa-star  checked"></span>
-  //         <span className="fa fa-star checked "></span>
-  //         <span className="fa fa-star "></span>
-  //         <span className="fa fa-star"></span>
-  //       </div>
-  //     );
-  //   } else if (rating.rating >= 50 && rating.rating < 85) {
-  //     return (
-  //       <div>
-  //         <span className="fa fa-star checked"></span>
-  //         <span className="fa fa-star  checked"></span>
-  //         <span className="fa fa-star checked "></span>
-  //         <span className="fa fa-star checked "></span>
-  //         <span className="fa fa-star"></span>
-  //       </div>
-  //     );
-  //   } else if (rating.rating >= 85) {
-  //     return (
-  //       <div>
-  //         <span className="fa fa-star checked"></span>
-  //         <span className="fa fa-star  checked"></span>
-  //         <span className="fa fa-star checked "></span>
-  //         <span className="fa fa-star checked "></span>
-  //         <span className="fa fa-star checked"></span>
-  //       </div>
-  //     );
-  //   }
-  // };
-
-  if (true) {
+const StarRating = ({ product, link }) => {
+  const updateRating = () => {}
+  if (link != "orders") {
+    if (product.rating == "1") {
+      return (
+        <div>
+          <span className="fa fa-star checked"></span>
+          <span className="fa fa-star"></span>
+          <span className="fa fa-star"></span>
+          <span className="fa fa-star"></span>
+          <span className="fa fa-star"></span>
+        </div>
+      )
+    } else if (product.rating == "2") {
+      return (
+        <div>
+          <span className="fa fa-star checked"></span>
+          <span className="fa fa-star  checked"></span>
+          <span className="fa fa-star"></span>
+          <span className="fa fa-star"></span>
+          <span className="fa fa-star"></span>
+        </div>
+      )
+    } else if (product.rating == "3") {
+      return (
+        <div>
+          <span className="fa fa-star checked"></span>
+          <span className="fa fa-star checked"></span>
+          <span className="fa fa-star checked "></span>
+          <span className="fa fa-star"></span>
+          <span className="fa fa-star"></span>
+        </div>
+      )
+    } else if (product.rating == "4") {
+      return (
+        <div>
+          <span className="fa fa-star checked"></span>
+          <span className="fa fa-star checked"></span>
+          <span className="fa fa-star checked "></span>
+          <span className="fa fa-star checked "></span>
+          <span className="fa fa-star"></span>
+        </div>
+      )
+    } else if (product.rating == "5") {
+      return (
+        <div>
+          <span className="fa fa-star checked"></span>
+          <span className="fa fa-star checked"></span>
+          <span className="fa fa-star checked "></span>
+          <span className="fa fa-star checked "></span>
+          <span className="fa fa-star checked"></span>
+        </div>
+      )
+    } else {
+      return true
+    }
+  } else {
     return (
       <form>
         <fieldset className="rating">
