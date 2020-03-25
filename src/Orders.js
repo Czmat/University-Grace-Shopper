@@ -110,7 +110,11 @@ const Orders = ({
               </li>
             )
           } else {
-            return <Checkout order={checkoutOrder} />
+            return (
+              <div key={order.id}>
+                <Checkout order={checkoutOrder} cart={cart} />
+              </div>
+            )
           }
         })}
       </ul>

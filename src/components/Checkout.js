@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useEffect, useState } from 'react';
 import {
   BrowserRouter as Router,
@@ -11,27 +12,36 @@ import Header from '../Header';
 
 const Checkout = ({ cartItems, order, products, params, auth, cart }) => {
   console.log(order);
+=======
+import React, { useEffect, useState } from "react"
+import address from "../address"
+
+const Checkout = ({ order, cart }) => {
+  const handleAddress = async e => {
+    let verifiedAddress = await address(e).catch(err => console.log(err))
+    console.log(verifiedAddress, "address")
+  }
+
+  console.log(cart, "cart")
+
+  const saveAddress = () => {
+    return true
+  }
+>>>>>>> orders
   return (
     <div key={order.id}>
       <h2>Checkout</h2>
       <li>Order {order.id.slice(0, 4)} </li>
       <h1>Order Summary</h1>
-      <form>
-        1 Shipping Address
-        <input />
-        Name <input />
-        Address
-        <input />
-        City
-        <input />
-        State <input />
-        Zip <input />
-        Phone <input />
-        Country
-        <input type="checkbox" name="address" value="save" />
-        <label htmlFor="address">Add to address book</label>
-        <button>Submit</button>
+      <form onSubmit={handleAddress}>
+        <input placeholder="Address" />
+        <input placeholder="City" />
+        <input placeholder="State" />
+        <input placeholder="Zip" />
+        <button type="submit">submit</button>
       </form>
+      <input type="checkbox" name="address" value="save" />
+      <label htmlFor="address">Add to address book</label>
     </div>
   );
 };

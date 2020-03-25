@@ -29,6 +29,7 @@ const headers = () => {
 };
 
 const App = () => {
+<<<<<<< HEAD
   const [params, setParams] = useState(qs.parse(window.location.hash.slice(1)));
   const [auth, setAuth] = useState({});
   const [orders, setOrders] = useState([]);
@@ -39,6 +40,18 @@ const App = () => {
   const [lineItems, setLineItems] = useState([]);
   const [isSubmitted, setIsSubmitted] = useState(false);
   //console.log(orders, 'orders', cart, 'cart', lineItems, 'lineItems');
+=======
+  //console.log('HELLO CHAISE!!!');
+  const [params, setParams] = useState(qs.parse(window.location.hash.slice(1)))
+  const [auth, setAuth] = useState({})
+  const [orders, setOrders] = useState([])
+  const [cart, setCart] = useState({})
+  const [saveForLater, setSaveForLater] = useState({})
+  const [products, setProducts] = useState([])
+  const [lineItems, setLineItems] = useState([])
+  const [isSubmitted, setIsSubmitted] = useState(false)
+  const [checkoutOrder, setCheckoutOrder] = useState([])
+>>>>>>> orders
 
   useEffect(() => {
     axios.get('/api/products').then(response => setProducts(response.data));
