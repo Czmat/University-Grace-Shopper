@@ -1,7 +1,7 @@
-const apiKey = " WS72-FSN3-HDQ2 "
+const apiKey = "WS72-FSN3-HDQ2"
 const axios = require("axios")
 
-const verify = async e => {
+const address = async e => {
   e.preventDefault()
   let words
   let address = e.target[0].value
@@ -26,4 +26,4 @@ const verify = async e => {
     })
 }
 
-module.exports = verify
+module.exports = address

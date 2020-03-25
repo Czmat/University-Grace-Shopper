@@ -3,12 +3,11 @@ import address from "../address"
 
 const Checkout = ({ order, cart }) => {
   const handleAddress = async e => {
-    console.log(e)
     let verifiedAddress = await address(e).catch(err => console.log(err))
-    console.log(verifiedAddress)
+    console.log(verifiedAddress, "address")
   }
 
-  console.log(cart)
+  console.log(cart, "cart")
 
   const saveAddress = () => {
     return true
@@ -23,15 +22,10 @@ const Checkout = ({ order, cart }) => {
         <input placeholder="City" />
         <input placeholder="State" />
         <input placeholder="Zip" />
-        <button type="button">submit</button>
-        <input
-          type="checkbox"
-          name="address"
-          value="save"
-          onClick={saveAddress}
-        />
-        <label htmlFor="address">Add to address book</label>
+        <button type="submit">submit</button>
       </form>
+      <input type="checkbox" name="address" value="save" />
+      <label htmlFor="address">Add to address book</label>
     </div>
   )
 }
