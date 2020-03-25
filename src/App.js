@@ -161,6 +161,7 @@ const App = () => {
   }
 
   const { view } = params
+
   const userCart = lineItems.filter(lineItem => lineItem.orderId === cart.id)
 
   let totalQty = 0
@@ -175,7 +176,6 @@ const App = () => {
           <nav className="header-container">
             <Link to="/">
               <h1 className="header-name">Grace Shopper</h1>
-              <Link to="/products"></Link>
             </Link>
             <ul className="nav-bar">
               <li></li>
