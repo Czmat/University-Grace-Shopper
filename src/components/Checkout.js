@@ -1,16 +1,6 @@
 import React, { useEffect, useState } from "react"
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useParams
-} from "react-router-dom"
-import qs from "qs"
-import Header from "../Header"
 
-const Checkout = ({ cartItems, order, products, params, auth, cart }) => {
-  console.log(order)
+const Checkout = ({ order }) => {
   return (
     <div key={order.id}>
       <h2>Checkout</h2>
