@@ -1,167 +1,167 @@
-const express = require('express');
-const app = express();
-const path = require('path');
-const db = require('./db');
-const models = db.models;
+const express = require("express")
+const app = express()
+const path = require("path")
+const db = require("./db")
+const models = db.models
 
-app.use('/dist', express.static(path.join(__dirname, 'dist')));
-app.use('/assets', express.static(path.join(__dirname, 'assets')));
+app.use("/dist", express.static(path.join(__dirname, "dist")))
+app.use("/assets", express.static(path.join(__dirname, "assets")))
 
-app.use(express.json());
+app.use(express.json())
 
 const isLoggedIn = (req, res, next) => {
   //console.log('isLI', req.user);
   if (!req.user) {
-    const error = Error('not authorized');
-    error.status = 401;
-    return next(error);
+    const error = Error("not authorized")
+    error.status = 401
+    return next(error)
   }
-  next();
-};
+  next()
+}
 
 const isAdmin = (req, res, next) => {
-  if (req.user.role !== 'ADMIN') {
-    return next(Error('not authorized'));
+  if (req.user.role !== "ADMIN") {
+    return next(Error("not authorized"))
   }
-  next();
-};
+  next()
+}
 
 app.use((req, res, next) => {
-  const token = req.headers.authorization;
+  const token = req.headers.authorization
 
   if (!token) {
-    return next();
+    return next()
   }
   db.findUserFromToken(token)
     .then(auth => {
       // console.log('find', req.user, auth);
-      req.user = auth;
-      next();
+      req.user = auth
+      next()
     })
     .catch(ex => {
-      const error = Error('not authorized');
-      error.status = 401;
-      next(error);
-    });
-});
+      const error = Error("not authorized")
+      error.status = 401
+      next(error)
+    })
+})
 
-app.get('/', (req, res, next) =>
-  res.sendFile(path.join(__dirname, 'index.html'))
-);
+app.get("/", (req, res, next) =>
+  res.sendFile(path.join(__dirname, "index.html"))
+)
 
-app.post('/api/auth', (req, res, next) => {
+app.post("/api/auth", (req, res, next) => {
   // console.log(req.body, 'auth in post');
   db.authenticate(req.body)
     .then(token => res.send({ token }))
     .catch(() => {
-      const error = Error('not authorized');
-      error.status = 401;
-      next(error);
-    });
-});
+      const error = Error("not authorized")
+      error.status = 401
+      next(error)
+    })
+})
 
-app.get('/api/auth', isLoggedIn, (req, res, next) => {
+app.get("/api/auth", isLoggedIn, (req, res, next) => {
   //console.log('isLoggedIn', isLoggedIn, req.user);
-  res.send(req.user);
-});
+  res.send(req.user)
+})
 
-app.get('/api/getCart', (req, res, next) => {
+app.get("/api/getCart", (req, res, next) => {
   db.getCart(req.user.id)
     .then(cart => res.send(cart))
-    .catch(next);
-});
+    .catch(next)
+})
 
-app.get('/api/getSaveForLater', (req, res, next) => {
+app.get("/api/getSaveForLater", (req, res, next) => {
   db.getSaveForLater(req.user.id)
     .then(cart => res.send(cart))
-    .catch(next);
-});
+    .catch(next)
+})
 
-app.get('/api/getOrders', (req, res, next) => {
+app.get("/api/getOrders", (req, res, next) => {
   db.getOrders(req.user.id)
     .then(orders => res.send(orders))
-    .catch(next);
-});
+    .catch(next)
+})
 
-app.post('/api/createOrder', (req, res, next) => {
+app.post("/api/createOrder", (req, res, next) => {
   db.createOrder(req.user.id)
     .then(order => res.send(order))
-    .catch(next);
-});
+    .catch(next)
+})
 
-app.get('/api/getLineItems', (req, res, next) => {
+app.get("/api/getLineItems", (req, res, next) => {
   db.getLineItems(req.user.id)
     .then(lineItems => res.send(lineItems))
-    .catch(next);
-});
+    .catch(next)
+})
 
-app.get('/api/products/:id', (req, res, next) => {
+app.get("/api/products/:id", (req, res, next) => {
   db.getProductDetail(req.params.id)
     .then(productDetail => res.send(productDetail))
-    .catch(next);
-});
+    .catch(next)
+})
 
-app.post('/api/addToCart', (req, res, next) => {
+app.post("/api/addToCart", (req, res, next) => {
   //console.log(req.body);
   db.addToCart({
     userId: req.user.id,
     productId: req.body.productId,
-    lineItemQuantity: req.body.quantity,
+    lineItemQuantity: req.body.quantity
   })
     .then(lineItem => res.send(lineItem))
-    .catch(next);
-});
+    .catch(next)
+})
 
-app.post('/api/addBackToCart', (req, res, next) => {
+app.post("/api/addBackToCart", (req, res, next) => {
   //console.log(req.body);
   db.addBackToCart({
     userId: req.user.id,
     productId: req.body.productId,
-    lineItemQuantity: req.body.quantity,
+    lineItemQuantity: req.body.quantity
   })
     .then(lineItem => res.send(lineItem))
-    .catch(next);
-});
+    .catch(next)
+})
 
-app.post('/api/changeQtyInCart', (req, res, next) => {
+app.post("/api/changeQtyInCart", (req, res, next) => {
   //console.log(req.body);
   db.changeQtyInCart({
     userId: req.user.id,
     productId: req.body.productId,
-    lineItemQuantity: req.body.quantity,
+    lineItemQuantity: req.body.quantity
   })
     .then(lineItem => res.send(lineItem))
-    .catch(next);
-});
+    .catch(next)
+})
 
-app.post('/api/addToSaveForLater', (req, res, next) => {
-  console.log(req.body, 'post addToSave');
+app.post("/api/addToSaveForLater", (req, res, next) => {
+  console.log(req.body, "post addToSave")
   db.addToSaveForLater({
     userId: req.user.id,
-    productId: req.body.productId,
+    productId: req.body.productId
   })
     .then(lineItem => res.send(lineItem))
-    .catch(next);
-});
+    .catch(next)
+})
 
-app.delete('/api/removeFromCart/:id', (req, res, next) => {
+app.delete("/api/removeFromCart/:id", (req, res, next) => {
   db.removeFromCart({ userId: req.user.id, lineItemId: req.params.id })
     .then(() => res.sendStatus(204))
-    .catch(next);
-});
+    .catch(next)
+})
 
-app.delete('/api/removeFromSave/:id', (req, res, next) => {
+app.delete("/api/removeFromSave/:id", (req, res, next) => {
   db.removeFromSave({ userId: req.user.id, lineItemId: req.params.id })
     .then(() => res.sendStatus(204))
-    .catch(next);
-});
+    .catch(next)
+})
 
-app.get('/api/products', (req, res, next) => {
+app.get("/api/products", (req, res, next) => {
   db.models.products
     .read()
     .then(products => res.send(products))
-    .catch(next);
-});
+    .catch(next)
+})
 
 Object.keys(models).forEach(key => {
   //console.log(key);
@@ -169,35 +169,41 @@ Object.keys(models).forEach(key => {
     models[key]
       .read({ user: req.user })
       .then(items => res.send(items))
-      .catch(next);
-  });
+      .catch(next)
+  })
   app.post(`/api/${key}`, isLoggedIn, isAdmin, (req, res, next) => {
     models[key]
       .create({ user: req.user })
       .then(items => res.send(items))
-      .catch(next);
-  });
-});
+      .catch(next)
+  })
+})
 
 //getting the cart and all the items
 
-app.get('/checkout/:id', (req, res, next) => {
+app.get("/checkout/:id", (req, res, next) => {
   // console.log(req.params)
-  db.getCheckoutCart(req.params.id).then(response => console.log(response));
+  db.getCheckoutCart(req.params.id).then(response => console.log(response))
   //res.send(console.log(req, "my backend stuff"))
-});
+})
+
+//posting the new rating
+app.post("/api/postRating/:id/:rating", (req, res, next) => {
+  console.log("Request received")
+  console.log(req.params)
+})
 
 app.use((req, res, next) => {
   const error = {
     message: `page not found ${req.url} for ${req.method}`,
-    status: 404,
-  };
-  next(error);
-});
+    status: 404
+  }
+  next(error)
+})
 
 app.use((err, req, res, next) => {
-  console.log(err.status);
-  res.status(err.status || 500).send({ message: err.message });
-});
+  console.log(err.status)
+  res.status(err.status || 500).send({ message: err.message })
+})
 
-module.exports = app;
+module.exports = app

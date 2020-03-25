@@ -15,7 +15,6 @@ const Products = ({ products, addToCart, getProductDetail }) => {
       <h2>Products</h2>
       <ul>
         {products.map(product => {
-          console.log(product)
           return (
             <li key={product.id} className="products">
               <Link

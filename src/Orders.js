@@ -99,7 +99,7 @@ const Orders = ({
                       <li key={cartItem.id}>
                         {product && product.name}
                         <div>
-                          <StarRating link={link} />
+                          <StarRating link={link} product={product} />
                         </div>
                         <span className="quantity">
                           Quantity: {cartItem.quantity}
