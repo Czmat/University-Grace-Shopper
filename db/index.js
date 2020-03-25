@@ -20,7 +20,8 @@ const {
   removeFromSave,
   changeQtyInCart,
   getProductDetail,
-  getCheckoutCart
+  getCheckoutCart,
+  changeProductRating
 } = require("./userMethods")
 
 const sync = async () => {
@@ -155,5 +156,6 @@ module.exports = {
   removeFromSave,
   changeQtyInCart,
   getProductDetail,
-  getCheckoutCart
+  getCheckoutCart,
+  changeProductRating
 }

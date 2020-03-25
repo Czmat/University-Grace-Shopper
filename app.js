@@ -189,8 +189,12 @@ app.get("/checkout/:id", (req, res, next) => {
 
 //posting the new rating
 app.post("/api/postRating/:id/:rating", (req, res, next) => {
-  console.log("Request received")
-  console.log(req.params)
+  db.changeProductRating(req.params.id, req.params.rating)
+    .then(response => res.send(response))
+    .catch(next)
+})
+app.get("/*", (req, res, next) => {
+  res.sendFile(path.join(__dirname, "index.html"))
 })
 
 app.use((req, res, next) => {

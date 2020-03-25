@@ -2,12 +2,11 @@ import React from "react"
 import axios from "axios"
 
 const StarRating = ({ product, link }) => {
-  console.log(product)
   const updateRating = e => {
     e.preventDefault()
-    console.log(product)
-    const rating = e.target.value
-    console.log(rating)
+
+    const rating = (product.rating + Number(e.target.value)) / 2
+
     axios
       .post(`api/postRating/${product.id}/${rating}`)
       .then(response => console.log(response))
@@ -74,7 +73,7 @@ const StarRating = ({ product, link }) => {
           type="radio"
           id="star5"
           name="rating"
-          value="5"
+          value={5}
           onClick={updateRating}
         />
         <label
@@ -86,7 +85,7 @@ const StarRating = ({ product, link }) => {
           type="radio"
           id="star4half"
           name="rating"
-          value="4.5"
+          value={4.5}
           onClick={updateRating}
         />
         <label
@@ -98,7 +97,7 @@ const StarRating = ({ product, link }) => {
           type="radio"
           id="star4"
           name="rating"
-          value="4"
+          value={4}
           onClick={updateRating}
         />
         <label
@@ -110,7 +109,7 @@ const StarRating = ({ product, link }) => {
           type="radio"
           id="star3half"
           name="rating"
-          value="3.5"
+          value={3.5}
           onClick={updateRating}
         />
         <label
@@ -130,7 +129,7 @@ const StarRating = ({ product, link }) => {
           type="radio"
           id="star2half"
           name="rating"
-          value="2.5"
+          value={2.5}
           onClick={updateRating}
         />
         <label
@@ -142,7 +141,7 @@ const StarRating = ({ product, link }) => {
           type="radio"
           id="star2"
           name="rating"
-          value="2"
+          value={2}
           onClick={updateRating}
         />
         <label
@@ -154,7 +153,7 @@ const StarRating = ({ product, link }) => {
           type="radio"
           id="star1half"
           name="rating"
-          value="1.5"
+          value={1.5}
           onClick={updateRating}
         />
         <label
@@ -166,7 +165,7 @@ const StarRating = ({ product, link }) => {
           type="radio"
           id="star1"
           name="rating"
-          value="1"
+          value={1}
           onClick={updateRating}
         />
         <label
