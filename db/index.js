@@ -1,11 +1,11 @@
-const client = require('./client');
-const faker = require('faker');
+const client = require("./client")
+const faker = require("faker")
 
-const { authenticate, compare, findUserFromToken, hash } = require('./auth');
+const { authenticate, compare, findUserFromToken, hash } = require("./auth")
 
-const models = ({ products, users, orders, lineItems } = require('./models'));
+const models = ({ products, users, orders, lineItems } = require("./models"))
 
-const fakeProduct = faker.commerce.product();
+const fakeProduct = faker.commerce.product()
 
 const {
   getCart,
@@ -20,10 +20,9 @@ const {
   removeFromSave,
   changeQtyInCart,
   getProductDetail,
-
   getCheckoutCart,
-  getProductRating,
-} = require('./userMethods');
+  getProductRating
+} = require("./userMethods")
 
 const sync = async () => {
   const SQL = `
@@ -63,129 +62,81 @@ const sync = async () => {
       "productId" UUID REFERENCES products(id) NOT NULL,
       quantity INTEGER DEFAULT 1
     );
-  `;
-  await client.query(SQL);
+  `
+  await client.query(SQL)
+
+  const getProducts = amount => {
+    let products = []
+    for (let i = 0; i < amount; i++) {
+      let prodName = faker.commerce.productName()
+      let price = faker.commerce.price(0.99, 20.0, 2)
+      let text = faker.lorem.sentence(5)
+      let rating = faker.random.number({ min: 1, max: 5 })
+      let img = faker.image.imageUrl(300, 300, "business", true)
+      let newProd = {
+        name: prodName,
+        price: price,
+        description: text,
+        rating: rating,
+        image: img
+      }
+      products.push(newProd)
+    }
+    return products
+  }
 
   const _users = {
     lucy: {
-      username: 'lucy',
-      password: 'LUCY',
-      role: 'ADMIN',
+      username: "lucy",
+      password: "LUCY",
+      role: "ADMIN"
     },
     moe: {
-      username: 'moe',
-      password: 'MOE',
-      role: null,
+      username: "moe",
+      password: "MOE",
+      role: null
     },
     curly: {
-      username: 'larry',
-      password: 'LARRY',
-      role: null,
-    },
-  };
+      username: "larry",
+      password: "LARRY",
+      role: null
+    }
+  }
 
-  const _products = {
-    fakeProduct: {
-      name: faker.commerce.productName(),
-      price: faker.commerce.price(),
-      details:
-        faker.commerce.productAdjective() +
-        ' ' +
-        faker.commerce.productMaterial(),
-      image: faker.random.image(),
-      quantity: 3,
-      rating: 3,
-    },
-    bar: {
-      name: faker.commerce.productName(),
-      price: faker.commerce.price(),
-      details:
-        faker.commerce.productAdjective() +
-        ' ' +
-        faker.commerce.productMaterial(),
-      image: faker.random.image(),
-      quantity: 3,
-      rating: 3,
-    },
-    bazz: {
-      name: faker.commerce.productName(),
-      price: faker.commerce.price(),
-      details:
-        faker.commerce.productAdjective() +
-        ' ' +
-        faker.commerce.productMaterial(),
-      image: faker.random.image(),
-      quantity: 3,
-      rating: 3,
-    },
-    quq: {
-      name: faker.commerce.productName(),
-      price: faker.commerce.price(),
-      details:
-        faker.commerce.productAdjective() +
-        ' ' +
-        faker.commerce.productMaterial(),
-      image: faker.random.image(),
-      quantity: 3,
-      rating: 3,
-    },
-    qq: {
-      name: faker.commerce.productName(),
-      price: faker.commerce.price(),
-      details:
-        faker.commerce.productAdjective() +
-        ' ' +
-        faker.commerce.productMaterial(),
-      image: faker.random.image(),
-      quantity: 3,
-      rating: 3,
-    },
-
-    zz: {
-      name: faker.commerce.productName(),
-      price: faker.commerce.price(),
-      details:
-        faker.commerce.productAdjective() +
-        ' ' +
-        faker.commerce.productMaterial(),
-      image: faker.random.image(),
-      quantity: 3,
-      rating: 3,
-    },
-  };
+  const _products = getProducts(5)
 
   const [lucy, moe] = await Promise.all(
     Object.values(_users).map(user => users.create(user))
-  );
+  )
   const [foo, bar, bazz] = await Promise.all(
     Object.values(_products).map(product => {
-      products.create(product);
+      products.create(product)
     })
-  );
+  )
 
   const _orders = {
     moe: {
-      userId: moe.id,
+      userId: moe.id
     },
     lucy: {
-      userId: lucy.id,
-    },
-  };
+      userId: lucy.id
+    }
+  }
 
   const userMap = (await users.read()).reduce((acc, user) => {
-    acc[user.username] = user;
-    return acc;
-  }, {});
+    acc[user.username] = user
+    return acc
+  }, {})
   const productMap = (await products.read()).reduce((acc, product) => {
-    acc[product.name] = product;
-    return acc;
-  }, {});
+    acc[product.name] = product
+    return acc
+  }, {})
   //console.log(userMap, productMap);
   return {
     users: userMap,
-    products: productMap,
-  };
-};
+    products: productMap
+  }
+}
 
 module.exports = {
   sync,
@@ -204,5 +155,5 @@ module.exports = {
   removeFromSave,
   changeQtyInCart,
   getProductDetail,
-  getCheckoutCart,
-};
+  getCheckoutCart
+}
