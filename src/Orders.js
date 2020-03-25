@@ -112,7 +112,7 @@ const Orders = ({
           } else {
             return (
               <div key={order.id}>
-                <Checkout order={checkoutOrder} />
+                <Checkout order={checkoutOrder} cart={cart} />
               </div>
             )
           }

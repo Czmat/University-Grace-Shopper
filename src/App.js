@@ -36,6 +36,7 @@ const App = () => {
   const [products, setProducts] = useState([])
   const [lineItems, setLineItems] = useState([])
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [checkoutOrder, setCheckoutOrder] = useState([])
 
   useEffect(() => {
     axios.get("/api/products").then(response => setProducts(response.data))

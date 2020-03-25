@@ -1,26 +1,36 @@
 import React, { useEffect, useState } from "react"
+import address from "../address"
 
-const Checkout = ({ order }) => {
+const Checkout = ({ order, cart }) => {
+  const handleAddress = async e => {
+    console.log(e)
+    let verifiedAddress = await address(e).catch(err => console.log(err))
+    console.log(verifiedAddress)
+  }
+
+  console.log(cart)
+
+  const saveAddress = () => {
+    return true
+  }
   return (
     <div key={order.id}>
       <h2>Checkout</h2>
       <li>Order {order.id.slice(0, 4)} </li>
       <h1>Order Summary</h1>
-      <form>
-        1 Shipping Address
-        <input />
-        Name <input />
-        Address
-        <input />
-        City
-        <input />
-        State <input />
-        Zip <input />
-        Phone <input />
-        Country
-        <input type="checkbox" name="address" value="save" />
+      <form onSubmit={handleAddress}>
+        <input placeholder="Address" />
+        <input placeholder="City" />
+        <input placeholder="State" />
+        <input placeholder="Zip" />
+        <button type="button">submit</button>
+        <input
+          type="checkbox"
+          name="address"
+          value="save"
+          onClick={saveAddress}
+        />
         <label htmlFor="address">Add to address book</label>
-        <button>Submit</button>
       </form>
     </div>
   )
