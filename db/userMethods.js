@@ -281,7 +281,13 @@ const getCheckoutCart = async userId => {
   console.log(response.rows[0], "my test for the checkout")
   return response.rows[0]
 }
-const getProductRating = async () => {}
+const changeProductRating = async (productId, rating) => {
+  const response = await client.query(
+    `UPDATE products set rating = $2 where id = $1 returning * `,
+    [productId, rating]
+  )
+  return response.rows[0]
+}
 
 module.exports = {
   getCart,
@@ -297,5 +303,5 @@ module.exports = {
   removeFromSave,
   changeQtyInCart,
   getProductDetail,
-  getProductRating
+  changeProductRating
 }
