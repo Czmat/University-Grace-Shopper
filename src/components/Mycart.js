@@ -1,4 +1,5 @@
 import React from 'react';
+import SaveForLater from './SaveForLater';
 
 const numArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
@@ -9,10 +10,32 @@ const Mycart = ({
   removeFromCart,
   products,
   addToCart,
+  saveForLater,
+  addToSaveForLater,
 }) => {
+  const findCartTotal = () => {
+    let cartTotal = 0;
+    lineItems
+      .filter(lineItem => lineItem.orderId === cart.id)
+      .forEach(lineItem => {
+        const product = products.find(
+          product => product.id === lineItem.productId
+        );
+        cartTotal += Number(product.price * lineItem.quantity);
+        console.log(cartTotal);
+      });
+    return cartTotal.toFixed(2);
+  };
+
   return (
     <div className="cart-container">
-      <h2>Your cart total: $100</h2>
+      <h2>Your cart total: ${findCartTotal()}</h2>
+      <button
+        disabled={!lineItems.find(lineItem => lineItem.orderId === cart.id)}
+        onClick={createOrder}
+      >
+        Create Order
+      </button>
       {lineItems
         .filter(lineItem => lineItem.orderId === cart.id)
         .map(lineItem => {
@@ -24,17 +47,17 @@ const Mycart = ({
               <button onClick={() => removeFromCart(lineItem.id)}>x</button>
               <div>
                 <a href="#">
-                  <img></img>Image
+                  <img src={product.image}></img>
                 </a>
               </div>
               <div>
-                <h4>
-                  <a href="#">{product && product.name}</a>
-                </h4>
+                <a href="#">
+                  <h4>{product && product.name}</h4>
+                </a>
               </div>
               <div className="">
                 <div>Description of a product</div>
-                <p>more detail Description</p>
+                <p>{product.details}</p>
                 <span>Qty:</span>
                 <select
                   defaultValue={lineItem.quantity}
@@ -55,18 +78,31 @@ const Mycart = ({
                   })}
                 </select>
                 <i>|</i>
-                <input type="submit" value="Save for later"></input>
+                <input
+                  type="submit"
+                  value="Save for later"
+                  onClick={e => {
+                    //e.preventDefault();
+                    addToSaveForLater(product.id);
+                  }}
+                ></input>
                 <div>${Number(product.price).toFixed(2)}</div>
               </div>
             </div>
           );
         })}
-      <button
-        disabled={!lineItems.find(lineItem => lineItem.orderId === cart.id)}
-        onClick={createOrder}
-      >
-        Create Order
-      </button>
+
+      <hr></hr>
+      <SaveForLater
+        lineItems={lineItems}
+        removeFromCart={removeFromCart}
+        cart={cart}
+        createOrder={createOrder}
+        products={products}
+        addToCart={addToCart}
+        saveForLater={saveForLater}
+        addToSaveForLater={addToSaveForLater}
+      />
     </div>
   );
 };

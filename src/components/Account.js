@@ -1,5 +1,5 @@
-import React from 'react';
-import qs from 'qs';
+import React from "react"
+import qs from "qs"
 
 const Account = ({ logout, auth, params }) => {
   return (
@@ -8,16 +8,22 @@ const Account = ({ logout, auth, params }) => {
       <ul>
         <li>
           <a
-            href={`#${qs.stringify({ view: 'profile' })}`}
-            className={params.view === 'profile' ? 'selected' : ''}
+            href={`#${qs.stringify({ view: "profile" })}`}
+            className={params.view === "profile" ? "selected" : ""}
           >
             Profile
+          </a>
+          <a
+            href={`#${qs.stringify({ view: "orders" })}`}
+            className={params.view === "profile" ? "selected" : ""}
+          >
+            Orders
           </a>
         </li>
       </ul>
       <button onClick={logout}>Logout {auth.username} </button>
     </div>
-  );
-};
+  )
+}
 
-export default Account;
+export default Account
