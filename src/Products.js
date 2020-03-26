@@ -1,14 +1,14 @@
-import React, { useState } from "react"
+import React, { useState } from 'react';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Link,
-  useParams
-} from "react-router-dom"
+  useParams,
+} from 'react-router-dom';
 
 const Products = ({ products, addToCart, getProductDetail }) => {
-  const [productQty, setProductQty] = useState(1)
+  const [productQty, setProductQty] = useState(1);
 
   return (
     <div className="products-box">
@@ -49,15 +49,15 @@ const Products = ({ products, addToCart, getProductDetail }) => {
               </span>
 
               <span>${Number(product.price).toFixed(2)}</span>
-              <button onClick={() => addToCart(product.id, productQty)}>
+              {/* <button onClick={() => addToCart(product.id, productQty)}>
                 Add to Cart
-              </button>
+              </button> */}
             </li>
-          )
+          );
         })}
       </ul>
     </div>
-  )
-}
+  );
+};
 
-export default Products
+export default Products;

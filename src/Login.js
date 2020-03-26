@@ -1,16 +1,23 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect } from 'react';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useParams,
+} from 'react-router-dom';
 
 const Login = ({ login }) => {
-  const [username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
-  const [error, setError] = useState("")
-  const [name, setName] = useState("")
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [name, setName] = useState('');
   const onSubmit = ev => {
-    ev.preventDefault()
+    ev.preventDefault();
     login({ username, password }).catch(ex =>
       setError(ex.response.data.message)
-    )
-  }
+    );
+  };
   return (
     <div>
       <form onSubmit={onSubmit}>
@@ -21,7 +28,10 @@ const Login = ({ login }) => {
         <button>Login</button>
       </form>
       <a href=""> Forgot Password</a>
-      <div className="horizontal">
+      <hr />
+      <h2>I am new to Grace Shopper</h2>
+      <Link to="/register">Create Account</Link>
+      {/* <div className="horizontal">
         <form>
           <h1>Create a new user</h1>
           Name <input value={name} onChange={ev => setName(ev.target.value)} />
@@ -37,9 +47,9 @@ const Login = ({ login }) => {
           />
           <button>Create</button>
         </form>
-      </div>
+      </div> */}
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;
