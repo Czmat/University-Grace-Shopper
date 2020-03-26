@@ -295,15 +295,11 @@ const getAddress = async userID => {
   SELECT * FROM addresses WHERE "userId" = $1`,
     [userID]
   )
-
-  return response.rows[0]
+  return response.rows
 }
 const addAddress = async (userID, address) => {
-  console.log(userID, address)
   const SQL = `INSERT INTO addresses ("userId", address) values ($1, $2) returning *`
   const response = await client.query(SQL, [userID, address])
-
-  console.log(response, "db response")
   return response.rows[0]
 }
 

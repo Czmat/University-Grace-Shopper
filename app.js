@@ -206,13 +206,13 @@ app.post("/api/postRating/:id/:rating", (req, res, next) => {
 //post for the saved addresses
 app.post("/api/address/:id/:address", (req, res, next) => {
   db.addAddress(req.params.id, req.params.address)
-    .then(response => console.log(response, "Response"))
+    .then(response => res.send(response))
     .catch(next)
 })
 
 //get for saved addresses
 app.get("/api/address/:id", (req, res, next) => {
-  res.send("on the way")
+  db.getAddress(req.params.id).then(response => res.send(response))
 })
 
 //will make sure the get requests work with the router
