@@ -274,7 +274,11 @@ const App = () => {
         <Switch>
           <Route path="/" exact>
             <div className="horizontal">
-              <FeaturedProduct products={products} />
+              <FeaturedProduct
+                products={products}
+                getProductDetail={getProductDetail}
+                productDetail={productDetail}
+              />
             </div>
           </Route>
           <Route path="/login">
@@ -345,7 +349,11 @@ const App = () => {
         <Switch>
           <Route path="/" exact>
             <div className="horizontal">
-              <FeaturedProduct products={products} />
+              <FeaturedProduct
+                products={products}
+                getProductDetail={getProductDetail}
+                productDetail={productDetail}
+              />
               {/* <Products
                 addToCart={addToCart}
                 products={products}
