@@ -1,12 +1,12 @@
-import React from "react"
+import React from 'react';
 
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Link,
-  useParams
-} from "react-router-dom"
+  useParams,
+} from 'react-router-dom';
 
 const Account = ({ logout, auth, params }) => {
   return (
@@ -15,12 +15,13 @@ const Account = ({ logout, auth, params }) => {
       <ul>
         <li>
           <Link to="/profile">Profile</Link>
+          <Link to="/addresses">Addresses</Link>
           <Link to="/orders">Orders</Link>
         </li>
       </ul>
       <button onClick={logout}>Logout {auth.username} </button>
     </div>
-  )
-}
+  );
+};
 
-export default Account
+export default Account;

@@ -50,7 +50,7 @@ app.get('/', (req, res, next) =>
 );
 
 app.post('/api/auth', (req, res, next) => {
-  // console.log(req.body, 'auth in post');
+  //console.log(req.body, 'credentials auth in post');
   db.authenticate(req.body)
     .then(token => res.send({ token }))
     .catch(() => {
@@ -160,6 +160,15 @@ app.get('/api/products', (req, res, next) => {
   db.models.products
     .read()
     .then(products => res.send(products))
+    .catch(next);
+});
+
+//creating user account { username, firstname, lastname, password, role, email }
+app.post('/api/user', (req, res, next) => {
+  console.log(req.body);
+  db.models.users
+    .create(req.body)
+    .then(user => res.send(user))
     .catch(next);
 });
 

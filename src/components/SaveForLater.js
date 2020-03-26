@@ -1,11 +1,11 @@
-import React from "react"
+import React from 'react';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Link,
-  useParams
-} from "react-router-dom"
+  useParams,
+} from 'react-router-dom';
 
 const SavedForLater = ({
   lineItems,
@@ -18,11 +18,11 @@ const SavedForLater = ({
   addToSaveForLater,
   addBackToCart,
   params,
-  getProductDetail
+  getProductDetail,
 }) => {
   const userSave = lineItems.filter(
     lineItem => lineItem.orderId === saveForLater.id
-  )
+  );
 
   return (
     <div className="cart-container">
@@ -32,7 +32,7 @@ const SavedForLater = ({
         .map(lineItem => {
           const product = products.find(
             product => product.id === lineItem.productId
-          )
+          );
           return (
             <div key={lineItem.id} className="product-card">
               <button onClick={() => removeFromSave(lineItem.id)}>x</button>
@@ -58,11 +58,11 @@ const SavedForLater = ({
                 <input
                   type="submit"
                   value="Move to cart"
-                  onClick={e => {
-                    e.preventDefault()
+                  onClick={() => {
+                    //e.preventDefault()
                     //console.log(product, 'product', lineItem, 'lineitem');
-                    addToCart(lineItem.productId, lineItem.quantity)
-                    removeFromSave(lineItem.id)
+                    addBackToCart(lineItem.productId, lineItem.quantity);
+                    //removeFromSave(lineItem.id);
 
                     //removeFromSave(lineItem.id);
                     //removeFromCart(lineItem.id);
@@ -71,10 +71,10 @@ const SavedForLater = ({
                 <div>${Number(product.price).toFixed(2)}</div>
               </div>
             </div>
-          )
+          );
         })}
     </div>
-  )
-}
+  );
+};
 
-export default SavedForLater
+export default SavedForLater;
