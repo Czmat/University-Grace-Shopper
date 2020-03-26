@@ -20,7 +20,7 @@ const Profile = ({ login, updateUser, auth }) => {
   const onSubmit = ev => {
     ev.preventDefault();
 
-    updateUser({ username, firstname, lastname, email });
+    updateUser({ id: auth.id, username, firstname, lastname, email });
     //window.location = '/account';
     // login({ username, password }).catch(ex =>
     //   setError(ex.response.data.message)

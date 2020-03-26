@@ -228,9 +228,14 @@ const App = () => {
 
   const updateUser = user => {
     console.log(user);
-    axios
-      .put('/api/user', user)
-      .then(response => console.log(response.data, 'update response'));
+    axios.put(`/api/user/${user.id}`, user).then(response => {
+      console.log(response.data.username, 'update response');
+      exchangeTokenForAuth();
+      // login({
+      //   username: response.data.username,
+      //   password: user.password,
+      // });
+    });
   };
 
   const userCart = lineItems.filter(lineItem => lineItem.orderId === cart.id);

@@ -84,12 +84,12 @@ const addBackToCart = async ({ productId, userId, lineItemQuantity }) => {
   );
 
   let cartLineItem;
-  console.log(cartResponse.rows.length, 'cartResp.lenght');
+  //console.log(cartResponse.rows.length, 'cartResp.lenght');
 
   if (cartResponse.rows.length) {
     cartLineItem = cartResponse.rows[0];
 
-    console.log(cartLineItem, 'cartlineitem');
+    //console.log(cartLineItem, 'cartlineitem');
     cartLineItem.quantity += Number(saveLineItem.quantity);
     await removeFromSave({ userId: userId, lineItemId: saveLineItem.id });
     // if (saveResponse.rows.length) {
@@ -260,6 +260,17 @@ const getProductDetail = async productId => {
     .rows[0];
 };
 
+//updateUser from profile
+const updateUser = async ({ id, username, firstname, lastname, email }) => {
+  console.log({ id, username, firstname, lastname, email });
+  return (
+    await client.query(
+      `UPDATE "users" set username=$1, firstname=$2, lastname=$3, email=$4 WHERE id = $5 returning *`,
+      [username, firstname, lastname, email, id]
+    )
+  ).rows[0];
+};
+
 const getLineItems = async userId => {
   const SQL = `
     SELECT "lineItems".*
@@ -305,4 +316,5 @@ module.exports = {
   getProductDetail,
   // getProductRating,
   changeProductRating,
+  updateUser,
 };

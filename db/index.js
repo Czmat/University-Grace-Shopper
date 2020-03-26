@@ -22,6 +22,7 @@ const {
   getProductDetail,
   getCheckoutCart,
   changeProductRating,
+  updateUser,
 } = require('./userMethods');
 
 const sync = async () => {
@@ -169,4 +170,5 @@ module.exports = {
   getProductDetail,
   getCheckoutCart,
   changeProductRating,
+  updateUser,
 };

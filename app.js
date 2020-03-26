@@ -172,6 +172,13 @@ app.post('/api/user', (req, res, next) => {
     .catch(next);
 });
 
+//updating profile with put
+app.put('/api/user/:id', (req, res, next) => {
+  db.updateUser(req.body).then(updatedUser =>
+    res.send(updatedUser).catch(next)
+  );
+});
+
 Object.keys(models).forEach(key => {
   //console.log(key);
   app.get(`/api/${key}`, isLoggedIn, isAdmin, (req, res, next) => {
