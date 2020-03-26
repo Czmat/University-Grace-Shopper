@@ -39,7 +39,8 @@ const App = () => {
   const [products, setProducts] = useState([])
   const [productDetail, setProductDetail] = useState({})
   const [lineItems, setLineItems] = useState([])
-  const [isSubmitted, setIsSubmitted] = useState(false)
+  const [order, setOrder] = useState([])
+  // const [checkoutOrder, setCheckoutOrder] = useState()
   //not sure if I need it
   //const [userAccount, setUserAccount] = useState({});
   //console.log(orders, 'orders', cart, 'cart', lineItems, 'lineItems');
@@ -114,6 +115,7 @@ const App = () => {
       .post("/api/createOrder", null, headers())
       .then(response => {
         setOrders([response.data, ...orders])
+        window.localStorage.setItem("storedOrder", response.data)
         const token = window.localStorage.getItem("token")
         return axios.get("/api/getCart", headers())
       })
@@ -295,6 +297,7 @@ const App = () => {
               removeFromCart={removeFromCart}
               cart={cart}
               createOrder={createOrder}
+              orders={orders}
               products={products}
               addToCart={addToCart}
               saveForLater={saveForLater}
@@ -392,6 +395,8 @@ const App = () => {
               products={products}
               orders={orders}
               cart={cart}
+              order={order}
+              setOrder={setOrder}
             />
           </Route>
           <Route path="/checkout">
@@ -399,6 +404,18 @@ const App = () => {
               cartItems={lineItems}
               products={products}
               setOrders={setOrders}
+              orders={orders}
+              auth={auth}
+              cart={cart}
+              order={order}
+            />
+          </Route>
+          <Route path="/checkout/:id">
+            <Checkout
+              cartItems={lineItems}
+              products={products}
+              setOrders={setOrders}
+              orders={orders}
               auth={auth}
               cart={cart}
             />
