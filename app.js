@@ -196,6 +196,16 @@ app.get('/checkout/:id', (req, res, next) => {
   //res.send(console.log(req, "my backend stuff"))
 });
 
+//posting the new rating
+app.post('/api/postRating/:id/:rating', (req, res, next) => {
+  db.changeProductRating(req.params.id, req.params.rating)
+    .then(response => res.send(response))
+    .catch(next);
+});
+app.get('/*', (req, res, next) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 app.use((req, res, next) => {
   const error = {
     message: `page not found ${req.url} for ${req.method}`,
