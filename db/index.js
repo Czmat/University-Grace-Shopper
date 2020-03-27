@@ -23,6 +23,8 @@ const {
   getCheckoutCart,
   changeProductRating,
   updateUser,
+  changePassword,
+  manageUser,
 } = require('./userMethods');
 
 const sync = async () => {
@@ -41,6 +43,7 @@ const sync = async () => {
       password VARCHAR(100) NOT NULL,
       role VARCHAR(20) DEFAULT 'USER',
       email VARCHAR(100) NOT NULL UNIQUE,
+      "isBlocked" BOOLEAN default false,
       CHECK (char_length(username) > 0)
     );
 
@@ -171,4 +174,6 @@ module.exports = {
   getCheckoutCart,
   changeProductRating,
   updateUser,
+  changePassword,
+  manageUser,
 };

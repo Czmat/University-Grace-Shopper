@@ -1,4 +1,5 @@
 const client = require('./client');
+const { hash } = require('./auth');
 
 const getSaveForLater = async userId => {
   const response = await client.query(
@@ -262,11 +263,33 @@ const getProductDetail = async productId => {
 
 //updateUser from profile
 const updateUser = async ({ id, username, firstname, lastname, email }) => {
-  console.log({ id, username, firstname, lastname, email });
+  //console.log({ id, username, firstname, lastname, email });
   return (
     await client.query(
       `UPDATE "users" set username=$1, firstname=$2, lastname=$3, email=$4 WHERE id = $5 returning *`,
       [username, firstname, lastname, email, id]
+    )
+  ).rows[0];
+};
+
+//updateUser from profile
+const manageUser = async ({ id, isBlocked }) => {
+  //console.log({ id, username, firstname, lastname, email });
+  return (
+    await client.query(
+      `UPDATE "users" set "isBlocked"=$1 WHERE id = $2 returning *`,
+      [isBlocked, id]
+    )
+  ).rows[0];
+};
+
+//changePassword
+const changePassword = async ({ id, password }) => {
+  console.log(password, id);
+  return (
+    await client.query(
+      `UPDATE "users" set password=$1 WHERE id = $2 returning *`,
+      [await hash(password), id]
     )
   ).rows[0];
 };
@@ -284,12 +307,12 @@ const getLineItems = async userId => {
 };
 
 const getCheckoutCart = async userId => {
-  console.log(userId);
+  //console.log(userId);
   const response = await client.query(
     `SELECT * FROM orders WHERE status='checkout' and "userId"=$1`,
     [userId]
   );
-  console.log(response.rows[0], 'my test for the checkout');
+  //console.log(response.rows[0], 'my test for the checkout');
   return response.rows[0];
 };
 const changeProductRating = async (productId, rating) => {
@@ -317,4 +340,6 @@ module.exports = {
   // getProductRating,
   changeProductRating,
   updateUser,
+  changePassword,
+  manageUser,
 };

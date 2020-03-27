@@ -20,6 +20,11 @@ import Checkout from './components/Checkout';
 import Routes from './Routes';
 import CreateUser from './components/CreateUser';
 import Profile from './components/Profile';
+import Password from './components/Password';
+import Admin from './components/Admin';
+import UserManagement from './components/UserManagement';
+import PromoManagement from './components/PromoManagement';
+import ProductManagement from './components/ProductManagement';
 
 const headers = () => {
   const token = window.localStorage.getItem('token');
@@ -39,6 +44,8 @@ const App = () => {
   const [productDetail, setProductDetail] = useState({});
   const [lineItems, setLineItems] = useState([]);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [message, setMessage] = useState('');
+  const [managedUsers, setManagedUsers] = useState([]);
   //not sure if I need it
   //const [userAccount, setUserAccount] = useState({});
   //console.log(orders, 'orders', cart, 'cart', lineItems, 'lineItems');
@@ -46,6 +53,15 @@ const App = () => {
   useEffect(() => {
     axios.get('/api/products').then(response => setProducts(response.data));
   }, []);
+
+  useEffect(() => {
+    if (auth.role === 'ADMIN') {
+      axios.get('/api/users', headers()).then(response => {
+        console.log(response.data, 'wow');
+        setManagedUsers(response.data);
+      });
+    }
+  }, [auth]);
 
   useEffect(() => {
     if (auth.id) {
@@ -82,7 +98,7 @@ const App = () => {
 
   const login = async credentials => {
     const token = (await axios.post('/api/auth', credentials)).data.token;
-    console.log(credentials);
+    //console.log(credentials);
     //console.log('token', token);
     window.localStorage.setItem('token', token);
     exchangeTokenForAuth();
@@ -90,8 +106,25 @@ const App = () => {
 
   const exchangeTokenForAuth = async () => {
     const response = await axios.get('/api/auth', headers());
-    console.log('exch', response.data);
+    //console.log('exch', response.data);
     setAuth(response.data);
+  };
+
+  const validatePassword = async credentials => {
+    console.log(credentials.currentPassword, auth.username, 'valPass');
+    const creds = {
+      username: auth.username,
+      password: credentials.currentPassword,
+    };
+    const tokenToValidate = (await axios.post('/api/auth/validate', creds)).data
+      .token;
+    const token = window.localStorage.getItem('token');
+    //console.log(credentials);
+
+    if (tokenToValidate === token) {
+      console.log('if token');
+      changePassword(credentials.newPassword);
+    }
   };
 
   const logout = () => {
@@ -104,8 +137,14 @@ const App = () => {
   //console.log('outside', auth);
 
   useEffect(() => {
+    //console.log('when this hits?');
     exchangeTokenForAuth();
   }, []);
+
+  // useEffect(() => {
+  //   //console.log('when this hits?');
+  //   setMessage('');
+  // }, []);
 
   const createOrder = () => {
     const token = window.localStorage.getItem('token');
@@ -238,6 +277,23 @@ const App = () => {
     });
   };
 
+  const manageUser = user => {
+    console.log(user);
+    axios.put(`/api/manage/user/${user.id}`, user).then(response => {
+      console.log(response.data, 'update response');
+    });
+  };
+
+  //console.log(auth, 'to check if it reset after updateUser');
+
+  const changePassword = password => {
+    const userPassword = { id: auth.id, password };
+    console.log(userPassword);
+    axios.put(`/api/user/password/${auth.id}`, userPassword).then(response => {
+      setMessage('You have changed your password successfully');
+    });
+  };
+
   const userCart = lineItems.filter(lineItem => lineItem.orderId === cart.id);
 
   let totalQty = 0;
@@ -342,7 +398,9 @@ const App = () => {
                 </Link>
               </li>
             </ul>
-            <button onClick={logout}>Logout {auth.username} </button>
+            <button onClick={logout}>
+              Logout {auth.firstname} {auth.lastname}
+            </button>
           </nav>
           <Link to="/products"></Link>
         </div>
@@ -363,7 +421,49 @@ const App = () => {
             <CreateUser login={login} />
           </Route>
           <Route path="/profile">
-            <Profile auth={auth} updateUser={updateUser} />
+            <Profile
+              auth={auth}
+              updateUser={updateUser}
+              setMessage={setMessage}
+            />
+          </Route>
+          <Route path="/admin">
+            <Admin
+              auth={auth}
+              updateUser={updateUser}
+              setMessage={setMessage}
+            />
+          </Route>
+          <Route path="/user/management">
+            <UserManagement
+              auth={auth}
+              updateUser={updateUser}
+              setMessage={setMessage}
+              managedUsers={managedUsers}
+              manageUser={manageUser}
+            />
+          </Route>
+          <Route path="/promo/management">
+            <PromoManagement
+              auth={auth}
+              updateUser={updateUser}
+              setMessage={setMessage}
+            />
+          </Route>
+          <Route path="/product/management">
+            <ProductManagement
+              auth={auth}
+              updateUser={updateUser}
+              setMessage={setMessage}
+            />
+          </Route>
+          <Route path="/password">
+            <Password
+              auth={auth}
+              validatePassword={validatePassword}
+              message={message}
+              setMessage={setMessage}
+            />
           </Route>
           <Route path="/products">
             <Products
