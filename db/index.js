@@ -25,6 +25,8 @@ const {
   updateUser,
   changePassword,
   manageUser,
+  getAddress,
+  addAddress,
 } = require('./userMethods');
 
 const sync = async () => {
@@ -32,9 +34,10 @@ const sync = async () => {
     CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
     DROP TABLE IF EXISTS "lineItems";
     DROP TABLE IF EXISTS orders;
-
+    DROP TABLE IF EXISTS addresses;
     DROP TABLE IF EXISTS users;
     DROP TABLE IF EXISTS products;
+
     CREATE TABLE users(
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
       username VARCHAR(100) NOT NULL UNIQUE,
@@ -63,12 +66,19 @@ const sync = async () => {
       status VARCHAR(10) DEFAULT 'CART',
       "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
+    CREATE TABLE addresses(
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      "userId" UUID REFERENCES users(id) NOT NULL,
+      address VARCHAR NOT NULL,
+      "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
     CREATE TABLE "lineItems"(
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
       "orderId" UUID REFERENCES orders(id) NOT NULL,
       "productId" UUID REFERENCES products(id) NOT NULL,
       quantity INTEGER DEFAULT 1
     );
+
   `;
   await client.query(SQL);
 
@@ -176,4 +186,6 @@ module.exports = {
   updateUser,
   changePassword,
   manageUser,
+  getAddress,
+  addAddress,
 };

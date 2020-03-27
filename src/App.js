@@ -25,6 +25,7 @@ import Admin from './components/Admin';
 import UserManagement from './components/UserManagement';
 import PromoManagement from './components/PromoManagement';
 import ProductManagement from './components/ProductManagement';
+import FeaturedProduct from './components/FeaturedProduct';
 
 const headers = () => {
   const token = window.localStorage.getItem('token');
@@ -46,6 +47,9 @@ const App = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [message, setMessage] = useState('');
   const [managedUsers, setManagedUsers] = useState([]);
+  const [order, setOrder] = useState([]);
+  // const [checkoutOrder, setCheckoutOrder] = useState()
+
   //not sure if I need it
   //const [userAccount, setUserAccount] = useState({});
   //console.log(orders, 'orders', cart, 'cart', lineItems, 'lineItems');
@@ -152,6 +156,7 @@ const App = () => {
       .post('/api/createOrder', null, headers())
       .then(response => {
         setOrders([response.data, ...orders]);
+        window.localStorage.setItem('storedOrder', response.data);
         const token = window.localStorage.getItem('token');
         return axios.get('/api/getCart', headers());
       })
@@ -300,14 +305,6 @@ const App = () => {
   const count = userCart.forEach(item => {
     totalQty += item.quantity;
   });
-  ////
-  // <div>
-  //   <Header params={params} lineItems={lineItems} cart={cart} />
-  //   {params.view === 'login' && <Login login={login} />}
-  //     <button onClick={logout}>Logout {auth.username} </button>
-  //     </div>
-
-  ////
 
   if (!auth.id) {
     return (
@@ -318,7 +315,9 @@ const App = () => {
               <h1 className="header-name">Grace Shopper</h1>
             </Link>
             <ul className="nav-bar">
-              <li></li>
+              <li>
+                <Link to="/products">Shop</Link>
+              </li>
               <li>
                 <Link to="/login">Login</Link>
               </li>
@@ -338,8 +337,7 @@ const App = () => {
         <Switch>
           <Route path="/" exact>
             <div className="horizontal">
-              <Products
-                addToCart={addToCart}
+              <FeaturedProduct
                 products={products}
                 getProductDetail={getProductDetail}
                 productDetail={productDetail}
@@ -348,6 +346,14 @@ const App = () => {
           </Route>
           <Route path="/login">
             <Login login={login} />
+          </Route>
+          <Route path="/products">
+            <Products
+              addToCart={addToCart}
+              products={products}
+              getProductDetail={getProductDetail}
+              productDetail={productDetail}
+            />
           </Route>
           <Route path="/register">
             <CreateUser login={login} createUser={createUser} />
@@ -358,6 +364,7 @@ const App = () => {
               removeFromCart={removeFromCart}
               cart={cart}
               createOrder={createOrder}
+              orders={orders}
               products={products}
               addToCart={addToCart}
               saveForLater={saveForLater}
@@ -383,7 +390,7 @@ const App = () => {
             </Link>
             <ul className="nav-bar">
               <li>
-                <Link to="/login">Login</Link>
+                <Link to="/products">Shop</Link>
               </li>
               <li>
                 <Link to="/account">Account</Link>
@@ -407,11 +414,16 @@ const App = () => {
         <Switch>
           <Route path="/" exact>
             <div className="horizontal">
-              <Products
+              <FeaturedProduct
+                products={products}
+                getProductDetail={getProductDetail}
+                productDetail={productDetail}
+              />
+              {/* <Products
                 addToCart={addToCart}
                 products={products}
                 getProductDetail={getProductDetail}
-              />
+              /> */}
             </div>
           </Route>
           <Route path="/login">
@@ -498,6 +510,8 @@ const App = () => {
               products={products}
               orders={orders}
               cart={cart}
+              order={order}
+              setOrder={setOrder}
             />
           </Route>
           <Route path="/checkout">
@@ -505,6 +519,18 @@ const App = () => {
               cartItems={lineItems}
               products={products}
               setOrders={setOrders}
+              orders={orders}
+              auth={auth}
+              cart={cart}
+              order={order}
+            />
+          </Route>
+          <Route path="/checkout/:id">
+            <Checkout
+              cartItems={lineItems}
+              products={products}
+              setOrders={setOrders}
+              orders={orders}
               auth={auth}
               cart={cart}
             />

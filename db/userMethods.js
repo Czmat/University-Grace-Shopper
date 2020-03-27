@@ -85,7 +85,7 @@ const addBackToCart = async ({ productId, userId, lineItemQuantity }) => {
   );
 
   let cartLineItem;
-  //console.log(cartResponse.rows.length, 'cartResp.lenght');
+  //console.log(cartResponse.rows.length, "cartResp.lenght")
 
   if (cartResponse.rows.length) {
     cartLineItem = cartResponse.rows[0];
@@ -307,12 +307,12 @@ const getLineItems = async userId => {
 };
 
 const getCheckoutCart = async userId => {
-  //console.log(userId);
+  console.log(userId);
   const response = await client.query(
     `SELECT * FROM orders WHERE status='checkout' and "userId"=$1`,
     [userId]
   );
-  //console.log(response.rows[0], 'my test for the checkout');
+  console.log(response.rows[0], 'my test for the checkout');
   return response.rows[0];
 };
 const changeProductRating = async (productId, rating) => {
@@ -320,6 +320,20 @@ const changeProductRating = async (productId, rating) => {
     `UPDATE products set rating = $2 where id = $1 returning * `,
     [productId, rating]
   );
+  return response.rows[0];
+};
+
+const getAddress = async userID => {
+  const response = await client.query(
+    `
+  SELECT * FROM addresses WHERE "userId" = $1`,
+    [userID]
+  );
+  return response.rows;
+};
+const addAddress = async (userID, address) => {
+  const SQL = `INSERT INTO addresses ("userId", address) values ($1, $2) returning *`;
+  const response = await client.query(SQL, [userID, address]);
   return response.rows[0];
 };
 
@@ -342,4 +356,7 @@ module.exports = {
   updateUser,
   changePassword,
   manageUser,
+  getAddress,
+  addAddress,
+  changeProductRating,
 };

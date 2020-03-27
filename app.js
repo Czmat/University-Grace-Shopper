@@ -262,6 +262,20 @@ app.post('/api/postRating/:id/:rating', (req, res, next) => {
     .then(response => res.send(response))
     .catch(next);
 });
+
+//post for the saved addresses
+app.post('/api/address/:id/:address', (req, res, next) => {
+  db.addAddress(req.params.id, req.params.address)
+    .then(response => res.send(response))
+    .catch(next);
+});
+
+//get for saved addresses
+app.get('/api/address/:id', (req, res, next) => {
+  db.getAddress(req.params.id).then(response => res.send(response));
+});
+
+//will make sure the get requests work with the router
 app.get('/*', (req, res, next) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
