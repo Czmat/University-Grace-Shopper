@@ -25,7 +25,8 @@ const Mycart = ({
   changeQtyInCart,
   addBackToCart,
   params,
-  getProductDetail
+  getProductDetail,
+  orders
 }) => {
   const findCartTotal = () => {
     let cartTotal = 0
@@ -44,12 +45,17 @@ const Mycart = ({
   return (
     <div className="cart-container">
       <h2>Your cart total: ${findCartTotal()}</h2>
-      <button
+      {/* commenting out the create order button for now -I will transfer this code to the checkout page
+      {/* <button
         disabled={!lineItems.find(lineItem => lineItem.orderId === cart.id)}
         onClick={createOrder}
       >
         Create Order
-      </button>
+      </button> */}
+      <Link to="/checkout" cart={cart} onClick={createOrder}>
+        Checkout
+      </Link>
+
       {lineItems
         .filter(lineItem => lineItem.orderId === cart.id)
         .map(lineItem => {

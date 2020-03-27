@@ -1,36 +1,75 @@
 import React, { useEffect, useState } from "react"
 import address from "../address"
+import axios from "axios"
 
-const Checkout = ({ order, cart }) => {
-  const handleAddress = async e => {
-    let verifiedAddress = await address(e).catch(err => console.log(err))
-    console.log(verifiedAddress, "address")
-  }
+const Checkout = ({ cart, auth }) => {
+  const [save, setSave] = useState(false)
+  const [userSavedAddress, setUserSavedAddress] = useState([])
+  const [userAddress, setUserAddress] = useState("")
+  const checkoutOrder = JSON.parse(window.localStorage.getItem("checkoutorder"))
 
-  console.log(cart, "cart")
-  if (!order) {
-    order = {
-      id: "1",
-      test: "test"
+  useEffect(() => {
+    if (auth.id) {
+      axios.get(`/api/address/${auth.id}`).then(response => {
+        setUserSavedAddress(response.data)
+      })
     }
-  }
+  }, [userSavedAddress])
 
   const saveAddress = () => {
-    return true
+    save === true ? setSave(false) : setSave(true)
   }
+
+  const handleSubmit = async e => {
+    e.preventDefault()
+    console.dir(e.target[0].value)
+
+    let fullAddress = address(e)
+    setUserAddress(fullAddress)
+    if (save === true) {
+      console.log(userAddress)
+      axios
+        .post(`/api/address/${auth.id}/${fullAddress}`)
+        .then(response => console.log(response, "response"))
+    }
+  }
+  const saveSelection = address => {
+    console.log(address)
+  }
+
   return (
-    <div key={order.id}>
+    <div key={checkoutOrder.id}>
       <h2>Checkout</h2>
-      <li>Order {order.id} </li>
-      <h1></h1>
-      <form onSubmit={handleAddress}>
+      <li>Order {checkoutOrder.id.slice(0, 4)} </li>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="saved">Choose a Saved Address </label>
+        <select id="saved">
+          <option> </option>
+          {userSavedAddress
+            ? userSavedAddress.map(mapAddress => {
+                return (
+                  <option
+                    key={mapAddress.id}
+                    onSelect={mapAddress => saveSelection(mapAddress)}
+                  >
+                    {mapAddress.address}
+                  </option>
+                )
+              })
+            : null}
+        </select>
         <input placeholder="Address" />
         <input placeholder="City" />
         <input placeholder="State" />
         <input placeholder="Zip" />
         <button type="submit">submit</button>
       </form>
-      <input type="checkbox" name="address" value="save" />
+      <input
+        type="checkbox"
+        name="address"
+        value="save"
+        onClick={saveAddress}
+      />
       <label htmlFor="address">Add to address book</label>
     </div>
   )

@@ -19,54 +19,15 @@ const Orders = ({
   setOrders,
   auth,
   cart,
-  setIsSubmitted,
-  isSubmitted
+  order,
+  setOrder
 }) => {
-  const [checkoutOrder, setCheckoutOrder] = useState()
   const link = "orders"
 
-  const submitCheckout = e => {
-    e.preventDefault()
-    console.log(checkoutOrder)
+  const submitCheckout = order => {
+    window.localStorage.setItem("checkoutorder", JSON.stringify(order))
+    // setOrder(order)
   }
-
-  // const Checkout = () => {
-  //   return (
-  //     <li key={order.id}>
-  //       OrderID: {order.id.slice(0, 4)}
-  //       <ul>
-  //         {mapCartItems.map(cartItem => {
-  //           const product = products.find(
-  //             product => product.id === cartItem.productId
-  //           )
-  //           return (
-  //             <li key={cartItem.id}>
-  //               {product && product.name}
-  //               <div>
-  //                 <StarRating />
-  //               </div>
-  //               <span className="quantity">Quantity: {cartItem.quantity}</span>
-  //             </li>
-  //           )
-  //         })}
-  //         <form onClick={submitCheckout}>
-  //           <button
-  //             onClick={e => {
-  //               order.status != "checkout"
-  //                 ? (order.status = "checkout")
-  //                 : (order.status = "ORDER")
-  //               setCheckoutOrder([order])
-  //               setIsSubmitted(true)
-  //             }}
-  //           >
-  //             Checkout
-  //           </button>
-  //           )}
-  //         </form>
-  //       </ul>
-  //     </li>
-  //   )
-  // }
 
   return (
     <div>
@@ -77,46 +38,31 @@ const Orders = ({
             cartItem => cartItem.orderId === order.id
           )
 
-          if (order.status != "checkout") {
-            return (
-              <li key={order.id}>
-                {/* <button
-                  onClick={() => {
-                    order.status != "checkout"
-                      ? (order.status = "checkout")
-                      : (order.status = "ORDER")
-                    setCheckoutOrder(order)
-                  }}
-                > */}
-                {/* </button> */}
-                <Link to="/checkout">OrderID: {order.id.slice(0, 4)}</Link>
-                <ul>
-                  {mapCartItems.map(cartItem => {
-                    const product = products.find(
-                      product => product.id === cartItem.productId
-                    )
-                    return (
-                      <li key={cartItem.id}>
-                        {product && product.name}
-                        <div>
-                          <StarRating link={link} product={product} />
-                        </div>
-                        <span className="quantity">
-                          Quantity: {cartItem.quantity}
-                        </span>
-                      </li>
-                    )
-                  })}
-                </ul>
-              </li>
-            )
-          } else {
-            return (
-              <div key={order.id}>
-                <Checkout order={checkoutOrder} cart={cart} />
-              </div>
-            )
-          }
+          return (
+            <div key={order.id}>
+              <Link to="/checkout" onClick={() => submitCheckout(order)}>
+                OrderID: {order.id.slice(0, 4)}
+              </Link>
+              <ul>
+                {mapCartItems.map(cartItem => {
+                  const product = products.find(
+                    product => product.id === cartItem.productId
+                  )
+                  return (
+                    <li key={cartItem.id}>
+                      {product && product.name}
+                      <div>
+                        <StarRating link={link} product={product} />
+                      </div>
+                      <span className="quantity">
+                        Quantity: {cartItem.quantity}
+                      </span>
+                    </li>
+                  )
+                })}
+              </ul>
+            </div>
+          )
         })}
       </ul>
     </div>

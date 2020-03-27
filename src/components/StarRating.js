@@ -4,9 +4,7 @@ import axios from "axios"
 const StarRating = ({ product, link }) => {
   const updateRating = e => {
     e.preventDefault()
-
     const rating = (product.rating + Number(e.target.value)) / 2
-
     axios
       .post(`api/postRating/${product.id}/${rating}`)
       .then(response => console.log(response))
