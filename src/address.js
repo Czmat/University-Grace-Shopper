@@ -14,7 +14,7 @@ const address = e => {
   let city = e.target[2].value
   let state = e.target[3].value
   let zip = e.target[4].value
-  const fullAddress = street + " " + city + " " + state + " " + zip
+  const fullAddress = [street, city, state, zip]
   return fullAddress
   // await axios
   //   .get(
