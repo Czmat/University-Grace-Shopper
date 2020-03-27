@@ -21,6 +21,7 @@ import Routes from "./Routes"
 import CreateUser from "./components/CreateUser"
 import Profile from "./components/Profile"
 import FeaturedProduct from "./components/FeaturedProduct"
+import Addresses from "./components/Addresses"
 
 const headers = () => {
   const token = window.localStorage.getItem("token")
@@ -437,6 +438,12 @@ const App = () => {
               addToCart={addToCart}
               changeQtyInCart={changeQtyInCart}
             />
+          </Route>
+          <Route path="/checkout/completed">
+            <span>HI</span>
+          </Route>
+          <Route path="/addresses">
+            <Addresses auth={auth} />
           </Route>
         </Switch>
       </Router>

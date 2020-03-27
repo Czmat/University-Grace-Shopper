@@ -3,6 +3,7 @@ const app = express()
 const path = require("path")
 const db = require("./db")
 const models = db.models
+const bodyParser = require("body-parser")
 
 app.use("/dist", express.static(path.join(__dirname, "dist")))
 app.use("/assets", express.static(path.join(__dirname, "assets")))
@@ -204,8 +205,15 @@ app.post("/api/postRating/:id/:rating", (req, res, next) => {
 })
 
 //post for the saved addresses
-app.post("/api/address/:id/:address", (req, res, next) => {
-  db.addAddress(req.params.id, req.params.address)
+app.post("/api/address/:id", (req, res, next) => {
+  console.log(req.body)
+  db.addAddress(
+    req.params.id,
+    req.body[0],
+    req.body[1],
+    req.body[2],
+    req.body[3]
+  )
     .then(response => res.send(response))
     .catch(next)
 })
@@ -213,6 +221,10 @@ app.post("/api/address/:id/:address", (req, res, next) => {
 //get for saved addresses
 app.get("/api/address/:id", (req, res, next) => {
   db.getAddress(req.params.id).then(response => res.send(response))
+})
+
+app.delete("/api/addresses/:id", (req, res, next) => {
+  db.deleteAddress(req.params.id).then(response => res.sendStatus(400))
 })
 
 //will make sure the get requests work with the router

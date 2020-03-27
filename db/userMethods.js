@@ -297,9 +297,16 @@ const getAddress = async userID => {
   )
   return response.rows
 }
-const addAddress = async (userID, address) => {
-  const SQL = `INSERT INTO addresses ("userId", address) values ($1, $2) returning *`
-  const response = await client.query(SQL, [userID, address])
+const addAddress = async (userID, street, city, state, zip) => {
+  const SQL = `INSERT INTO addresses ("userId", street, city, state, zip) values ($1, $2, $3, $4, $5) returning *`
+  const response = await client.query(SQL, [userID, street, city, state, zip])
+  return response.rows[0]
+}
+
+const deleteAddress = async id => {
+  const response = await client.query(`DELETE FROM addresses WHERE id = $1`, [
+    id
+  ])
   return response.rows[0]
 }
 
@@ -319,5 +326,6 @@ module.exports = {
   getProductDetail,
   getAddress,
   addAddress,
+  deleteAddress,
   changeProductRating
 }

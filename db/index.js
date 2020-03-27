@@ -23,7 +23,8 @@ const {
   getCheckoutCart,
   changeProductRating,
   getAddress,
-  addAddress
+  addAddress,
+  deleteAddress
 } = require("./userMethods")
 
 const sync = async () => {
@@ -65,7 +66,10 @@ const sync = async () => {
     CREATE TABLE addresses(
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
       "userId" UUID REFERENCES users(id) NOT NULL,
-      address VARCHAR NOT NULL,
+      street VARCHAR NOT NULL,
+      city VARCHAR NOT NULL,
+      state VARCHAR NOT NULL,
+      zip INT NOT NULL,
       "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
     CREATE TABLE "lineItems"(
@@ -180,5 +184,6 @@ module.exports = {
   getCheckoutCart,
   changeProductRating,
   getAddress,
-  addAddress
+  addAddress,
+  deleteAddress
 }
