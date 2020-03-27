@@ -21,15 +21,12 @@ const Checkout = ({ cart, auth }) => {
   }
 
   const handleSubmit = async e => {
-    e.preventDefault()
-    console.dir(e.target[0].value)
-
     let fullAddress = address(e)
     setUserAddress(fullAddress)
     if (save === true) {
       console.log(userAddress)
       axios
-        .post(`/api/address/${auth.id}/${fullAddress}`)
+        .post(`/api/address/${auth.id}/`, [fullAddress])
         .then(response => console.log(response, "response"))
     }
   }
