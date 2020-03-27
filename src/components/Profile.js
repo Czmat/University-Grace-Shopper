@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useParams,
+} from 'react-router-dom';
 
-const Profile = ({ login, updateUser, auth }) => {
+const Profile = ({ login, updateUser, auth, setMessage }) => {
   //const [user, setUser] = useState({});
   const [username, setUsername] = useState(auth.username);
   const [firstname, setFirstname] = useState(auth.firstname);
@@ -20,16 +27,12 @@ const Profile = ({ login, updateUser, auth }) => {
   const onSubmit = ev => {
     ev.preventDefault();
 
-    updateUser({ username, firstname, lastname, email });
+    updateUser({ id: auth.id, username, firstname, lastname, email });
     //window.location = '/account';
     // login({ username, password }).catch(ex =>
     //   setError(ex.response.data.message)
     // );
     //console.log(auth);
-  };
-
-  const changePassword = () => {
-    //console.log('changePassword');
   };
 
   //   var firstName = fullName.split(' ').slice(0, -1).join(' ');
@@ -51,7 +54,9 @@ const Profile = ({ login, updateUser, auth }) => {
         <input value={lastname} onChange={ev => setLastname(ev.target.value)} />
         <label>Email address</label>
         <input value={email} onChange={ev => setEmail(ev.target.value)} />
-        <button onClick={changePassword}>Change Password</button>
+        <Link className={'button'} to="/password">
+          Change Password
+        </Link>
         <button>Save Profile</button>
       </form>
       {/* <a href="#"> Forgot Password</a>

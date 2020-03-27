@@ -1,191 +1,232 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect } from 'react';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Link,
-  useParams
-} from "react-router-dom"
-import qs from "qs"
-import axios from "axios"
-import Login from "./Login"
-import Orders from "./Orders"
-import Cart from "./Cart"
-import Products from "./Products"
-import Account from "./components/Account"
-import Mycart from "./components/Mycart"
-import ProductDetail from "./components/ProductDetail"
-import SaveForLater from "./components/SaveForLater"
-import Checkout from "./components/Checkout"
-import Routes from "./Routes"
-import CreateUser from "./components/CreateUser"
-import Profile from "./components/Profile"
-import FeaturedProduct from "./components/FeaturedProduct"
+  useParams,
+} from 'react-router-dom';
+import qs from 'qs';
+import axios from 'axios';
+import Login from './Login';
+import Orders from './Orders';
+import Cart from './Cart';
+import Products from './Products';
+import Account from './components/Account';
+import Mycart from './components/Mycart';
+import ProductDetail from './components/ProductDetail';
+import SaveForLater from './components/SaveForLater';
+import Checkout from './components/Checkout';
+import Routes from './Routes';
+import CreateUser from './components/CreateUser';
+import Profile from './components/Profile';
+import Password from './components/Password';
+import Admin from './components/Admin';
+import UserManagement from './components/UserManagement';
+import PromoManagement from './components/PromoManagement';
+import ProductManagement from './components/ProductManagement';
+import FeaturedProduct from './components/FeaturedProduct';
 
 const headers = () => {
-  const token = window.localStorage.getItem("token")
+  const token = window.localStorage.getItem('token');
   return {
     headers: {
-      authorization: token
-    }
-  }
-}
+      authorization: token,
+    },
+  };
+};
 
 const App = () => {
-  const [auth, setAuth] = useState({})
-  const [orders, setOrders] = useState([])
-  const [cart, setCart] = useState({})
-  const [saveForLater, setSaveForLater] = useState({})
-  const [products, setProducts] = useState([])
-  const [productDetail, setProductDetail] = useState({})
-  const [lineItems, setLineItems] = useState([])
-  const [order, setOrder] = useState([])
+  const [auth, setAuth] = useState({});
+  const [orders, setOrders] = useState([]);
+  const [cart, setCart] = useState({});
+  const [saveForLater, setSaveForLater] = useState({});
+  const [products, setProducts] = useState([]);
+  const [productDetail, setProductDetail] = useState({});
+  const [lineItems, setLineItems] = useState([]);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [message, setMessage] = useState('');
+  const [managedUsers, setManagedUsers] = useState([]);
+  const [order, setOrder] = useState([]);
   // const [checkoutOrder, setCheckoutOrder] = useState()
+
   //not sure if I need it
   //const [userAccount, setUserAccount] = useState({});
   //console.log(orders, 'orders', cart, 'cart', lineItems, 'lineItems');
 
   useEffect(() => {
-    axios.get("/api/products").then(response => setProducts(response.data))
-  }, [])
+    axios.get('/api/products').then(response => setProducts(response.data));
+  }, []);
+
+  useEffect(() => {
+    if (auth.role === 'ADMIN') {
+      axios.get('/api/users', headers()).then(response => {
+        console.log(response.data, 'wow');
+        setManagedUsers(response.data);
+      });
+    }
+  }, [auth]);
 
   useEffect(() => {
     if (auth.id) {
-      const token = window.localStorage.getItem("token")
-      axios.get("/api/getLineItems", headers()).then(response => {
-        setLineItems(response.data)
-      })
+      const token = window.localStorage.getItem('token');
+      axios.get('/api/getLineItems', headers()).then(response => {
+        setLineItems(response.data);
+      });
     }
-  }, [auth])
+  }, [auth]);
 
   useEffect(() => {
     if (auth.id) {
-      axios.get("/api/getCart", headers()).then(response => {
-        setCart(response.data)
-      })
+      axios.get('/api/getCart', headers()).then(response => {
+        setCart(response.data);
+      });
     }
-  }, [auth])
+  }, [auth]);
 
   useEffect(() => {
     if (auth.id) {
-      axios.get("/api/getSaveForLater", headers()).then(response => {
-        setSaveForLater(response.data)
-      })
+      axios.get('/api/getSaveForLater', headers()).then(response => {
+        setSaveForLater(response.data);
+      });
     }
-  }, [auth])
+  }, [auth]);
 
   useEffect(() => {
     if (auth.id) {
-      axios.get("/api/getOrders", headers()).then(response => {
-        setOrders(response.data)
-      })
+      axios.get('/api/getOrders', headers()).then(response => {
+        setOrders(response.data);
+      });
     }
-  }, [auth])
+  }, [auth]);
 
   const login = async credentials => {
-    const token = (await axios.post("/api/auth", credentials)).data.token
-    console.log(credentials)
+    const token = (await axios.post('/api/auth', credentials)).data.token;
+    //console.log(credentials);
     //console.log('token', token);
-    window.localStorage.setItem("token", token)
-    exchangeTokenForAuth()
-  }
+    window.localStorage.setItem('token', token);
+    exchangeTokenForAuth();
+  };
 
   const exchangeTokenForAuth = async () => {
-    const response = await axios.get("/api/auth", headers())
-    console.log("exch", response.data)
-    setAuth(response.data)
-  }
+    const response = await axios.get('/api/auth', headers());
+    //console.log('exch', response.data);
+    setAuth(response.data);
+  };
+
+  const validatePassword = async credentials => {
+    console.log(credentials.currentPassword, auth.username, 'valPass');
+    const creds = {
+      username: auth.username,
+      password: credentials.currentPassword,
+    };
+    const tokenToValidate = (await axios.post('/api/auth/validate', creds)).data
+      .token;
+    const token = window.localStorage.getItem('token');
+    //console.log(credentials);
+
+    if (tokenToValidate === token) {
+      console.log('if token');
+      changePassword(credentials.newPassword);
+    }
+  };
 
   const logout = () => {
-    window.location.hash = "#"
-    window.localStorage.removeItem("token")
-    setAuth({})
+    window.location.hash = '#';
+    window.localStorage.removeItem('token');
+    setAuth({});
 
     // console.log('logout', auth);
-  }
+  };
   //console.log('outside', auth);
 
   useEffect(() => {
-    exchangeTokenForAuth()
-  }, [])
+    //console.log('when this hits?');
+    exchangeTokenForAuth();
+  }, []);
+
+  // useEffect(() => {
+  //   //console.log('when this hits?');
+  //   setMessage('');
+  // }, []);
 
   const createOrder = () => {
-    const token = window.localStorage.getItem("token")
+    const token = window.localStorage.getItem('token');
     axios
-      .post("/api/createOrder", null, headers())
+      .post('/api/createOrder', null, headers())
       .then(response => {
-        setOrders([response.data, ...orders])
-        window.localStorage.setItem("storedOrder", response.data)
-        const token = window.localStorage.getItem("token")
-        return axios.get("/api/getCart", headers())
+        setOrders([response.data, ...orders]);
+        window.localStorage.setItem('storedOrder', response.data);
+        const token = window.localStorage.getItem('token');
+        return axios.get('/api/getCart', headers());
       })
       .then(response => {
-        setCart(response.data)
-      })
-  }
+        setCart(response.data);
+      });
+  };
 
   const getProductDetail = productId => {
     axios.get(`/api/products/${productId}`).then(response => {
-      setProductDetail(response.data)
-    })
-  }
+      setProductDetail(response.data);
+    });
+  };
 
   const addToCart = (productId, quantity) => {
     axios
-      .post("/api/addToCart", { productId, quantity }, headers())
+      .post('/api/addToCart', { productId, quantity }, headers())
       .then(response => {
-        const lineItem = response.data
-        const found = lineItems.find(_lineItem => _lineItem.id === lineItem.id)
+        const lineItem = response.data;
+        const found = lineItems.find(_lineItem => _lineItem.id === lineItem.id);
         if (!found) {
-          setLineItems([...lineItems, lineItem])
+          setLineItems([...lineItems, lineItem]);
         } else {
           const updated = lineItems.map(_lineItem =>
             _lineItem.id === lineItem.id ? lineItem : _lineItem
-          )
-          setLineItems(updated)
+          );
+          setLineItems(updated);
         }
-      })
-  }
+      });
+  };
 
   const changeQtyInCart = (productId, quantity) => {
     axios
-      .post("/api/changeQtyInCart", { productId, quantity }, headers())
+      .post('/api/changeQtyInCart', { productId, quantity }, headers())
       .then(response => {
-        const lineItem = response.data
-        const found = lineItems.find(_lineItem => _lineItem.id === lineItem.id)
+        const lineItem = response.data;
+        const found = lineItems.find(_lineItem => _lineItem.id === lineItem.id);
         if (!found) {
-          setLineItems([...lineItems, lineItem])
+          setLineItems([...lineItems, lineItem]);
         } else {
           const updated = lineItems.map(_lineItem =>
             _lineItem.id === lineItem.id ? lineItem : _lineItem
-          )
-          setLineItems(updated)
+          );
+          setLineItems(updated);
         }
-      })
-  }
+      });
+  };
 
   const addBackToCart = (productId, quantity) => {
     axios
-      .post("/api/addBackToCart", { productId, quantity }, headers())
+      .post('/api/addBackToCart', { productId, quantity }, headers())
       .then(response => {
-        axios.get("/api/getLineItems", headers()).then(response => {
-          setLineItems(response.data)
-        })
-      })
-  }
+        axios.get('/api/getLineItems', headers()).then(response => {
+          setLineItems(response.data);
+        });
+      });
+  };
 
   const addToSaveForLater = productId => {
     axios
-      .post("/api/addToSaveForLater", { productId }, headers())
+      .post('/api/addToSaveForLater', { productId }, headers())
       .then(response => {
         // debugger;
-        const lineItem = response.data
+        const lineItem = response.data;
 
         const found = lineItems.find(
           _lineItem =>
             _lineItem.productId === lineItem.productId &&
             _lineItem.orderId === cart.id
-        )
+        );
 
         //console.log(found, 'found', lineItem, 'lineitem');
         // if (!found) {
@@ -202,46 +243,68 @@ const App = () => {
         // setLineItems(test);
         //setLineItems(lineItems.filter(_lineItem => _lineItem.id !== found.id));
         //}
-        axios.get("/api/getLineItems", headers()).then(response => {
-          setLineItems(response.data)
-        })
-      })
-  }
+        axios.get('/api/getLineItems', headers()).then(response => {
+          setLineItems(response.data);
+        });
+      });
+  };
 
   const removeFromCart = lineItemId => {
     axios.delete(`/api/removeFromCart/${lineItemId}`, headers()).then(() => {
-      setLineItems(lineItems.filter(_lineItem => _lineItem.id !== lineItemId))
-    })
-  }
+      setLineItems(lineItems.filter(_lineItem => _lineItem.id !== lineItemId));
+    });
+  };
 
   const removeFromSave = lineItemId => {
     axios.delete(`/api/removeFromSave/${lineItemId}`, headers()).then(() => {
-      setLineItems(lineItems.filter(_lineItem => _lineItem.id !== lineItemId))
-    })
-  }
+      setLineItems(lineItems.filter(_lineItem => _lineItem.id !== lineItemId));
+    });
+  };
 
   //creating user account
   const createUser = user => {
     //console.log(user, 'first in');
-    axios.post("/api/user", user).then(response => {
-      login({ username: user.username, password: user.password })
+    axios.post('/api/user', user).then(response => {
+      login({ username: user.username, password: user.password });
       //setUserAccount(response.data);
-    })
-  }
+    });
+  };
 
   const updateUser = user => {
-    console.log(user)
-    axios
-      .put("/api/user", user)
-      .then(response => console.log(response.data, "update response"))
-  }
+    console.log(user);
+    axios.put(`/api/user/${user.id}`, user).then(response => {
+      console.log(response.data.username, 'update response');
+      exchangeTokenForAuth();
+      // login({
+      //   username: response.data.username,
+      //   password: user.password,
+      // });
+    });
+  };
 
-  const userCart = lineItems.filter(lineItem => lineItem.orderId === cart.id)
+  const manageUser = user => {
+    console.log(user);
+    axios.put(`/api/manage/user/${user.id}`, user).then(response => {
+      console.log(response.data, 'update response');
+    });
+  };
 
-  let totalQty = 0
+  //console.log(auth, 'to check if it reset after updateUser');
+
+  const changePassword = password => {
+    const userPassword = { id: auth.id, password };
+    console.log(userPassword);
+    axios.put(`/api/user/password/${auth.id}`, userPassword).then(response => {
+      setMessage('You have changed your password successfully');
+    });
+  };
+
+  const userCart = lineItems.filter(lineItem => lineItem.orderId === cart.id);
+
+  let totalQty = 0;
   const count = userCart.forEach(item => {
-    totalQty += item.quantity
-  })
+    totalQty += item.quantity;
+  });
 
   if (!auth.id) {
     return (
@@ -314,7 +377,7 @@ const App = () => {
           </Route>
         </Switch>
       </Router>
-    )
+    );
   } else {
     return (
       <Router>
@@ -342,7 +405,9 @@ const App = () => {
                 </Link>
               </li>
             </ul>
-            <button onClick={logout}>Logout {auth.username} </button>
+            <button onClick={logout}>
+              Logout {auth.firstname} {auth.lastname}
+            </button>
           </nav>
           <Link to="/products"></Link>
         </div>
@@ -368,7 +433,49 @@ const App = () => {
             <CreateUser login={login} />
           </Route>
           <Route path="/profile">
-            <Profile auth={auth} updateUser={updateUser} />
+            <Profile
+              auth={auth}
+              updateUser={updateUser}
+              setMessage={setMessage}
+            />
+          </Route>
+          <Route path="/admin">
+            <Admin
+              auth={auth}
+              updateUser={updateUser}
+              setMessage={setMessage}
+            />
+          </Route>
+          <Route path="/user/management">
+            <UserManagement
+              auth={auth}
+              updateUser={updateUser}
+              setMessage={setMessage}
+              managedUsers={managedUsers}
+              manageUser={manageUser}
+            />
+          </Route>
+          <Route path="/promo/management">
+            <PromoManagement
+              auth={auth}
+              updateUser={updateUser}
+              setMessage={setMessage}
+            />
+          </Route>
+          <Route path="/product/management">
+            <ProductManagement
+              auth={auth}
+              updateUser={updateUser}
+              setMessage={setMessage}
+            />
+          </Route>
+          <Route path="/password">
+            <Password
+              auth={auth}
+              validatePassword={validatePassword}
+              message={message}
+              setMessage={setMessage}
+            />
           </Route>
           <Route path="/products">
             <Products
@@ -440,8 +547,8 @@ const App = () => {
           </Route>
         </Switch>
       </Router>
-    )
+    );
   }
-}
+};
 
-export default App
+export default App;

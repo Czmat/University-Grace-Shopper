@@ -17,6 +17,7 @@ const Account = ({ logout, auth, params }) => {
           <Link to="/profile">Profile</Link>
           <Link to="/addresses">Addresses</Link>
           <Link to="/orders">Orders</Link>
+          {auth.role === 'ADMIN' ? <Link to="/admin">Admin</Link> : ''}
         </li>
       </ul>
       <button onClick={logout}>Logout {auth.username} </button>
