@@ -285,7 +285,7 @@ const manageUser = async ({ id, isBlocked }) => {
 
 //changePassword
 const changePassword = async ({ id, password }) => {
-  console.log(password, id);
+  //console.log(password, id);
   return (
     await client.query(
       `UPDATE "users" set password=$1 WHERE id = $2 returning *`,
@@ -307,12 +307,12 @@ const getLineItems = async userId => {
 };
 
 const getCheckoutCart = async userId => {
-  console.log(userId);
+  //console.log(userId);
   const response = await client.query(
     `SELECT * FROM orders WHERE status='checkout' and "userId"=$1`,
     [userId]
   );
-  console.log(response.rows[0], 'my test for the checkout');
+  //console.log(response.rows[0], 'my test for the checkout');
   return response.rows[0];
 };
 const changeProductRating = async (productId, rating) => {

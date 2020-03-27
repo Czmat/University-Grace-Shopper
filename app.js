@@ -230,7 +230,7 @@ Object.keys(models).forEach(key => {
     models[key]
       .read({ user: req.user })
       .then(items => {
-        console.log(items, 'read users');
+        //console.log(items, 'read users');
         res.send(items);
       })
       .catch(next);
@@ -239,7 +239,7 @@ Object.keys(models).forEach(key => {
     models[key]
       .create({ user: req.user })
       .then(items => {
-        console.log(items, 'create users');
+        //console.log(items, 'create users');
         res.send(items);
       })
       .catch(next);
