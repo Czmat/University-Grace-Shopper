@@ -13,7 +13,7 @@ app.use(express.json())
 const isLoggedIn = (req, res, next) => {
   //console.log('isLI', req.user);
   if (!req.user) {
-    const error = Error("not authorized")
+    const error = Error("not Authorized")
     error.status = 401
     return next(error)
   }
@@ -27,20 +27,30 @@ const isAdmin = (req, res, next) => {
   next()
 }
 
+const isBlocked = (req, res, next) => {
+  console.log(req.user.isBlocked, "isBlocked wow")
+  if (req.user.isBlocked === true) {
+    return next(Error(" You are Blocked for life"))
+  }
+  next()
+}
+
 app.use((req, res, next) => {
   const token = req.headers.authorization
+  //console.log('under isAdmin');
 
   if (!token) {
+    // console.log('under no token');
     return next()
   }
   db.findUserFromToken(token)
     .then(auth => {
-      // console.log('find', req.user, auth);
+      //console.log('find', auth);
       req.user = auth
       next()
     })
     .catch(ex => {
-      const error = Error("not authorized")
+      const error = Error("NOT authorized")
       error.status = 401
       next(error)
     })
@@ -50,18 +60,38 @@ app.get("/", (req, res, next) =>
   res.sendFile(path.join(__dirname, "index.html"))
 )
 
+//api request with credentials
 app.post("/api/auth", (req, res, next) => {
   //console.log(req.body, 'credentials auth in post');
   db.authenticate(req.body)
-    .then(token => res.send({ token }))
+    .then(token => {
+      //console.log(token, 'return token');
+      res.send({ token })
+    })
     .catch(() => {
-      const error = Error("not authorized")
+      const error = Error("noT authorized")
       error.status = 401
       next(error)
     })
 })
 
-app.get("/api/auth", isLoggedIn, (req, res, next) => {
+//validating password
+app.post("/api/auth/validate", (req, res, next) => {
+  console.log("validate post", req.body)
+  db.authenticate(req.body)
+    .then(token => {
+      //console.log(token, 'return token');
+      res.send({ token })
+    })
+    .catch(() => {
+      const error = Error("Incorrect password")
+      error.status = 401
+      next(error)
+    })
+})
+
+//exchanging token
+app.get("/api/auth", isLoggedIn, isBlocked, (req, res, next) => {
   //console.log('isLoggedIn', isLoggedIn, req.user);
   res.send(req.user)
 })
@@ -136,7 +166,7 @@ app.post("/api/changeQtyInCart", (req, res, next) => {
 })
 
 app.post("/api/addToSaveForLater", (req, res, next) => {
-  console.log(req.body, "post addToSave")
+  //console.log(req.body, 'post addToSave');
   db.addToSaveForLater({
     userId: req.user.id,
     productId: req.body.productId
@@ -166,25 +196,53 @@ app.get("/api/products", (req, res, next) => {
 
 //creating user account { username, firstname, lastname, password, role, email }
 app.post("/api/user", (req, res, next) => {
-  console.log(req.body)
+  //console.log(req.body);
   db.models.users
     .create(req.body)
     .then(user => res.send(user))
     .catch(next)
 })
 
+//updating profile with put
+app.put("/api/user/:id", (req, res, next) => {
+  db.updateUser(req.body)
+    .then(updatedUser => res.send(updatedUser))
+    .catch(next)
+})
+
+//updating profile with put
+app.put("/api/manage/user/:id", (req, res, next) => {
+  db.manageUser(req.body)
+    .then(managedUser => res.send(managedUser))
+    .catch(next)
+})
+
+//change password
+app.put("/api/user/password/:id", (req, res, next) => {
+  //console.log('changePass put', req.body);
+  db.changePassword(req.body)
+    .then(response => res.send(response))
+    .catch(next)
+})
+
 Object.keys(models).forEach(key => {
-  //console.log(key);
+  console.log(key)
   app.get(`/api/${key}`, isLoggedIn, isAdmin, (req, res, next) => {
     models[key]
       .read({ user: req.user })
-      .then(items => res.send(items))
+      .then(items => {
+        console.log(items, "read users")
+        res.send(items)
+      })
       .catch(next)
   })
   app.post(`/api/${key}`, isLoggedIn, isAdmin, (req, res, next) => {
     models[key]
       .create({ user: req.user })
-      .then(items => res.send(items))
+      .then(items => {
+        console.log(items, "create users")
+        res.send(items)
+      })
       .catch(next)
   })
 })
@@ -193,7 +251,9 @@ Object.keys(models).forEach(key => {
 
 app.get("/checkout/:id", (req, res, next) => {
   // console.log(req.params)
-  db.getCheckoutCart(req.params.id).then(response => console.log(response))
+  db.getCheckoutCart(req.params.id)
+    .then(response => console.log(response))
+    .catch(next)
   //res.send(console.log(req, "my backend stuff"))
 })
 
