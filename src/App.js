@@ -61,8 +61,9 @@ const App = () => {
   useEffect(() => {
     console.log('useEffect works');
     axios.get('/api/products').then(response => setProducts(response.data));
-    axios.get('api/promos').then(response => {
+    axios.get('/api/promos').then(response => {
       console.log('in use', response.data);
+      //debugger;
       setPromos(response.data);
     });
   }, []);
@@ -319,6 +320,29 @@ const App = () => {
     });
   };
 
+  ////create, update remove promo
+  const createPromo = madePromo => {
+    axios.post('/api/promos', madePromo).then(response => {
+      const returnedPromo = response.data;
+      // console.log(returnedPromo, 'returned');
+
+      setPromos([...promos, returnedPromo]);
+    });
+  };
+
+  const updatePromo = revisedPromo => {
+    console.log(revisedPromo);
+    axios.put(`/api/promos/${revisedPromo.id}`, revisedPromo).then(response => {
+      console.log(response.data, 'returned revised promo');
+      const returnedPromo = response.data;
+      const updated = promos.map(_promo =>
+        _promo.id === returnedPromo.id ? returnedPromo : _promo
+      );
+      setPromos(updated);
+    });
+  };
+
+  ///return
   const userCart = lineItems.filter(lineItem => lineItem.orderId === cart.id);
 
   let totalQty = 0;
@@ -483,6 +507,9 @@ const App = () => {
               updateUser={updateUser}
               setMessage={setMessage}
               promos={promos}
+              managedUsers={managedUsers}
+              createPromo={createPromo}
+              updatePromo={updatePromo}
             />
           </Route>
           <Route path="/product/management">

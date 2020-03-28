@@ -299,20 +299,35 @@ const readPromos = async () => {
   return (await client.query('SELECT * FROM promos')).rows;
 };
 //create promo
-const createPromo = async ({ name, discount, isDollar, text, userId }) => {
+const createPromo = async ({
+  name,
+  discount,
+  isActive,
+  isDollar,
+  text,
+  userId,
+}) => {
   return (
     await client.query(
-      `INSERT INTO promos(name, discount, "isDollar", text, "userId") values ($1, $2, $3, $4, $5) returning *`,
-      [name, discount, isDollar, text || null, userId || null]
+      `INSERT INTO promos(name, discount, "isActive", "isDollar", text, "userId") values ($1, $2, $3, $4, $5, $6) returning *`,
+      [name, discount, isActive, isDollar, text || null, userId || null]
     )
   ).rows[0];
 };
 //update promo
-const updatePromo = async ({ isActive, id }) => {
+const updatePromo = async ({
+  name,
+  discount,
+  isActive,
+  isDollar,
+  userId,
+  text,
+  id,
+}) => {
   return (
     await client.query(
-      'UPDATE promos set "isActive"=$1 WHERE id = $2 returning *',
-      [isActive, id]
+      'UPDATE promos set name=$1, discount=$2, "isActive"=$3, "isDollar"=$4, "userId"=$5, text=$6 WHERE id = $7 returning *',
+      [name, discount, isActive || false, isDollar, userId, text, id]
     )
   ).rows[0];
 };

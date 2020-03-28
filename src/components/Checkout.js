@@ -1,38 +1,40 @@
-import React, { useEffect, useState } from "react"
-import address from "../address"
-import axios from "axios"
-
+import React, { useEffect, useState } from 'react';
+import address from '../address';
+import axios from 'axios';
+import CheckoutPromoForm from '../checkout/CheckoutPromoForm';
 const Checkout = ({ cart, auth }) => {
-  const [save, setSave] = useState(false)
-  const [userSavedAddress, setUserSavedAddress] = useState([])
-  const [userAddress, setUserAddress] = useState("")
-  const checkoutOrder = JSON.parse(window.localStorage.getItem("checkoutorder"))
+  const [save, setSave] = useState(false);
+  const [userSavedAddress, setUserSavedAddress] = useState([]);
+  const [userAddress, setUserAddress] = useState('');
+  const checkoutOrder = JSON.parse(
+    window.localStorage.getItem('checkoutorder')
+  );
 
   useEffect(() => {
     if (auth.id) {
       axios.get(`/api/address/${auth.id}`).then(response => {
-        setUserSavedAddress(response.data)
-      })
+        setUserSavedAddress(response.data);
+      });
     }
-  }, [userSavedAddress])
+  }, [userSavedAddress]);
 
   const saveAddress = () => {
-    save === true ? setSave(false) : setSave(true)
-  }
+    save === true ? setSave(false) : setSave(true);
+  };
 
   const handleSubmit = async e => {
-    let fullAddress = address(e)
-    setUserAddress(fullAddress)
+    let fullAddress = address(e);
+    setUserAddress(fullAddress);
     if (save === true) {
-      console.log(userAddress)
+      console.log(userAddress);
       axios
         .post(`/api/address/${auth.id}/`, [fullAddress])
-        .then(response => console.log(response, "response"))
+        .then(response => console.log(response, 'response'));
     }
-  }
+  };
   const saveSelection = address => {
-    console.log(address)
-  }
+    console.log(address);
+  };
 
   return (
     <div key={checkoutOrder.id}>
@@ -51,7 +53,7 @@ const Checkout = ({ cart, auth }) => {
                   >
                     {mapAddress.address}
                   </option>
-                )
+                );
               })
             : null}
         </select>
@@ -68,11 +70,12 @@ const Checkout = ({ cart, auth }) => {
         onClick={saveAddress}
       />
       <label htmlFor="address">Add to address book</label>
+      <CheckoutPromoForm />
     </div>
-  )
-}
+  );
+};
 
-export default Checkout
+export default Checkout;
 
 //want to create orders page that shows each order and the status - the cart should have a checkout button and once you checkout the order and pay/add a shipping address it will then create an order number which you can then reference on the order page.
 

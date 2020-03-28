@@ -247,7 +247,7 @@ app.post('/api/promos', (req, res, next) => {
 });
 
 app.put('/api/promos/:id', (req, res, next) => {
-  //console.log('changePass put', req.body);
+  console.log('req.body in put', req.body);
   db.updatePromo(req.body)
     .then(promo => res.send(promo))
     .catch(next);

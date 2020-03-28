@@ -22,7 +22,9 @@ const ManagedUser = ({ user, manageUser, setUserId }) => {
         <h4>Username: {user.username}</h4>
         <form onSubmit={onSubmit}>
           <div>
-            {user.isBlocked ? 'User is blocked' : 'User is not blocked'}
+            {isBlockedUser.isBlocked
+              ? 'User is blocked'
+              : 'User is not blocked'}
           </div>
           <div>
             <input

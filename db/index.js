@@ -163,13 +163,15 @@ const sync = async () => {
     createPromo({
       name: 'summer',
       discount: 10,
-      isDollar: null,
+      isActive: false,
+      isDollar: false,
       text: 'Summer promo',
     }),
     createPromo({
       name: 'david',
       discount: 20,
-      isDollar: null,
+      isActive: false,
+      isDollar: false,
       text: 'corona virus promo',
     }),
   ]);

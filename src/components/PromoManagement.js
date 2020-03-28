@@ -7,9 +7,18 @@ import {
   useParams,
 } from 'react-router-dom';
 import ManagedPromo from './ManagedPromo';
+import CreatePromoForm from './CreatePromoForm';
 
-const PromoManagement = ({ auth, users, promos, updatePromo }) => {
+const PromoManagement = ({
+  auth,
+  managedUsers,
+  promos,
+  updatePromo,
+  createPromo,
+}) => {
+  const [createForm, setCreateForm] = useState(false);
   const [promo, setPromo] = useState({});
+  const [revisedPromo, setRevisedPromo] = useState(promo);
   console.log(promos);
   //console.log(promo, 'one');
   //const promo = managedPromos.find(p => p.id === promoId);
@@ -20,15 +29,19 @@ const PromoManagement = ({ auth, users, promos, updatePromo }) => {
 
   return (
     <div>
-      {!!promo.id && (
+      {!!revisedPromo.id && (
         <ManagedPromo
           promo={promo}
           updatePromo={updatePromo}
-          // setUserId={setUserId}
-          // manageUser={manageUser}
+          setPromo={setPromo}
+          revisedPromo={revisedPromo}
+          setRevisedPromo={setRevisedPromo}
+          managedUsers={managedUsers}
         />
       )}
       <h1>Promo Management</h1>
+      {/* <button onClick={console.log('Update')}>Update Promos</button> */}
+      <h5>Update existing promos</h5>
       <ul>
         {promos.map(promo => {
           return (
@@ -36,7 +49,8 @@ const PromoManagement = ({ auth, users, promos, updatePromo }) => {
               <Link
                 to="/promo/management"
                 onClick={() => {
-                  setPromo(promo);
+                  //setPromo(promo);
+                  setRevisedPromo(promo);
                 }}
               >
                 {promo.name}
@@ -45,6 +59,14 @@ const PromoManagement = ({ auth, users, promos, updatePromo }) => {
           );
         })}
       </ul>
+      <button onClick={() => setCreateForm(true)}>Create Promo</button>
+      {!!createForm && (
+        <CreatePromoForm
+          createPromo={createPromo}
+          managedUsers={managedUsers}
+          setCreateForm={setCreateForm}
+        />
+      )}
     </div>
   );
 };
