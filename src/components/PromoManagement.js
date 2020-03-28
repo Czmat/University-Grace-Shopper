@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   BrowserRouter as Router,
   Switch,
@@ -6,19 +6,44 @@ import {
   Link,
   useParams,
 } from 'react-router-dom';
+import ManagedPromo from './ManagedPromo';
 
-const PromoManagement = ({ auth, users }) => {
-  console.log(users);
+const PromoManagement = ({ auth, users, promos, updatePromo }) => {
+  const [promo, setPromo] = useState({});
+  console.log(promos);
+  //console.log(promo, 'one');
+  //const promo = managedPromos.find(p => p.id === promoId);
+
+  // const onClick = promoClicked => {
+  //   setPromoId(promoClicked.id);
+  // };
 
   return (
     <div>
+      {!!promo.id && (
+        <ManagedPromo
+          promo={promo}
+          updatePromo={updatePromo}
+          // setUserId={setUserId}
+          // manageUser={manageUser}
+        />
+      )}
       <h1>Promo Management</h1>
       <ul>
-        <li>
-          <Link to="/user/management">User management</Link>
-          <Link to="/promo/management">Promo management</Link>
-          <Link to="/product/management">Product management</Link>
-        </li>
+        {promos.map(promo => {
+          return (
+            <li key={promo.id}>
+              <Link
+                to="/promo/management"
+                onClick={() => {
+                  setPromo(promo);
+                }}
+              >
+                {promo.name}
+              </Link>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );

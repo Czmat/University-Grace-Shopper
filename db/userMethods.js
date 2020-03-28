@@ -274,7 +274,7 @@ const updateUser = async ({ id, username, firstname, lastname, email }) => {
 
 //updateUser from profile
 const manageUser = async ({ id, isBlocked }) => {
-  //console.log({ id, username, firstname, lastname, email });
+  console.log(id, isBlocked, 'sql man user');
   return (
     await client.query(
       `UPDATE "users" set "isBlocked"=$1 WHERE id = $2 returning *`,
@@ -292,6 +292,34 @@ const changePassword = async ({ id, password }) => {
       [await hash(password), id]
     )
   ).rows[0];
+};
+
+//get promos
+const readPromos = async () => {
+  return (await client.query('SELECT * FROM promos')).rows;
+};
+//create promo
+const createPromo = async ({ name, discount, isDollar, text, userId }) => {
+  return (
+    await client.query(
+      `INSERT INTO promos(name, discount, "isDollar", text, "userId") values ($1, $2, $3, $4, $5) returning *`,
+      [name, discount, isDollar, text || null, userId || null]
+    )
+  ).rows[0];
+};
+//update promo
+const updatePromo = async ({ isActive, id }) => {
+  return (
+    await client.query(
+      'UPDATE promos set "isActive"=$1 WHERE id = $2 returning *',
+      [isActive, id]
+    )
+  ).rows[0];
+};
+//delete promo
+const removePromo = async ({ id }) => {
+  const cart = await getCart(userId);
+  await client.query('DELETE FROM promos WHERE id=$1', [id]);
 };
 
 const getLineItems = async userId => {
@@ -367,4 +395,8 @@ module.exports = {
   addAddress,
   deleteAddress,
   changeProductRating,
+  readPromos,
+  createPromo,
+  updatePromo,
+  removePromo,
 };

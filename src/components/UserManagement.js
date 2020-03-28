@@ -1,36 +1,37 @@
 import React, { useState } from 'react';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useParams,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Link } from 'react-router-dom';
+import ManagedUser from './ManagedUser';
 
-const ManagedUser = ({ user }) => {
-  return (
-    <ul>
-      <li>isBlocked: {user.isBlocked ? 'true' : 'false'}</li>
-      <li>Username: {user.username}</li>
-    </ul>
-  );
-};
-
-const UserManagement = ({ auth, managedUsers }) => {
+const UserManagement = ({ managedUsers, updateUser, manageUser }) => {
   const [userId, setUserId] = useState('');
 
   const user = managedUsers.find(u => u.id === userId);
-  console.log(user);
+
+  const onClick = userClicked => {
+    setUserId(userClicked.id);
+  };
 
   return (
     <div>
-      <h1>User my Management</h1>
-      {!!user && <ManagedUser user={user} />}
+      {!!userId && (
+        <ManagedUser
+          user={user}
+          updateUser={updateUser}
+          setUserId={setUserId}
+          manageUser={manageUser}
+        />
+      )}
+      <h1>Pick User to Management</h1>
       <ul>
         {managedUsers.map(user => {
           return (
             <li key={user.id}>
-              <Link to="/user/management" onClick={() => setUserId(user.id)}>
+              <Link
+                to="/user/management"
+                onClick={() => {
+                  onClick(user);
+                }}
+              >
                 {user.username}
               </Link>
             </li>

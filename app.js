@@ -28,9 +28,12 @@ const isAdmin = (req, res, next) => {
 };
 
 const isBlocked = (req, res, next) => {
-  console.log(req.user.isBlocked, 'isBlocked wow');
+  //console.log(req.user.isBlocked, 'isBlocked wow');
   if (req.user.isBlocked === true) {
-    return next(Error(' You are Blocked for life'));
+    //throw new Error(' You are Blocked for life');
+    const error = Error(' You are Blocked for life');
+    error.status = 401;
+    return next(error);
   }
   next();
 };
@@ -65,7 +68,7 @@ app.post('/api/auth', (req, res, next) => {
   //console.log(req.body, 'credentials auth in post');
   db.authenticate(req.body)
     .then(token => {
-      //console.log(token, 'return token');
+      // console.log(token, 'return token');
       res.send({ token });
     })
     .catch(() => {
@@ -75,9 +78,9 @@ app.post('/api/auth', (req, res, next) => {
     });
 });
 
-//validating password
+//validating password change
 app.post('/api/auth/validate', (req, res, next) => {
-  console.log('validate post', req.body);
+  //console.log('validate post', req.body);
   db.authenticate(req.body)
     .then(token => {
       //console.log(token, 'return token');
@@ -92,7 +95,7 @@ app.post('/api/auth/validate', (req, res, next) => {
 
 //exchanging token
 app.get('/api/auth', isLoggedIn, isBlocked, (req, res, next) => {
-  //console.log('isLoggedIn', isLoggedIn, req.user);
+  //console.log('isLoggedIn and is Blocked', isLoggedIn, req.user);
   res.send(req.user);
 });
 
@@ -212,6 +215,7 @@ app.put('/api/user/:id', (req, res, next) => {
 
 //updating profile with put
 app.put('/api/manage/user/:id', (req, res, next) => {
+  //console.log(req.body, 'app. put');
   db.manageUser(req.body)
     .then(managedUser => res.send(managedUser))
     .catch(next);
@@ -222,6 +226,36 @@ app.put('/api/user/password/:id', (req, res, next) => {
   //console.log('changePass put', req.body);
   db.changePassword(req.body)
     .then(response => res.send(response))
+    .catch(next);
+});
+
+//get post put delete promos
+app.get('/api/promos', (req, res, next) => {
+  db.readPromos()
+    .then(promos => {
+      console.log(promos);
+      res.send(promos);
+    })
+    .catch(next);
+});
+
+app.post('/api/promos', (req, res, next) => {
+  //console.log(req.body);
+  db.createPromo(req.body)
+    .then(promo => res.send(promo))
+    .catch(next);
+});
+
+app.put('/api/promos/:id', (req, res, next) => {
+  //console.log('changePass put', req.body);
+  db.updatePromo(req.body)
+    .then(promo => res.send(promo))
+    .catch(next);
+});
+
+app.delete('/api/promos/:id', (req, res, next) => {
+  db.removePromo()
+    .then(() => res.sendStatus(204))
     .catch(next);
 });
 
