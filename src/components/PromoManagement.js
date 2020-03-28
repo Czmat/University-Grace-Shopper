@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   BrowserRouter as Router,
   Switch,
@@ -6,20 +6,67 @@ import {
   Link,
   useParams,
 } from 'react-router-dom';
+import ManagedPromo from './ManagedPromo';
+import CreatePromoForm from './CreatePromoForm';
 
-const PromoManagement = ({ auth, users }) => {
-  console.log(users);
+const PromoManagement = ({
+  auth,
+  managedUsers,
+  promos,
+  updatePromo,
+  createPromo,
+}) => {
+  const [createForm, setCreateForm] = useState(false);
+  const [promo, setPromo] = useState({});
+  const [revisedPromo, setRevisedPromo] = useState(promo);
+  console.log(promos);
+  //console.log(promo, 'one');
+  //const promo = managedPromos.find(p => p.id === promoId);
+
+  // const onClick = promoClicked => {
+  //   setPromoId(promoClicked.id);
+  // };
 
   return (
     <div>
+      {!!revisedPromo.id && (
+        <ManagedPromo
+          promo={promo}
+          updatePromo={updatePromo}
+          setPromo={setPromo}
+          revisedPromo={revisedPromo}
+          setRevisedPromo={setRevisedPromo}
+          managedUsers={managedUsers}
+        />
+      )}
       <h1>Promo Management</h1>
+      {/* <button onClick={console.log('Update')}>Update Promos</button> */}
+      <h5>Update existing promos</h5>
       <ul>
-        <li>
-          <Link to="/user/management">User management</Link>
-          <Link to="/promo/management">Promo management</Link>
-          <Link to="/product/management">Product management</Link>
-        </li>
+        {promos.map(promo => {
+          return (
+            <li key={promo.id}>
+              <Link
+                to="/promo/management"
+                onClick={() => {
+                  //setPromo(promo);
+                  setRevisedPromo(promo);
+                }}
+              >
+                {promo.name}
+              </Link>
+            </li>
+          );
+        })}
       </ul>
+      <button onClick={() => setCreateForm(true)}>Create Promo</button>
+      {!!createForm && (
+        <CreatePromoForm
+          createPromo={createPromo}
+          managedUsers={managedUsers}
+          setCreateForm={setCreateForm}
+        />
+      )}
     </div>
   );
 };

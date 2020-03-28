@@ -7,21 +7,24 @@ import {
   useParams,
 } from 'react-router-dom';
 
-const Login = ({ login }) => {
+const Login = ({ login, err }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [name, setName] = useState('');
   const onSubmit = ev => {
     ev.preventDefault();
-    login({ username, password }).catch(ex =>
-      setError(ex.response.data.message)
-    );
+    login({ username, password }).catch(ex => {
+      //console.log(ex.response, 'error');
+      setError(ex.response.data.message);
+    });
   };
+
   return (
     <div>
       <form onSubmit={onSubmit}>
         <h1>Login</h1>
+        {err ? <div className="error">{err}</div> : ''}
         <div className="error">{error}</div>
         <input value={username} onChange={ev => setUsername(ev.target.value)} />
         <input value={password} onChange={ev => setPassword(ev.target.value)} />
