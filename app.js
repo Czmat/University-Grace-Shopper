@@ -229,6 +229,13 @@ app.put('/api/user/password/:id', (req, res, next) => {
     .catch(next);
 });
 
+//update cart total amount
+app.put(`/api/cart/total/:id`, (req, res, next) => {
+  db.updateCartTotal(req.body)
+    .then(response => res.send(response))
+    .catch(next);
+});
+
 //get post put delete promos
 app.get('/api/promos', (req, res, next) => {
   db.readPromos()
