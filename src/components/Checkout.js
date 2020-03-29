@@ -2,7 +2,10 @@ import React, { useEffect, useState } from 'react';
 import address from '../address';
 import axios from 'axios';
 import CheckoutPromoForm from '../checkout/CheckoutPromoForm';
-const Checkout = ({ cart, auth }) => {
+import TotalAmount from '../checkout/TotalAmount';
+
+const Checkout = ({ cart, auth, cartTotal, updateCartTotal, promos }) => {
+  const [totalIncludesPromo, setTotalIncludesPromo] = useState(cart.total);
   const [save, setSave] = useState(false);
   const [userSavedAddress, setUserSavedAddress] = useState([]);
   const [userAddress, setUserAddress] = useState('');
@@ -16,7 +19,9 @@ const Checkout = ({ cart, auth }) => {
         setUserSavedAddress(response.data);
       });
     }
-  }, [userSavedAddress]);
+  }, []);
+  //console.log(cart.total, 'in checkout outside cart.total');
+  console.log(totalIncludesPromo, 'in checkout outside cart.total');
 
   const saveAddress = () => {
     save === true ? setSave(false) : setSave(true);
@@ -70,7 +75,22 @@ const Checkout = ({ cart, auth }) => {
         onClick={saveAddress}
       />
       <label htmlFor="address">Add to address book</label>
-      <CheckoutPromoForm />
+      <hr />
+      <CheckoutPromoForm
+        cart={cart}
+        updateCartTotal={updateCartTotal}
+        promos={promos}
+        totalIncludesPromo={totalIncludesPromo}
+        setTotalIncludesPromo={setTotalIncludesPromo}
+      />
+      <TotalAmount
+        cart={cart}
+        updateCartTotal={updateCartTotal}
+        promos={promos}
+        totalIncludesPromo={totalIncludesPromo}
+        setTotalIncludesPromo={setTotalIncludesPromo}
+      />
+      {cartTotal}
     </div>
   );
 };

@@ -1,15 +1,15 @@
-import React from "react"
-import SaveForLater from "./SaveForLater"
+import React, { useState, useEffect } from 'react';
+import SaveForLater from './SaveForLater';
 
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Link,
-  useParams
-} from "react-router-dom"
+  useParams,
+} from 'react-router-dom';
 
-const numArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+const numArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 const Mycart = ({
   lineItems,
@@ -26,25 +26,45 @@ const Mycart = ({
   addBackToCart,
   params,
   getProductDetail,
-  orders
+  orders,
+  auth,
+  updateCartTotal,
+  // findCartTotal,
 }) => {
+  const [cartTotal, setCartTotal] = useState(0);
+
   const findCartTotal = () => {
-    let cartTotal = 0
+    let cartTotalAmount = 0;
     lineItems
       .filter(lineItem => lineItem.orderId === cart.id)
       .forEach(lineItem => {
         const product = products.find(
           product => product.id === lineItem.productId
-        )
-        cartTotal += Number(product.price * lineItem.quantity)
-        // console.log(cartTotal);
-      })
-    return cartTotal.toFixed(2)
-  }
+        );
+        cartTotalAmount += Number(product.price * lineItem.quantity);
+        console.log(cartTotal, 'in find');
+      });
+    setCartTotal(cartTotalAmount);
+  };
 
+  useEffect(() => {
+    findCartTotal();
+  }, [cart, lineItems]);
+
+  // // updating cart total amount to use later
+  // const updateCartTotal = () => {
+  //   console.log((cart.id, cartTotal));
+  //   axios
+  //     .put(`/api/cart/total/${cart.id}`, (cart.id, cartTotal))
+  //     .then(response => {
+  //       console.log(response.data, 'update cart total response');
+  //     });
+  // };
+
+  console.log(cartTotal, 'outside');
   return (
     <div className="cart-container">
-      <h2>Your cart total: ${findCartTotal()}</h2>
+      <h2>Your cart total: ${cartTotal}</h2>
       {/* commenting out the create order button for now -I will transfer this code to the checkout page
       {/* <button
         disabled={!lineItems.find(lineItem => lineItem.orderId === cart.id)}
@@ -52,7 +72,11 @@ const Mycart = ({
       >
         Create Order
       </button> */}
-      <Link to="/checkout" cart={cart} onClick={createOrder}>
+      <Link
+        to="/checkout"
+        cart={cart}
+        onClick={() => updateCartTotal(cart.id, cartTotal)}
+      >
         Checkout
       </Link>
 
@@ -61,7 +85,8 @@ const Mycart = ({
         .map(lineItem => {
           const product = products.find(
             product => product.id === lineItem.productId
-          )
+          );
+          //cartTotal += Number(product.price * lineItem.quantity);
           return (
             <div key={lineItem.id} className="product-card">
               <button onClick={() => removeFromCart(lineItem.id)}>x</button>
@@ -89,9 +114,9 @@ const Mycart = ({
                   defaultValue={lineItem.quantity}
                   onChange={e => {
                     //console.log(e.target.value);
-                    e.target.value === "0"
+                    e.target.value === '0'
                       ? removeFromCart(lineItem.id)
-                      : changeQtyInCart(product.id, e.target.value)
+                      : changeQtyInCart(product.id, e.target.value);
                   }}
                 >
                   <option value={0}>0 (delete)</option>
@@ -100,7 +125,7 @@ const Mycart = ({
                       <option key={num} value={num}>
                         {num}
                       </option>
-                    )
+                    );
                   })}
                 </select>
                 <i>|</i>
@@ -109,16 +134,16 @@ const Mycart = ({
                   value="Save for later"
                   onClick={e => {
                     //e.preventDefault();
-                    addToSaveForLater(product.id)
+                    addToSaveForLater(product.id);
                     //removeFromCart(lineItem.id);
                   }}
                 ></input>
                 <div>${Number(product.price).toFixed(2)}</div>
               </div>
             </div>
-          )
+          );
         })}
-
+      <h2>Your cart total: ${cartTotal.toFixed(2)}</h2>
       <hr></hr>
       <SaveForLater
         lineItems={lineItems}
@@ -135,8 +160,8 @@ const Mycart = ({
         params={params}
       />
     </div>
-  )
-}
+  );
+};
 
 {
   /* <h2>Cart - {cart.id && cart.id.slice(0, 4)}</h2>
@@ -166,4 +191,4 @@ const Mycart = ({
 </ul> */
 }
 
-export default Mycart
+export default Mycart;

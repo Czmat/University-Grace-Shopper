@@ -51,12 +51,14 @@ const App = () => {
   const [order, setOrder] = useState([]);
   const [promos, setPromos] = useState([]);
   const [err, setErr] = useState('');
+  const [cartTotal, setCartTotal] = useState(0);
 
   // const [checkoutOrder, setCheckoutOrder] = useState()
 
   //not sure if I need it
   //const [userAccount, setUserAccount] = useState({});
   //console.log(orders, 'orders', cart, 'cart', lineItems, 'lineItems');
+  //let cartTotal = 0;
 
   useEffect(() => {
     console.log('useEffect works');
@@ -152,12 +154,32 @@ const App = () => {
 
     // console.log('logout', auth);
   };
-  //console.log('outside', auth);
+
+  const findCartTotal = () => {
+    let cartTotalAmount = 0;
+    lineItems
+      .filter(lineItem => lineItem.orderId === cart.id)
+      .forEach(lineItem => {
+        const product = products.find(
+          product => product.id === lineItem.productId
+        );
+        cartTotalAmount += Number(product.price * lineItem.quantity);
+        console.log(cartTotal, 'in find');
+      });
+    setCartTotal(cartTotalAmount);
+  };
 
   useEffect(() => {
     //console.log('when this hits?');
     exchangeTokenForAuth();
+    //findCartTotal();
   }, []);
+
+  useEffect(() => {
+    //console.log('when this hits?');
+
+    findCartTotal();
+  }, [cart, lineItems, auth]);
 
   // useEffect(() => {
   //   //console.log('when this hits?');
@@ -199,6 +221,7 @@ const App = () => {
           );
           setLineItems(updated);
         }
+        //findCartTotal();
       });
   };
 
@@ -216,6 +239,17 @@ const App = () => {
           );
           setLineItems(updated);
         }
+        //findCartTotal();
+      });
+  };
+
+  // updating cart total amount to use later
+  const updateCartTotal = (id, total) => {
+    console.log((id, total, 'this is cart.id-->', cart.id));
+    axios
+      .put(`/api/cart/total/${cartTotal.id}`, { id, total })
+      .then(response => {
+        console.log(response.data, 'update cart total response');
       });
   };
 
@@ -225,6 +259,7 @@ const App = () => {
       .then(response => {
         axios.get('/api/getLineItems', headers()).then(response => {
           setLineItems(response.data);
+          //findCartTotal();
         });
       });
   };
@@ -342,6 +377,8 @@ const App = () => {
     });
   };
 
+  console.log('outside in app cart', cart);
+
   ///return
   const userCart = lineItems.filter(lineItem => lineItem.orderId === cart.id);
 
@@ -417,6 +454,7 @@ const App = () => {
               changeQtyInCart={changeQtyInCart}
               addBackToCart={addBackToCart}
               getProductDetail={getProductDetail}
+              //cartTotal={cartTotal}
             />
           </Route>
         </Switch>
@@ -552,6 +590,10 @@ const App = () => {
               getProductDetail={getProductDetail}
               removeFromSave={removeFromSave}
               addBackToCart={addBackToCart}
+              auth={auth}
+              cartTotal={cartTotal}
+              findCartTotal={findCartTotal}
+              updateCartTotal={updateCartTotal}
             />
           </Route>
           <Route path="/orders">
@@ -573,6 +615,9 @@ const App = () => {
               auth={auth}
               cart={cart}
               order={order}
+              cartTotal={cartTotal}
+              updateCartTotal={updateCartTotal}
+              promos={promos}
             />
           </Route>
           <Route path="/checkout/:id">
