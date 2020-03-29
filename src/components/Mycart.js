@@ -29,7 +29,6 @@ const Mycart = ({
   orders,
   auth,
   updateCartTotal,
-  // findCartTotal,
 }) => {
   const [cartTotal, setCartTotal] = useState(0);
 
@@ -51,21 +50,11 @@ const Mycart = ({
     findCartTotal();
   }, [cart, lineItems]);
 
-  // // updating cart total amount to use later
-  // const updateCartTotal = () => {
-  //   console.log((cart.id, cartTotal));
-  //   axios
-  //     .put(`/api/cart/total/${cart.id}`, (cart.id, cartTotal))
-  //     .then(response => {
-  //       console.log(response.data, 'update cart total response');
-  //     });
-  // };
-
-  console.log(cartTotal, 'outside');
+  //console.log(cartTotal, 'outside');
   return (
     <div className="cart-container">
       <h2>Your cart total: ${cartTotal}</h2>
-      {/* commenting out the create order button for now -I will transfer this code to the checkout page
+      {/* commenting out the create order button for now -I will transfer this code to the checkout page*/}
       {/* <button
         disabled={!lineItems.find(lineItem => lineItem.orderId === cart.id)}
         onClick={createOrder}
@@ -79,14 +68,12 @@ const Mycart = ({
       >
         Checkout
       </Link>
-
       {lineItems
         .filter(lineItem => lineItem.orderId === cart.id)
         .map(lineItem => {
           const product = products.find(
             product => product.id === lineItem.productId
           );
-          //cartTotal += Number(product.price * lineItem.quantity);
           return (
             <div key={lineItem.id} className="product-card">
               <button onClick={() => removeFromCart(lineItem.id)}>x</button>
@@ -133,9 +120,7 @@ const Mycart = ({
                   type="submit"
                   value="Save for later"
                   onClick={e => {
-                    //e.preventDefault();
                     addToSaveForLater(product.id);
-                    //removeFromCart(lineItem.id);
                   }}
                 ></input>
                 <div>${Number(product.price).toFixed(2)}</div>
@@ -162,33 +147,5 @@ const Mycart = ({
     </div>
   );
 };
-
-{
-  /* <h2>Cart - {cart.id && cart.id.slice(0, 4)}</h2>
-<button
-  disabled={!lineItems.find(lineItem => lineItem.orderId === cart.id)}
-  onClick={createOrder}
->
-  Create Order
-</button>
-<ul>
-  {lineItems
-    .filter(lineItem => lineItem.orderId === cart.id)
-    .map(lineItem => {
-      const product = products.find(
-        product => product.id === lineItem.productId
-      );
-      return (
-        <li key={lineItem.id}>
-          {product && product.name}{' '}
-          <span className="quantity">Quantity: {lineItem.quantity}</span>
-          <button onClick={() => removeFromCart(lineItem.id)}>
-            Remove From Cart
-          </button>
-        </li>
-      );
-    })}
-</ul> */
-}
 
 export default Mycart;

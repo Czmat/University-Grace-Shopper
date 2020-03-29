@@ -4,8 +4,15 @@ import axios from 'axios';
 import CheckoutPromoForm from '../checkout/CheckoutPromoForm';
 import TotalAmount from '../checkout/TotalAmount';
 
-const Checkout = ({ cart, auth, cartTotal, updateCartTotal, promos }) => {
-  const [totalIncludesPromo, setTotalIncludesPromo] = useState(cart.total);
+const Checkout = ({
+  cart,
+  auth,
+  updateCartTotal,
+  promos,
+  lineItems,
+  createOrder,
+}) => {
+  const [totalIncludesPromo, setTotalIncludesPromo] = useState();
   const [save, setSave] = useState(false);
   const [userSavedAddress, setUserSavedAddress] = useState([]);
   const [userAddress, setUserAddress] = useState('');
@@ -20,8 +27,6 @@ const Checkout = ({ cart, auth, cartTotal, updateCartTotal, promos }) => {
       });
     }
   }, []);
-  //console.log(cart.total, 'in checkout outside cart.total');
-  console.log(totalIncludesPromo, 'in checkout outside cart.total');
 
   const saveAddress = () => {
     save === true ? setSave(false) : setSave(true);
@@ -38,8 +43,16 @@ const Checkout = ({ cart, auth, cartTotal, updateCartTotal, promos }) => {
     }
   };
   const saveSelection = address => {
-    console.log(address);
+    // console.log(address);
   };
+
+  //to set latest total to total includes promo
+  useEffect(() => {
+    setTotalIncludesPromo(cart.total);
+  }, [cart, lineItems]);
+
+  console.log(cart.total, 'in checkout outside cart.total');
+  console.log(totalIncludesPromo, 'in checkout outside totalInPromo');
 
   return (
     <div key={checkoutOrder.id}>
@@ -89,8 +102,9 @@ const Checkout = ({ cart, auth, cartTotal, updateCartTotal, promos }) => {
         promos={promos}
         totalIncludesPromo={totalIncludesPromo}
         setTotalIncludesPromo={setTotalIncludesPromo}
+        createOrder={createOrder}
+        lineItems={lineItems}
       />
-      {cartTotal}
     </div>
   );
 };

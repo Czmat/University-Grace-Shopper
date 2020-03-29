@@ -51,7 +51,6 @@ const App = () => {
   const [order, setOrder] = useState([]);
   const [promos, setPromos] = useState([]);
   const [err, setErr] = useState('');
-  const [cartTotal, setCartTotal] = useState(0);
 
   // const [checkoutOrder, setCheckoutOrder] = useState()
 
@@ -151,35 +150,13 @@ const App = () => {
     window.location.hash = '#';
     window.localStorage.removeItem('token');
     setAuth({});
-
     // console.log('logout', auth);
-  };
-
-  const findCartTotal = () => {
-    let cartTotalAmount = 0;
-    lineItems
-      .filter(lineItem => lineItem.orderId === cart.id)
-      .forEach(lineItem => {
-        const product = products.find(
-          product => product.id === lineItem.productId
-        );
-        cartTotalAmount += Number(product.price * lineItem.quantity);
-        console.log(cartTotal, 'in find');
-      });
-    setCartTotal(cartTotalAmount);
   };
 
   useEffect(() => {
     //console.log('when this hits?');
     exchangeTokenForAuth();
-    //findCartTotal();
   }, []);
-
-  useEffect(() => {
-    //console.log('when this hits?');
-
-    findCartTotal();
-  }, [cart, lineItems, auth]);
 
   // useEffect(() => {
   //   //console.log('when this hits?');
@@ -188,15 +165,21 @@ const App = () => {
 
   const createOrder = () => {
     const token = window.localStorage.getItem('token');
+    console.log('first I hit createOrder');
     axios
       .post('/api/createOrder', null, headers())
       .then(response => {
+        console.log('2 I hit createOrder to setOrders', response.data);
         setOrders([response.data, ...orders]);
         window.localStorage.setItem('storedOrder', response.data);
         const token = window.localStorage.getItem('token');
         return axios.get('/api/getCart', headers());
       })
       .then(response => {
+        console.log(
+          '3 I hit createOrder to setCart to status order',
+          response.data
+        );
         setCart(response.data);
       });
   };
@@ -221,7 +204,6 @@ const App = () => {
           );
           setLineItems(updated);
         }
-        //findCartTotal();
       });
   };
 
@@ -239,18 +221,16 @@ const App = () => {
           );
           setLineItems(updated);
         }
-        //findCartTotal();
       });
   };
 
   // updating cart total amount to use later
   const updateCartTotal = (id, total) => {
     console.log((id, total, 'this is cart.id-->', cart.id));
-    axios
-      .put(`/api/cart/total/${cartTotal.id}`, { id, total })
-      .then(response => {
-        console.log(response.data, 'update cart total response');
-      });
+    axios.put(`/api/cart/total/${id}`, { id, total }).then(response => {
+      setCart(response.data);
+      //console.log(response.data, 'update cart total response');
+    });
   };
 
   const addBackToCart = (productId, quantity) => {
@@ -259,7 +239,6 @@ const App = () => {
       .then(response => {
         axios.get('/api/getLineItems', headers()).then(response => {
           setLineItems(response.data);
-          //findCartTotal();
         });
       });
   };
@@ -268,9 +247,7 @@ const App = () => {
     axios
       .post('/api/addToSaveForLater', { productId }, headers())
       .then(response => {
-        // debugger;
         const lineItem = response.data;
-
         const found = lineItems.find(
           _lineItem =>
             _lineItem.productId === lineItem.productId &&
@@ -324,10 +301,6 @@ const App = () => {
     axios.put(`/api/user/${user.id}`, user).then(response => {
       console.log(response.data.username, 'update response');
       exchangeTokenForAuth();
-      // login({
-      //   username: response.data.username,
-      //   password: user.password,
-      // });
     });
   };
 
@@ -360,7 +333,6 @@ const App = () => {
     axios.post('/api/promos', madePromo).then(response => {
       const returnedPromo = response.data;
       // console.log(returnedPromo, 'returned');
-
       setPromos([...promos, returnedPromo]);
     });
   };
@@ -591,8 +563,6 @@ const App = () => {
               removeFromSave={removeFromSave}
               addBackToCart={addBackToCart}
               auth={auth}
-              cartTotal={cartTotal}
-              findCartTotal={findCartTotal}
               updateCartTotal={updateCartTotal}
             />
           </Route>
@@ -615,9 +585,10 @@ const App = () => {
               auth={auth}
               cart={cart}
               order={order}
-              cartTotal={cartTotal}
               updateCartTotal={updateCartTotal}
               promos={promos}
+              lineItems={lineItems}
+              createOrder={createOrder}
             />
           </Route>
           <Route path="/checkout/:id">

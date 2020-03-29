@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 const CreateUser = ({ login, createUser }) => {
   const [user, setUser] = useState({});
@@ -28,7 +29,7 @@ const CreateUser = ({ login, createUser }) => {
     // );
   };
 
-  console.log(user);
+  //console.log(user);
 
   //   var firstName = fullName.split(' ').slice(0, -1).join(' ');
   // var lastName = fullName.split(' ').slice(-1).join(' ');
@@ -38,12 +39,28 @@ const CreateUser = ({ login, createUser }) => {
       <form onSubmit={onSubmit}>
         <h1>Welcome to the family!</h1>
         <div className="error">{error}</div>
-        <input value={username} onChange={ev => setUsername(ev.target.value)} />
-        <input value={email} onChange={ev => setEmail(ev.target.value)} />
-        <input value={password} onChange={ev => setPassword(ev.target.value)} />
-        <button>Create Account</button>
+        <label>Username</label>
+        <input
+          value={username}
+          placeholder="First and Last name"
+          onChange={ev => setUsername(ev.target.value)}
+        />
+        <input
+          value={email}
+          placeholder="Email address"
+          onChange={ev => setEmail(ev.target.value)}
+        />
+        <input
+          value={password}
+          placeholder="Password"
+          onChange={ev => setPassword(ev.target.value)}
+        />
+        <Link to="/profile">
+          <button>Create Account</button>
+        </Link>
       </form>
       <a href="#"> Forgot Password</a>
+
       <div className="horizontal"></div>
     </div>
   );

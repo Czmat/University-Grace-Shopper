@@ -54,11 +54,6 @@ const CheckoutPromoForm = ({
             Redeem gift or promo code
           </button>
         </div>
-        {/* <TotalAmount
-          cart={cart}
-          updateCartTotal={updateCartTotal}
-          promos={promos}
-        /> */}
       </div>
     );
   } else {
@@ -85,11 +80,6 @@ const CheckoutPromoForm = ({
             {matchedPromo ? matchedPromo.text : failMessage[0]}
           </p>
         </div>
-        {/* <TotalAmount
-          cart={cart}
-          updateCartTotal={updateCartTotal}
-          promos={promos}
-        /> */}
       </div>
     );
   }
