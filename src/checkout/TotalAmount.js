@@ -14,15 +14,23 @@ const TotalAmount = ({
   updateCartTotal,
   totalIncludesPromo,
   setTotalIncludesPromo,
+  lineItems,
+  createOrder,
 }) => {
-  console.log(promos, 'in checkout outside promos');
+  console.log(lineItems, 'in totalAmount lineItems');
   return (
     <div className="cart-container">
       <div className="product-card">
-        <h5>
-          Total: <p>{totalIncludesPromo}</p>
-        </h5>
-        <button>Apply</button>
+        <p> Total: {totalIncludesPromo}</p>
+
+        <Link to="/orders">
+          <button
+            disabled={!lineItems.find(lineItem => lineItem.orderId === cart.id)}
+            onClick={createOrder}
+          >
+            Apply
+          </button>
+        </Link>
       </div>
     </div>
   );
