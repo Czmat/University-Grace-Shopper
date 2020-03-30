@@ -147,21 +147,11 @@ const App = () => {
   }
 
   const logout = () => {
-<<<<<<< HEAD
     window.location.hash = "#"
     window.localStorage.removeItem("token")
     setAuth({})
-
     // console.log('logout', auth);
   }
-  //console.log('outside', auth);
-=======
-    window.location.hash = '#';
-    window.localStorage.removeItem('token');
-    setAuth({});
-    // console.log('logout', auth);
-  };
->>>>>>> master
 
   useEffect(() => {
     //console.log('when this hits?');
@@ -174,41 +164,25 @@ const App = () => {
   // }, []);
 
   const createOrder = () => {
-<<<<<<< HEAD
     const token = window.localStorage.getItem("token")
-=======
-    const token = window.localStorage.getItem('token');
-    console.log('first I hit createOrder');
->>>>>>> master
+    console.log("first I hit createOrder")
     axios
       .post("/api/createOrder", null, headers())
       .then(response => {
-<<<<<<< HEAD
+        console.log("2 I hit createOrder to setOrders", response.data)
         setOrders([response.data, ...orders])
         window.localStorage.setItem("storedOrder", response.data)
         const token = window.localStorage.getItem("token")
         return axios.get("/api/getCart", headers())
       })
       .then(response => {
+        console.log(
+          "3 I hit createOrder to setCart to status order",
+          response.data
+        )
         setCart(response.data)
       })
   }
-=======
-        console.log('2 I hit createOrder to setOrders', response.data);
-        setOrders([response.data, ...orders]);
-        window.localStorage.setItem('storedOrder', response.data);
-        const token = window.localStorage.getItem('token');
-        return axios.get('/api/getCart', headers());
-      })
-      .then(response => {
-        console.log(
-          '3 I hit createOrder to setCart to status order',
-          response.data
-        );
-        setCart(response.data);
-      });
-  };
->>>>>>> master
 
   const getProductDetail = productId => {
     axios.get(`/api/products/${productId}`).then(response => {
@@ -252,12 +226,12 @@ const App = () => {
 
   // updating cart total amount to use later
   const updateCartTotal = (id, total) => {
-    console.log((id, total, 'this is cart.id-->', cart.id));
+    console.log((id, total, "this is cart.id-->", cart.id))
     axios.put(`/api/cart/total/${id}`, { id, total }).then(response => {
-      setCart(response.data);
+      setCart(response.data)
       //console.log(response.data, 'update cart total response');
-    });
-  };
+    })
+  }
 
   const addBackToCart = (productId, quantity) => {
     axios
@@ -273,13 +247,9 @@ const App = () => {
     axios
       .post("/api/addToSaveForLater", { productId }, headers())
       .then(response => {
-<<<<<<< HEAD
         // debugger;
         const lineItem = response.data
 
-=======
-        const lineItem = response.data;
->>>>>>> master
         const found = lineItems.find(
           _lineItem =>
             _lineItem.productId === lineItem.productId &&
@@ -331,21 +301,10 @@ const App = () => {
   const updateUser = user => {
     console.log(user)
     axios.put(`/api/user/${user.id}`, user).then(response => {
-<<<<<<< HEAD
       console.log(response.data.username, "update response")
       exchangeTokenForAuth()
-      // login({
-      //   username: response.data.username,
-      //   password: user.password,
-      // });
     })
   }
-=======
-      console.log(response.data.username, 'update response');
-      exchangeTokenForAuth();
-    });
-  };
->>>>>>> master
 
   const manageUser = isBlockedUser => {
     console.log(isBlockedUser, "put is blocked")
@@ -376,16 +335,9 @@ const App = () => {
     axios.post("/api/promos", madePromo).then(response => {
       const returnedPromo = response.data
       // console.log(returnedPromo, 'returned');
-<<<<<<< HEAD
-
       setPromos([...promos, returnedPromo])
     })
   }
-=======
-      setPromos([...promos, returnedPromo]);
-    });
-  };
->>>>>>> master
 
   const updatePromo = revisedPromo => {
     console.log(revisedPromo)
@@ -399,7 +351,7 @@ const App = () => {
     })
   }
 
-  console.log('outside in app cart', cart);
+  console.log("outside in app cart", cart)
 
   ///return
   const userCart = lineItems.filter(lineItem => lineItem.orderId === cart.id)
@@ -625,15 +577,12 @@ const App = () => {
               order={order}
               setOrder={setOrder}
               auth={auth}
-<<<<<<< HEAD
-=======
               cart={cart}
               order={order}
               updateCartTotal={updateCartTotal}
               promos={promos}
               lineItems={lineItems}
               createOrder={createOrder}
->>>>>>> master
             />
           </Route>
           <Route path="/checkout">
