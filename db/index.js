@@ -35,7 +35,7 @@ const {
   removePromo,
   updateCartTotal,
   getCartTotal,
-  updateProductDetail,
+  updateProductDetail
 } = require('./userMethods');
 
 const sync = async () => {
@@ -113,14 +113,14 @@ const sync = async () => {
       let price = faker.commerce.price(0.99, 20.0, 2);
       let text = faker.lorem.sentence(5);
       let rating = faker.random.number({ min: 1, max: 5 });
-      let img = faker.image.imageUrl(300, 300, 'business', true);
+      let img = faker.image.imageUrl(300, 300, 'cats', true);
       let newProd = {
         name: prodName,
         price: price,
         details: text,
         rating: rating,
         image: img,
-        quantity: 5,
+        quantity: 5
       };
       products.push(newProd);
     }
@@ -134,14 +134,14 @@ const sync = async () => {
       lastname: 'Anabell',
       password: 'LUCY',
       role: 'ADMIN',
-      email: 'lucy@gmail.com',
+      email: 'lucy@gmail.com'
     },
     moe: {
       username: 'moe',
       firstname: 'moe',
       lastname: 'Shmoe',
       password: 'MOE',
-      email: 'moe@gmail.com',
+      email: 'moe@gmail.com'
     },
     curly: {
       username: 'larry',
@@ -149,8 +149,8 @@ const sync = async () => {
       lastname: 'Doe',
       password: 'LARRY',
       role: null,
-      email: 'larry@gmail.com',
-    },
+      email: 'larry@gmail.com'
+    }
   };
 
   const _products = getProducts(5);
@@ -171,24 +171,24 @@ const sync = async () => {
       discount: 10,
       isActive: false,
       isDollar: false,
-      text: 'Summer promo',
+      text: 'Summer promo'
     }),
     createPromo({
       name: 'david',
       discount: 20,
       isActive: false,
       isDollar: false,
-      text: 'corona virus promo',
-    }),
+      text: 'corona virus promo'
+    })
   ]);
 
   const _orders = {
     moe: {
-      userId: moe.id,
+      userId: moe.id
     },
     lucy: {
-      userId: lucy.id,
-    },
+      userId: lucy.id
+    }
   };
 
   const userMap = (await users.read()).reduce((acc, user) => {
@@ -202,7 +202,7 @@ const sync = async () => {
 
   return {
     users: userMap,
-    products: productMap,
+    products: productMap
   };
 };
 
@@ -238,5 +238,5 @@ module.exports = {
   removePromo,
   updateCartTotal,
   getCartTotal,
-  updateProductDetail,
+  updateProductDetail
 };
