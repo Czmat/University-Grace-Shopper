@@ -1,8 +1,8 @@
 @import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
-@import url("https://fonts.googleapis.com/css?family=Raleway|Lora|Sen&display=swap");
+@import url('https://fonts.googleapis.com/css?family=Raleway|Lora|Sen&display=swap');
 
 body {
-  font-family: "Raleway", sans-serif;
+  font-family: 'Raleway', sans-serif;
   background-color: white;
 }
 
@@ -114,7 +114,7 @@ h1 {
   height: 25px;
   font-size: 10px;
   text-decoration: none;
-  background-color: white;
+  background-color: rgb(199, 197, 197);
 
   padding: 10px;
   text-align: center;
@@ -124,17 +124,16 @@ h1 {
 }
 
 .button:hover {
-  background-color: whitesmoke;
+  border: solid 1px rgb(97, 96, 96);
   color: black;
 }
 /**Header CSS*/
 
 .header-container {
   display: flex;
-
   align-items: center;
   justify-content: center;
-  font-family: "Raleway", sans-serif;
+  font-family: 'Raleway', sans-serif;
 }
 
 .header-container > *,
@@ -170,11 +169,11 @@ a {
   font-size: 1.25em;
   font-family: FontAwesome;
   display: inline-block;
-  content: "\f005";
+  content: '\f005';
 }
 
 .rating > .half:before {
-  content: "\f089";
+  content: '\f089';
   position: absolute;
 }
 
