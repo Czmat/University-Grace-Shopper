@@ -53,7 +53,7 @@ const Mycart = ({
   //console.log(cartTotal, 'outside');
   return (
     <div className="cart-container">
-      <h2>Your cart total: ${() => findCartTotal()}</h2>
+      <h2>Your cart total: ${cartTotal.toFixed(2)}</h2>
       <Link
         to="/checkout"
         // style={cart ? '' : { pointerEvents: 'none' }}

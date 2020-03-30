@@ -607,11 +607,15 @@ const App = () => {
           </Route>
           <Route path="/checkout">
             <Checkout
+              // cartItems={lineItems}
+              orders={orders}
+              order={order}
               products={products}
               setOrders={setOrders}
               createOrder={createOrder}
               auth={auth}
               cart={cart}
+              lineItems={lineItems}
             />
           </Route>
 
