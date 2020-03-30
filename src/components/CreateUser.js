@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useParams,
+} from 'react-router-dom';
 
 const CreateUser = ({ login, createUser }) => {
   const [user, setUser] = useState({});
@@ -20,19 +26,16 @@ const CreateUser = ({ login, createUser }) => {
 
   const onSubmit = ev => {
     ev.preventDefault();
-    //console.log(firstname, lastname);
+    console.log(firstname, lastname, 'first and last name');
     //setUser({ username, firstname, lastname, password, email });
     createUser({ username, firstname, lastname, password, email });
-    //window.location = '/account';
-    // login({ username, password }).catch(ex =>
-    //   setError(ex.response.data.message)
-    // );
+    //window.location = '/profile';
+    login({ username, password }).catch(ex =>
+      setError(ex.response.data.message)
+    );
   };
 
   //console.log(user);
-
-  //   var firstName = fullName.split(' ').slice(0, -1).join(' ');
-  // var lastName = fullName.split(' ').slice(-1).join(' ');
 
   return (
     <div>
@@ -55,12 +58,11 @@ const CreateUser = ({ login, createUser }) => {
           placeholder="Password"
           onChange={ev => setPassword(ev.target.value)}
         />
-        <Link to="/profile">
-          <button>Create Account</button>
-        </Link>
+        {/* <Link to="/profile"> */}
+        <button to="/profile">Create Account</button>
+        {/* </Link> */}
       </form>
       <a href="#"> Forgot Password</a>
-
       <div className="horizontal"></div>
     </div>
   );

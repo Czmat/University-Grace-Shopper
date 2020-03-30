@@ -147,10 +147,9 @@ const App = () => {
   };
 
   const logout = () => {
-    window.location.hash = '#';
     window.localStorage.removeItem('token');
     setAuth({});
-    // console.log('logout', auth);
+    setCart({});
   };
 
   useEffect(() => {
@@ -289,7 +288,7 @@ const App = () => {
 
   //creating user account
   const createUser = user => {
-    //console.log(user, 'first in');
+    console.log(user, 'first in crate user');
     axios.post('/api/user', user).then(response => {
       login({ username: user.username, password: user.password });
       //setUserAccount(response.data);
@@ -459,9 +458,12 @@ const App = () => {
                 </Link>
               </li>
             </ul>
-            <button onClick={logout}>
+            <Link className={'button'} to="/products" onClick={logout}>
               Logout {auth.firstname} {auth.lastname}
-            </button>
+            </Link>
+            {/* <button onClick={logout}>
+              Logout {auth.firstname} {auth.lastname}
+            </button> */}
           </nav>
           <Link to="/products"></Link>
         </div>

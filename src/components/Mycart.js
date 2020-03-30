@@ -63,10 +63,17 @@ const Mycart = ({
       </button> */}
       <Link
         to="/checkout"
-        cart={cart}
-        onClick={() => updateCartTotal(cart.id, cartTotal)}
+        // style={cart ? '' : { pointerEvents: 'none' }}
+        onClick={e => {
+          if (!lineItems.length) {
+            e.preventDefault();
+          }
+          if (cart.id) {
+            updateCartTotal(cart.id, cartTotal);
+          }
+        }}
       >
-        Checkout
+        <button>Checkout</button>
       </Link>
       {lineItems
         .filter(lineItem => lineItem.orderId === cart.id)
