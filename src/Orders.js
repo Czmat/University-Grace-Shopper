@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import {
   BrowserRouter as Router,
   Switch,
@@ -7,25 +7,40 @@ import {
   useParams,
   useRouteMatch
 } from "react-router-dom"
-import qs from "qs"
+import axios from "axios"
 import Checkout from "./components/Checkout"
 import StarRating from "./components/StarRating"
 
-const Orders = ({
-  cartItems,
-  orders,
-  products,
-  params,
-  setOrders,
-  auth,
-  cart,
-  order,
-  setOrder
-}) => {
+const Orders = ({ cartItems, products, auth }) => {
+  const [orders, setOrders] = useState([])
   const link = "orders"
 
-  const submitCheckout = order => {
+  const headers = () => {
+    const token = window.localStorage.getItem("token")
+    return {
+      headers: {
+        authorization: token
+      }
+    }
+  }
+
+  useEffect(() => {
+    let mounted = true
+    if (mounted) {
+      if (auth.id) {
+        axios.get("/api/getOrders", headers()).then(response => {
+          setOrders(response.data)
+        })
+      }
+    } else {
+      return null
+    }
+    return () => (mounted = false)
+  }, [])
+
+  const submitCheckout = (order, cartItems) => {
     window.localStorage.setItem("checkoutorder", JSON.stringify(order))
+    window.localStorage.setItem("cartItems", JSON.stringify(cartItems))
     // setOrder(order)
   }
 
@@ -40,9 +55,7 @@ const Orders = ({
 
           return (
             <div key={order.id}>
-              <Link to="/checkout" onClick={() => submitCheckout(order)}>
-                OrderID: {order.id.slice(0, 4)}
-              </Link>
+              OrderID: {order.id.slice(0, 4)}
               <ul>
                 {mapCartItems.map(cartItem => {
                   const product = products.find(

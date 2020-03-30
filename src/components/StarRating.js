@@ -7,7 +7,9 @@ const StarRating = ({ product, link }) => {
     const rating = (product.rating + Number(e.target.value)) / 2
     axios
       .post(`api/postRating/${product.id}/${rating}`)
-      .then(response => console.log(response))
+      .then(response =>
+        axios.get(`/api/products/${product.id}`).then(console.log(response))
+      )
       .catch(err => console.log(err))
   }
   if (link != "orders") {
