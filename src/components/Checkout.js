@@ -128,7 +128,7 @@ const Checkout = ({
 
   return (
     <div className="cart-container">
-      <h2>Your cart total: ${findCartTotal()}</h2>
+      <h2>Your cart total: ${() => findCartTotal()}</h2>
 
       {lineItems
         .filter(lineItem => lineItem.orderId === cart.id)
@@ -187,7 +187,7 @@ const Checkout = ({
         totalIncludesPromo={totalIncludesPromo}
         setTotalIncludesPromo={setTotalIncludesPromo}
       />
-      <TotalAmount
+      {/* <TotalAmount
         cart={cart}
         updateCartTotal={updateCartTotal}
         promos={promos}
@@ -195,7 +195,7 @@ const Checkout = ({
         setTotalIncludesPromo={setTotalIncludesPromo}
         createOrder={createOrder}
         lineItems={lineItems}
-      />
+      /> */}
     </div>
   )
 }

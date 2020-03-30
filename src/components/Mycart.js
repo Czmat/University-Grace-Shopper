@@ -53,7 +53,7 @@ const Mycart = ({
   //console.log(cartTotal, 'outside');
   return (
     <div className="cart-container">
-      <h2>Your cart total: ${findCartTotal()}</h2>
+      <h2>Your cart total: ${() => findCartTotal()}</h2>
       <Link to="/checkout">Checkout</Link>
       {/* commenting out the create order button for now -I will transfer this code to the checkout page
       {/* <button
