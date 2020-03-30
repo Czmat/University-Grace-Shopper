@@ -67,7 +67,7 @@ const sync = async () => {
       details VARCHAR DEFAULT 'great product',
       image VARCHAR,
       quantity INTEGER DEFAULT 2,
-      rating INT,
+      rating DECIMAL(2,1),
       CHECK (char_length(name) > 0)
     );
     CREATE TABLE orders(

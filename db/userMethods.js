@@ -374,10 +374,12 @@ const getCheckoutCart = async userId => {
   return response.rows[0]
 }
 const changeProductRating = async (productId, rating) => {
+  console.log(productId, rating, "in db methods")
   const response = await client.query(
     `UPDATE products set rating = $2 where id = $1 returning * `,
     [productId, rating]
   )
+  console.log(response.rows)
   return response.rows[0]
 }
 
