@@ -128,7 +128,7 @@ const Checkout = ({
 
   return (
     <div className="cart-container">
-      <h2>Your cart total: ${() => findCartTotal()}</h2>
+      <h2>Your cart total: ${findCartTotal()}</h2>
 
       {lineItems
         .filter(lineItem => lineItem.orderId === cart.id)
