@@ -26,6 +26,7 @@ import PromoManagement from './components/PromoManagement';
 import ProductManagement from './components/ProductManagement';
 import FeaturedProduct from './components/FeaturedProduct';
 import Addresses from './components/Addresses';
+import OrderDetails from './Orders/OrderDetails';
 
 const headers = () => {
   const token = window.localStorage.getItem('token');
@@ -72,7 +73,7 @@ const App = () => {
   useEffect(() => {
     if (auth.role === 'ADMIN') {
       axios.get('/api/users', headers()).then(response => {
-        console.log(response.data, 'wow', promos);
+        //  console.log(response.data, "wow", promos)
         setManagedUsers(response.data);
       });
       // axios.get('api/promos').then(response => setPromos(response.data));
@@ -246,7 +247,9 @@ const App = () => {
     axios
       .post('/api/addToSaveForLater', { productId }, headers())
       .then(response => {
+        // debugger;
         const lineItem = response.data;
+
         const found = lineItems.find(
           _lineItem =>
             _lineItem.productId === lineItem.productId &&
@@ -576,14 +579,6 @@ const App = () => {
               cart={cart}
               order={order}
               setOrder={setOrder}
-            />
-          </Route>
-          <Route path="/checkout">
-            <Checkout
-              cartItems={lineItems}
-              products={products}
-              setOrders={setOrders}
-              orders={orders}
               auth={auth}
               cart={cart}
               order={order}
@@ -593,16 +588,33 @@ const App = () => {
               createOrder={createOrder}
             />
           </Route>
-          <Route path="/checkout/:id">
-            <Checkout
+          <Route path="/orderdetails">
+            <OrderDetails
               cartItems={lineItems}
               products={products}
-              setOrders={setOrders}
               orders={orders}
+              cart={cart}
+              order={order}
+              setOrder={setOrder}
+              auth={auth}
+              cart={cart}
+              order={order}
+              updateCartTotal={updateCartTotal}
+              promos={promos}
+              lineItems={lineItems}
+              createOrder={createOrder}
+            />
+          </Route>
+          <Route path="/checkout">
+            <Checkout
+              products={products}
+              setOrders={setOrders}
+              createOrder={createOrder}
               auth={auth}
               cart={cart}
             />
           </Route>
+
           <Route path="/productDetails">
             <ProductDetail
               cartItems={lineItems}

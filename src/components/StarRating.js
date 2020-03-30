@@ -1,17 +1,35 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import axios from "axios"
 
 const StarRating = ({ product, link }) => {
+  const [rating, setRating] = useState(product.rating)
+  useEffect(() => {
+    axios
+      .get(`/api/products/${product.id}`)
+      .then(response => console.log(response.data))
+  }, [])
   const updateRating = e => {
     e.preventDefault()
-    const rating = (product.rating + Number(e.target.value)) / 2
+
+    const rating = (Number(product.rating) + Number(e.target.value)) / 2
+    console.log(rating)
+    console.log(product.id, rating, "huh")
     axios
       .post(`api/postRating/${product.id}/${rating}`)
-      .then(response => console.log(response))
+      .then(response =>
+        axios
+          .get(`/api/products/${product.id}`)
+          .then(
+            axios
+              .get(`/api/products/${product.id}`)
+              .then(response => console.log(response))
+          )
+      )
       .catch(err => console.log(err))
   }
   if (link != "orders") {
-    if (product.rating == "1") {
+    console.log(product.rating)
+    if (Number(product.rating) <= 1) {
       return (
         <div>
           <span className="fa fa-star checked"></span>
@@ -21,7 +39,7 @@ const StarRating = ({ product, link }) => {
           <span className="fa fa-star"></span>
         </div>
       )
-    } else if (product.rating == "2") {
+    } else if (Number(product.rating) > 1 || Number(product.rating) <= 2) {
       return (
         <div>
           <span className="fa fa-star checked"></span>
@@ -31,7 +49,7 @@ const StarRating = ({ product, link }) => {
           <span className="fa fa-star"></span>
         </div>
       )
-    } else if (product.rating == "3") {
+    } else if (Number(product.rating) > 2 || Number(product.rating) <= 3) {
       return (
         <div>
           <span className="fa fa-star checked"></span>
@@ -41,7 +59,7 @@ const StarRating = ({ product, link }) => {
           <span className="fa fa-star"></span>
         </div>
       )
-    } else if (product.rating == "4") {
+    } else if (Number(product.rating) > 3 || Number(product.rating) <= 4) {
       return (
         <div>
           <span className="fa fa-star checked"></span>
@@ -51,7 +69,7 @@ const StarRating = ({ product, link }) => {
           <span className="fa fa-star"></span>
         </div>
       )
-    } else if (product.rating == "5") {
+    } else if (Number(product.rating) > 4 || Number(product.rating) <= 5) {
       return (
         <div>
           <span className="fa fa-star checked"></span>
@@ -71,7 +89,7 @@ const StarRating = ({ product, link }) => {
           type="radio"
           id="star5"
           name="rating"
-          value={5}
+          value="5"
           onClick={updateRating}
         />
         <label
@@ -83,7 +101,7 @@ const StarRating = ({ product, link }) => {
           type="radio"
           id="star4half"
           name="rating"
-          value={4.5}
+          value="4.5"
           onClick={updateRating}
         />
         <label
@@ -95,7 +113,7 @@ const StarRating = ({ product, link }) => {
           type="radio"
           id="star4"
           name="rating"
-          value={4}
+          value="4"
           onClick={updateRating}
         />
         <label
@@ -107,7 +125,7 @@ const StarRating = ({ product, link }) => {
           type="radio"
           id="star3half"
           name="rating"
-          value={3.5}
+          value="3.5"
           onClick={updateRating}
         />
         <label
@@ -127,7 +145,7 @@ const StarRating = ({ product, link }) => {
           type="radio"
           id="star2half"
           name="rating"
-          value={2.5}
+          value="2.5"
           onClick={updateRating}
         />
         <label
@@ -139,7 +157,7 @@ const StarRating = ({ product, link }) => {
           type="radio"
           id="star2"
           name="rating"
-          value={2}
+          value="2"
           onClick={updateRating}
         />
         <label
@@ -151,7 +169,7 @@ const StarRating = ({ product, link }) => {
           type="radio"
           id="star1half"
           name="rating"
-          value={1.5}
+          value="1.5"
           onClick={updateRating}
         />
         <label
@@ -163,7 +181,7 @@ const StarRating = ({ product, link }) => {
           type="radio"
           id="star1"
           name="rating"
-          value={1}
+          value="1"
           onClick={updateRating}
         />
         <label

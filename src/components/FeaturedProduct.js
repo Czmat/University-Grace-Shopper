@@ -1,15 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react"
+import axios from "axios"
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Link,
-  useParams,
-} from 'react-router-dom';
+  useParams
+} from "react-router-dom"
 
-const FeaturedProduct = ({ products, getProductDetail, ProductDetail }) => {
-  const featuredProduct = products.filter(product => product.rating >= 4);
+const FeaturedProduct = ({ getProductDetail, ProductDetail }) => {
+  const [products, setProducts] = useState([])
+
+  useEffect(() => {
+    console.log("useEffect works")
+    axios.get("/api/products").then(response => setProducts(response.data))
+  }, [])
+
+  const featuredProduct = products.filter(product => product.rating >= 4)
 
   if (featuredProduct[0]) {
     return (
@@ -37,10 +44,10 @@ const FeaturedProduct = ({ products, getProductDetail, ProductDetail }) => {
           </li>
         </ul>
       </div>
-    );
+    )
   } else {
-    return <div>Select Shop to check out our products!</div>;
+    return <div>Select Shop to check out our products!</div>
   }
-};
+}
 
-export default FeaturedProduct;
+export default FeaturedProduct
