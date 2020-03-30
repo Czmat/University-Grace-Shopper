@@ -26,6 +26,7 @@ import PromoManagement from "./components/PromoManagement"
 import ProductManagement from "./components/ProductManagement"
 import FeaturedProduct from "./components/FeaturedProduct"
 import Addresses from "./components/Addresses"
+import OrderDetails from "./Orders/OrderDetails"
 
 const headers = () => {
   const token = window.localStorage.getItem("token")
@@ -570,6 +571,23 @@ const App = () => {
           </Route>
           <Route path="/orders">
             <Orders
+              cartItems={lineItems}
+              products={products}
+              orders={orders}
+              cart={cart}
+              order={order}
+              setOrder={setOrder}
+              auth={auth}
+              cart={cart}
+              order={order}
+              updateCartTotal={updateCartTotal}
+              promos={promos}
+              lineItems={lineItems}
+              createOrder={createOrder}
+            />
+          </Route>
+          <Route path="/orderdetails">
+            <OrderDetails
               cartItems={lineItems}
               products={products}
               orders={orders}

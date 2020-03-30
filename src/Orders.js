@@ -38,9 +38,9 @@ const Orders = ({ cartItems, products, auth }) => {
     return () => (mounted = false)
   }, [])
 
-  const submitCheckout = (order, cartItems) => {
-    window.localStorage.setItem("checkoutorder", JSON.stringify(order))
-    window.localStorage.setItem("cartItems", JSON.stringify(cartItems))
+  const submitCheckout = order => {
+    window.localStorage.setItem("orderdetails", JSON.stringify(order))
+
     // setOrder(order)
   }
 
@@ -55,7 +55,9 @@ const Orders = ({ cartItems, products, auth }) => {
 
           return (
             <div key={order.id}>
-              OrderID: {order.id.slice(0, 4)}
+              <Link to="/orderdetails" order={order}>
+                OrderID: {order.id.slice(0, 4)}
+              </Link>
               <ul>
                 {mapCartItems.map(cartItem => {
                   const product = products.find(
