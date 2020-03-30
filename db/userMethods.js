@@ -296,18 +296,18 @@ const changePassword = async ({ id, password }) => {
 
 //update and get cart total amount
 const updateCartTotal = async ({ id, total }) => {
-  console.log(id, total, 'sql update cart total');
+  console.log(id, total, "sql update cart total")
   return (
     await client.query(
       `UPDATE "orders" set total=$1 WHERE id = $2 returning *`,
       [total, id]
     )
-  ).rows[0];
-};
+  ).rows[0]
+}
 
 const getCartTotal = async cartId => {
-  return (await client.query(`SELECT * FROM orders WHERE id=$1`, [id])).rows[0];
-};
+  return (await client.query(`SELECT * FROM orders WHERE id=$1`, [id])).rows[0]
+}
 
 //get promos
 const readPromos = async () => {
@@ -439,12 +439,7 @@ module.exports = {
   readPromos,
   createPromo,
   updatePromo,
-<<<<<<< HEAD
-  removePromo
-}
-=======
   removePromo,
   updateCartTotal,
-  getCartTotal,
-};
->>>>>>> master
+  getCartTotal
+}
