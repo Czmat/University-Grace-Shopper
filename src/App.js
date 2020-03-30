@@ -341,12 +341,15 @@ const App = () => {
             <Login login={login} err={err} />
           </Route>
           <Route path="/products">
-            <Products
-              addToCart={addToCart}
-              products={products}
-              getProductDetail={getProductDetail}
-              productDetail={productDetail}
-            />
+            {' '}
+            <div className="horizontal">
+              <Products
+                addToCart={addToCart}
+                products={products}
+                getProductDetail={getProductDetail}
+                productDetail={productDetail}
+              />
+            </div>
           </Route>
           <Route path="/productDetails">
             <ProductDetail
@@ -392,7 +395,9 @@ const App = () => {
           <nav className="header-container">
             <Link to="/">
               <div>
-                <h1 className="header-name">Grace Shopper</h1>
+                <span>
+                  <h1 className="header-name">Grace Shopper</h1>
+                </span>
               </div>
             </Link>
             <ul className="nav-bar">

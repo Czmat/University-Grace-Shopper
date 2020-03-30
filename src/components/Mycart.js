@@ -55,7 +55,7 @@ const Mycart = ({
           }
         }}
       >
-        <button>Checkout</button>
+        Checkout
       </Link>
       {lineItems
         .filter(lineItem => lineItem.orderId === cart.id)

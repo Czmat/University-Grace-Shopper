@@ -1,8 +1,9 @@
 @import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
-@import url('https://fonts.googleapis.com/css?family=Raleway|Lora|Sen&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Raleway|Lora|Sen&display=swap");
 
 body {
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
+  background-color: white;
 }
 
 input,
@@ -23,22 +24,29 @@ form > * {
 .horizontal {
   display: flex;
   flex-direction: row;
+  background-color: whitesmoke;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
 }
 
 .horizontal > * {
   flex-direction: row;
+  align-items: center;
   margin: 1rem;
-  border: solid 1px dodgerBlue;
+  text-align: center;
   padding: 1rem;
 }
 .products-box {
   flex-direction: row;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
 }
 
 .products {
-  margin: 1rem;
-
-  padding: 1rem;
+  margin: 0.5rem;
+  padding: 0.5rem;
 }
 
 ul {
@@ -51,9 +59,6 @@ li {
   flex-direction: column;
 }
 
-div > ul > li {
-  border-bottom: solid 1px teal;
-}
 .checked {
   color: orange;
 }
@@ -81,8 +86,13 @@ li > * {
 }
 
 img {
-  height: 150px;
-  width: 150px;
+  height: 300px;
+  width: 300px;
+}
+
+.featured {
+  width: 30rem;
+  height: 40rem;
 }
 
 fieldset,
@@ -99,17 +109,24 @@ h1 {
 }
 .button {
   display: block;
-  width: 180px;
+  text-size-adjust: 75%;
+  width: 130px;
   height: 25px;
+  font-size: 10px;
   text-decoration: none;
-  background: rgb(230, 139, 139);
+  background-color: white;
+
   padding: 10px;
   text-align: center;
   border-radius: 5px;
-  color: white;
+  color: black;
   font-weight: bold;
 }
 
+.button:hover {
+  background-color: whitesmoke;
+  color: black;
+}
 /**Header CSS*/
 
 .header-container {
@@ -117,7 +134,7 @@ h1 {
 
   align-items: center;
   justify-content: center;
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
 }
 
 .header-container > *,
@@ -153,11 +170,11 @@ a {
   font-size: 1.25em;
   font-family: FontAwesome;
   display: inline-block;
-  content: '\f005';
+  content: "\f005";
 }
 
 .rating > .half:before {
-  content: '\f089';
+  content: "\f089";
   position: absolute;
 }
 

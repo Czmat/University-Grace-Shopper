@@ -28,7 +28,7 @@ const FeaturedProduct = ({ getProductDetail, ProductDetail }) => {
               to="/productDetails"
               onClick={() => getProductDetail(featuredProduct[0].id)}
             >
-              <img src={featuredProduct[0].image}></img>
+              <img className="featured" src={featuredProduct[0].image}></img>
             </Link>
 
             <span>
