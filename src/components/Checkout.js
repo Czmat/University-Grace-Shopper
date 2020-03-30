@@ -7,7 +7,7 @@ import {
   Link,
   useParams,
   Redirect,
-  useHistory,
+  useHistory
 } from 'react-router-dom';
 import address from '../address';
 import axios from 'axios';
@@ -21,7 +21,7 @@ const Checkout = ({
   updateCartTotal,
   promos,
   lineItems,
-  createOrder,
+  createOrder
 }) => {
   const [totalIncludesPromo, setTotalIncludesPromo] = useState();
   const [save, setSave] = useState(false);
@@ -38,8 +38,8 @@ const Checkout = ({
     const token = window.localStorage.getItem('token');
     return {
       headers: {
-        authorization: token,
-      },
+        authorization: token
+      }
     };
   };
 

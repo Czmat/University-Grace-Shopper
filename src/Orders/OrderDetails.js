@@ -1,6 +1,17 @@
 import React from 'react';
 
-export default function OrderDetails({ order }) {
-  const orderDet = JSON.parse(window.localStorage.getItem('orderdetails'));
-  return <div>HI</div>;
-}
+const OrderDetails = ({ order }) => {
+  if (order.id) {
+    return (
+      <div>
+        Order details!
+        <h1>OrderID: {order.id.slice(0, 4)}</h1>
+        <div>Status: {order.status}</div>
+        <div>Total: ${order.total}</div>
+      </div>
+    );
+  } else {
+    return <div>Check out our Shop!</div>;
+  }
+};
+export default OrderDetails;

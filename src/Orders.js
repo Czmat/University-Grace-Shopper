@@ -4,38 +4,8 @@ import axios from 'axios';
 import Checkout from './components/Checkout';
 import StarRating from './components/StarRating';
 
-const Orders = ({ cartItems, products, auth }) => {
-  const [orders, setOrders] = useState([]);
+const Orders = ({ cartItems, products, auth, orders, setOrders, setOrder }) => {
   const link = 'orders';
-
-  const headers = () => {
-    const token = window.localStorage.getItem('token');
-    return {
-      headers: {
-        authorization: token,
-      },
-    };
-  };
-
-  useEffect(() => {
-    let mounted = true;
-    if (mounted) {
-      if (auth.id) {
-        axios.get('/api/getOrders', headers()).then(response => {
-          setOrders(response.data);
-        });
-      }
-    } else {
-      return null;
-    }
-    return () => (mounted = false);
-  }, []);
-
-  const submitCheckout = order => {
-    window.localStorage.setItem('orderdetails', JSON.stringify(order));
-
-    // setOrder(order)
-  };
 
   return (
     <div>
@@ -47,7 +17,11 @@ const Orders = ({ cartItems, products, auth }) => {
           );
           return (
             <div key={order.id}>
-              <Link to="/orderdetails" order={order}>
+              <Link
+                to="/orderdetails"
+                order={order}
+                onClick={() => setOrder(order)}
+              >
                 OrderID: {order.id.slice(0, 4)}
               </Link>
               <ul>
