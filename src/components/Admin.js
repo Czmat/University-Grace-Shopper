@@ -8,8 +8,6 @@ import {
 } from 'react-router-dom';
 
 const Admin = ({ auth }) => {
-  //console.log(users);
-
   return (
     <div>
       <h1>{auth.username} is Admin</h1>

@@ -1,16 +1,6 @@
-import React, { useState, useEffect } from "react"
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useParams,
-  useRouteMatch
-} from "react-router-dom"
-import axios from "axios"
+import React from 'react';
 
 export default function OrderDetails({ order }) {
-  const orderDet = JSON.parse(window.localStorage.getItem("orderdetails"))
-
-  return <div>Order Details</div>
+  const orderDet = JSON.parse(window.localStorage.getItem('orderdetails'));
+  return <div>HI</div>;
 }

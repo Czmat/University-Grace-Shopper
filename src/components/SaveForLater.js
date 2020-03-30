@@ -1,23 +1,12 @@
 import React from 'react';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useParams,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Link } from 'react-router-dom';
 
 const SavedForLater = ({
   lineItems,
-  cart,
-  createOrder,
   removeFromSave,
   products,
-  addToCart,
   saveForLater,
-  addToSaveForLater,
   addBackToCart,
-  params,
   getProductDetail,
 }) => {
   const userSave = lineItems.filter(
@@ -59,13 +48,7 @@ const SavedForLater = ({
                   type="submit"
                   value="Move to cart"
                   onClick={() => {
-                    //e.preventDefault()
-                    //console.log(product, 'product', lineItem, 'lineitem');
                     addBackToCart(lineItem.productId, lineItem.quantity);
-                    //removeFromSave(lineItem.id);
-
-                    //removeFromSave(lineItem.id);
-                    //removeFromCart(lineItem.id);
                   }}
                 ></input>
                 <div>${Number(product.price).toFixed(2)}</div>
