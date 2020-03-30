@@ -26,8 +26,8 @@ const headers = () => {
   const token = window.localStorage.getItem('token');
   return {
     headers: {
-      authorization: token,
-    },
+      authorization: token
+    }
   };
 };
 
@@ -112,7 +112,7 @@ const App = () => {
     console.log(credentials.currentPassword, auth.username, 'valPass');
     const creds = {
       username: auth.username,
-      password: credentials.currentPassword,
+      password: credentials.currentPassword
     };
     const tokenToValidate = (await axios.post('/api/auth/validate', creds)).data
       .token;
@@ -260,7 +260,7 @@ const App = () => {
         const responseUser = response.data;
         setReturnedManagedUser({
           id: responseUser.id,
-          isBlocked: responseUser.isBlocked,
+          isBlocked: responseUser.isBlocked
         });
       });
   };
@@ -545,12 +545,6 @@ const App = () => {
               order={order}
               setOrder={setOrder}
               auth={auth}
-              cart={cart}
-              order={order}
-              updateCartTotal={updateCartTotal}
-              promos={promos}
-              lineItems={lineItems}
-              createOrder={createOrder}
             />
           </Route>
           <Route path="/checkout">
