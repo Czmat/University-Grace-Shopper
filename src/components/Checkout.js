@@ -19,7 +19,7 @@ const Checkout = ({
   auth,
   updateCartTotal,
   promos,
-  lineItems,
+
   createOrder
 }) => {
   const [totalIncludesPromo, setTotalIncludesPromo] = useState()
@@ -39,8 +39,6 @@ const Checkout = ({
       }
     }
   }
-
-  const checkoutOrder = JSON.parse(window.localStorage.getItem("checkoutorder"))
 
   const cartStuff = JSON.parse(window.localStorage.getItem("cartItems"))
   //console.log(cartItems)
