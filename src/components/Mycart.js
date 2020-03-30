@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react"
-import SaveForLater from "./SaveForLater"
+import React, { useState, useEffect } from 'react';
+import SaveForLater from './SaveForLater';
 
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Link,
-  useParams
-} from "react-router-dom"
+  useParams,
+} from 'react-router-dom';
 
-const numArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+const numArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 const Mycart = ({
   lineItems,
@@ -28,46 +28,52 @@ const Mycart = ({
   getProductDetail,
   orders,
   auth,
-  updateCartTotal
+  updateCartTotal,
 }) => {
-  const [cartTotal, setCartTotal] = useState(0)
+  const [cartTotal, setCartTotal] = useState(0);
 
   const findCartTotal = () => {
-    let cartTotalAmount = 0
+    let cartTotalAmount = 0;
     lineItems
       .filter(lineItem => lineItem.orderId === cart.id)
       .forEach(lineItem => {
         const product = products.find(
           product => product.id === lineItem.productId
-        )
-        cartTotalAmount += Number(product.price * lineItem.quantity)
-        console.log(cartTotal, "in find")
-      })
-    setCartTotal(cartTotalAmount)
-  }
+        );
+        cartTotalAmount += Number(product.price * lineItem.quantity);
+        console.log(cartTotal, 'in find');
+      });
+    setCartTotal(cartTotalAmount);
+  };
 
   useEffect(() => {
-    findCartTotal()
-  }, [cart, lineItems])
+    findCartTotal();
+  }, [cart, lineItems]);
 
   //console.log(cartTotal, 'outside');
   return (
     <div className="cart-container">
       <h2>Your cart total: ${() => findCartTotal()}</h2>
-      <Link to="/checkout">Checkout</Link>
-      {/* commenting out the create order button for now -I will transfer this code to the checkout page
-      {/* <button
-        disabled={!lineItems.find(lineItem => lineItem.orderId === cart.id)}
-        onClick={createOrder}
+      <Link
+        to="/checkout"
+        // style={cart ? '' : { pointerEvents: 'none' }}
+        onClick={e => {
+          if (!lineItems.length) {
+            e.preventDefault();
+          }
+          if (cart.id) {
+            updateCartTotal(cart.id, cartTotal);
+          }
+        }}
       >
-        Create Order
-      </button> */}
+        <button>Checkout</button>
+      </Link>
       {lineItems
         .filter(lineItem => lineItem.orderId === cart.id)
         .map(lineItem => {
           const product = products.find(
             product => product.id === lineItem.productId
-          )
+          );
           return (
             <div key={lineItem.id} className="product-card">
               <button onClick={() => removeFromCart(lineItem.id)}>x</button>
@@ -95,9 +101,9 @@ const Mycart = ({
                   defaultValue={lineItem.quantity}
                   onChange={e => {
                     //console.log(e.target.value);
-                    e.target.value === "0"
+                    e.target.value === '0'
                       ? removeFromCart(lineItem.id)
-                      : changeQtyInCart(product.id, e.target.value)
+                      : changeQtyInCart(product.id, e.target.value);
                   }}
                 >
                   <option value={0}>0 (delete)</option>
@@ -106,7 +112,7 @@ const Mycart = ({
                       <option key={num} value={num}>
                         {num}
                       </option>
-                    )
+                    );
                   })}
                 </select>
                 <i>|</i>
@@ -114,13 +120,13 @@ const Mycart = ({
                   type="submit"
                   value="Save for later"
                   onClick={e => {
-                    addToSaveForLater(product.id)
+                    addToSaveForLater(product.id);
                   }}
                 ></input>
                 <div>${Number(product.price).toFixed(2)}</div>
               </div>
             </div>
-          )
+          );
         })}
       <h2>Your cart total: ${cartTotal.toFixed(2)}</h2>
       <hr></hr>
@@ -140,7 +146,7 @@ const Mycart = ({
         params={params}
       />
     </div>
-  )
-}
+  );
+};
 
-export default Mycart
+export default Mycart;
