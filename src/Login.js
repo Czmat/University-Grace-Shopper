@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  BrowserRouter as Router,
-  useHistory,
-  Switch,
-  Route,
-  Link,
-  useParams,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Link } from 'react-router-dom';
 
 const Login = ({ login, err, auth }) => {
   const [username, setUsername] = useState('');

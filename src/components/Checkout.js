@@ -203,13 +203,6 @@ const Checkout = ({
   );
 };
 
-//           )
-//         })}
-//         </div>
-//     </div>
-//   )
-// }
-
 export default Checkout;
 
 //want to create orders page that shows each order and the status - the cart should have a checkout button and once you checkout the order and pay/add a shipping address it will then create an order number which you can then reference on the order page.

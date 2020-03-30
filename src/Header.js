@@ -43,9 +43,7 @@ const Header = ({ params, lineItems, cart }) => {
           <a
             href={`#${qs.stringify({ view: 'cart' })}`}
             className={params.view === 'cart' ? 'selected' : ''}
-            onClick={e => {
-              console.log('clicked');
-            }}
+            onClick={e => {}}
           >
             <i className="fas fa-shopping-bag"></i>
             <span>{userCart.length}</span>

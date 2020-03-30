@@ -17,7 +17,6 @@ const CreatePromoForm = ({
     userId: null,
     text: '',
   });
-  console.log(createdPromo, 'in man promo');
   const onChange = ev => {
     const change = {};
     change[ev.target.name] =

@@ -1,12 +1,5 @@
 import React, { useState } from 'react';
 import TotalAmount from '../checkout/TotalAmount';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useParams,
-} from 'react-router-dom';
 
 const CheckoutPromoForm = ({
   promos,
@@ -21,7 +14,6 @@ const CheckoutPromoForm = ({
   const [failMessage, setFailMessage] = useState([]);
 
   const onChange = e => {
-    //console.log(e.target.value, 'input promo');
     setPromoInput(e.target.value);
     setMatchedPromo({});
   };
@@ -39,12 +31,9 @@ const CheckoutPromoForm = ({
     }
     if (!found.isActive) {
       totalWithPromo -= cart.total * (found.discount / 100);
-      console.log(found, 'percent', totalWithPromo);
       setTotalIncludesPromo(totalWithPromo);
     }
   };
-
-  //console.log(failMessage, 'fail');
 
   if (!showInput) {
     return (

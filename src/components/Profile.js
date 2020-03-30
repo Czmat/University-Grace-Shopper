@@ -8,35 +8,16 @@ import {
 } from 'react-router-dom';
 
 const Profile = ({ login, updateUser, auth, setMessage }) => {
-  //const [user, setUser] = useState({});
   const [username, setUsername] = useState(auth.username);
   const [firstname, setFirstname] = useState(auth.firstname);
   const [lastname, setLastname] = useState(auth.lastname);
   const [email, setEmail] = useState(auth.email);
   const [error, setError] = useState('');
 
-  // const firstname = username
-  //   .split(' ')
-  //   .slice(0, -1)
-  //   .join(' ');
-  // const lastname = username
-  //   .split(' ')
-  //   .slice(-1)
-  //   .join(' ');
-
   const onSubmit = ev => {
     ev.preventDefault();
-
     updateUser({ id: auth.id, username, firstname, lastname, email });
-    //window.location = '/account';
-    // login({ username, password }).catch(ex =>
-    //   setError(ex.response.data.message)
-    // );
-    //console.log(auth);
   };
-
-  //   var firstName = fullName.split(' ').slice(0, -1).join(' ');
-  // var lastName = fullName.split(' ').slice(-1).join(' ');
 
   return (
     <div>
@@ -59,8 +40,6 @@ const Profile = ({ login, updateUser, auth, setMessage }) => {
         </Link>
         <button>Save Profile</button>
       </form>
-      {/* <a href="#"> Forgot Password</a>
-      <div className="horizontal"></div> */}
     </div>
   );
 };

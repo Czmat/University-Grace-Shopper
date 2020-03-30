@@ -6,7 +6,6 @@ const users = {
     return (await client.query('SELECT * from users')).rows;
   },
   create: async ({ username, firstname, lastname, password, role, email }) => {
-    //console.log(username, password, role);
     const SQL = `INSERT INTO users(username, firstname, lastname, password, role, email) values($1, $2, $3, $4, $5, $6) returning *`;
 
     return (
