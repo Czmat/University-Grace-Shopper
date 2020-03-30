@@ -26,6 +26,8 @@ form > * {
   flex-direction: row;
   background-color: whitesmoke;
   text-align: center;
+  align-items: center;
+  justify-content: center;
 }
 
 .horizontal > * {
@@ -38,7 +40,10 @@ form > * {
 .products-box {
   flex-direction: row;
   text-align: center;
-  width: 600px;
+
+  text-align: center;
+  align-items: center;
+  justify-content: center;
 }
 
 .products {
