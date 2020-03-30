@@ -12,7 +12,7 @@ const ProductDetail = ({ products, addToCart, productDetail, params }) => {
   }
   console.log(inStockQty)
   return (
-    <div>
+    <div className="products-box">
       <h2>Product</h2>
       <div>
         <img src={productDetail.image}></img>
