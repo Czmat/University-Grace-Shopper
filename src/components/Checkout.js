@@ -14,7 +14,23 @@ import axios from "axios"
 import CheckoutPromoForm from "../checkout/CheckoutPromoForm"
 import Orders from "../Orders"
 
-const Checkout = ({ auth, cart, createOrder }) => {
+const Checkout = ({
+  cart,
+  auth,
+  updateCartTotal,
+  promos,
+  lineItems,
+  createOrder
+}) => {
+  const [totalIncludesPromo, setTotalIncludesPromo] = useState()
+  const [save, setSave] = useState(false)
+  const [userSavedAddress, setUserSavedAddress] = useState([])
+  const [userAddress, setUserAddress] = useState([])
+  const [products, setProducts] = useState([])
+  const [lineItems, setLineItems] = useState([])
+  const [isSubmitted, setIsSubmitted] = useState(false)
+  let history = useHistory()
+  const checkoutOrder = JSON.parse(window.localStorage.getItem("checkoutorder"))
   const headers = () => {
     const token = window.localStorage.getItem("token")
     return {
@@ -23,13 +39,7 @@ const Checkout = ({ auth, cart, createOrder }) => {
       }
     }
   }
-  const [save, setSave] = useState(false)
-  const [userSavedAddress, setUserSavedAddress] = useState([])
-  const [userAddress, setUserAddress] = useState([])
-  const [products, setProducts] = useState([])
-  const [lineItems, setLineItems] = useState([])
-  const [isSubmitted, setIsSubmitted] = useState(false)
-  let history = useHistory()
+
   const checkoutOrder = JSON.parse(window.localStorage.getItem("checkoutorder"))
 
   const cartStuff = JSON.parse(window.localStorage.getItem("cartItems"))
@@ -65,7 +75,7 @@ const Checkout = ({ auth, cart, createOrder }) => {
         .get(`/api/address/${auth.id}/`)
         .then(response => setUserSavedAddress(response.data))
     }
-  }, [userSavedAddress])
+  }, [])
 
   const saveAddress = () => {
     save === true ? setSave(false) : setSave(true)
@@ -109,6 +119,14 @@ const Checkout = ({ auth, cart, createOrder }) => {
       .get(`/api/addressid/${e.target.value}/`)
       .then(response => setUserAddress(response.data))
   }
+
+  //to set latest total to total includes promo
+  useEffect(() => {
+    setTotalIncludesPromo(cart.total)
+  }, [cart, lineItems])
+
+  console.log(cart.total, "in checkout outside cart.total")
+  console.log(totalIncludesPromo, "in checkout outside totalInPromo")
 
   return (
     <div className="cart-container">
@@ -163,10 +181,23 @@ const Checkout = ({ auth, cart, createOrder }) => {
         onClick={saveAddress}
       />
       <label htmlFor="address">Add to address book</label>
-      <CheckoutPromoForm />
-      {/* {isSubmitted && (
-        <Orders cartItems={lineItems} products={products} auth={auth} />
-      )} */}
+      <hr />
+      <CheckoutPromoForm
+        cart={cart}
+        updateCartTotal={updateCartTotal}
+        promos={promos}
+        totalIncludesPromo={totalIncludesPromo}
+        setTotalIncludesPromo={setTotalIncludesPromo}
+      />
+      <TotalAmount
+        cart={cart}
+        updateCartTotal={updateCartTotal}
+        promos={promos}
+        totalIncludesPromo={totalIncludesPromo}
+        setTotalIncludesPromo={setTotalIncludesPromo}
+        createOrder={createOrder}
+        lineItems={lineItems}
+      />
     </div>
   )
 }

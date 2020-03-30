@@ -32,7 +32,10 @@ const {
   readPromos,
   createPromo,
   updatePromo,
-  removePromo
+
+  removePromo,
+  updateCartTotal,
+  getCartTotal
 } = require("./userMethods")
 
 const sync = async () => {
@@ -72,6 +75,7 @@ const sync = async () => {
       "userId" UUID REFERENCES users(id) NOT NULL,
       status VARCHAR(10) DEFAULT 'CART',
       address VARCHAR,
+      total INTEGER DEFAULT 0,
       "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
     CREATE TABLE addresses(
@@ -236,5 +240,7 @@ module.exports = {
   readPromos,
   createPromo,
   updatePromo,
-  removePromo
+  removePromo,
+  updateCartTotal,
+  getCartTotal
 }

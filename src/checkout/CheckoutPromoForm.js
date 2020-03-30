@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import TotalAmount from '../checkout/TotalAmount';
 import {
   BrowserRouter as Router,
   Switch,
@@ -7,18 +8,43 @@ import {
   useParams,
 } from 'react-router-dom';
 
-const CheckoutPromoForm = ({ promo }) => {
+const CheckoutPromoForm = ({
+  promos,
+  cart,
+  updateCartTotal,
+  totalIncludesPromo,
+  setTotalIncludesPromo,
+}) => {
   const [showInput, setShowInput] = useState(false);
   const [promoInput, setPromoInput] = useState('');
+  const [matchedPromo, setMatchedPromo] = useState({});
+  const [failMessage, setFailMessage] = useState([]);
+
   const onChange = e => {
-    console.log(e.target.value, 'input promo');
+    //console.log(e.target.value, 'input promo');
     setPromoInput(e.target.value);
+    setMatchedPromo({});
   };
 
   const onSubmit = e => {
     e.preventDefault(e);
-    console.log(promoInput, 'in man promo');
+
+    const found = promos.find(promo => promo.name === promoInput);
+
+    setMatchedPromo(found);
+    setFailMessage(['No such promo code', ...failMessage]);
+    let totalWithPromo = cart.total;
+    if (found.isDollar && found.isActive) {
+      console.log('dollar');
+    }
+    if (!found.isActive) {
+      totalWithPromo -= cart.total * (found.discount / 100);
+      console.log(found, 'percent', totalWithPromo);
+      setTotalIncludesPromo(totalWithPromo);
+    }
   };
+
+  //console.log(failMessage, 'fail');
 
   if (!showInput) {
     return (
@@ -32,18 +58,29 @@ const CheckoutPromoForm = ({ promo }) => {
     );
   } else {
     return (
-      <form onSubmit={onSubmit}>
-        <div>
-          <input
-            name="name"
-            placeholder="promo code"
-            value={promoInput}
-            onChange={onChange}
-          />
-          {promoInput}
+      <div className="cart-container">
+        <div className="product-card">
+          <button onClick={e => setShowInput(true)}>
+            Redeem gift or promo code
+          </button>
+          <hr />
+          <form onSubmit={onSubmit}>
+            <div>
+              <input
+                name="name"
+                placeholder="promo code"
+                value={promoInput}
+                onChange={onChange}
+              />
+              {promoInput}
+            </div>
+            <button>Apply</button>
+          </form>
+          <p className={matchedPromo ? 'success' : 'fail'}>
+            {matchedPromo ? matchedPromo.text : failMessage[0]}
+          </p>
         </div>
-        <button>Apply</button>
-      </form>
+      </div>
     );
   }
 };

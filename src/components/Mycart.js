@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import SaveForLater from "./SaveForLater"
 
 import {
@@ -26,22 +26,31 @@ const Mycart = ({
   addBackToCart,
   params,
   getProductDetail,
-  orders
+  orders,
+  auth,
+  updateCartTotal
 }) => {
+  const [cartTotal, setCartTotal] = useState(0)
+
   const findCartTotal = () => {
-    let cartTotal = 0
+    let cartTotalAmount = 0
     lineItems
       .filter(lineItem => lineItem.orderId === cart.id)
       .forEach(lineItem => {
         const product = products.find(
           product => product.id === lineItem.productId
         )
-        cartTotal += Number(product.price * lineItem.quantity)
-        // console.log(cartTotal);
+        cartTotalAmount += Number(product.price * lineItem.quantity)
+        console.log(cartTotal, "in find")
       })
-    return cartTotal.toFixed(2)
+    setCartTotal(cartTotalAmount)
   }
 
+  useEffect(() => {
+    findCartTotal()
+  }, [cart, lineItems])
+
+  //console.log(cartTotal, 'outside');
   return (
     <div className="cart-container">
       <h2>Your cart total: ${findCartTotal()}</h2>
@@ -53,7 +62,6 @@ const Mycart = ({
       >
         Create Order
       </button> */}
-
       {lineItems
         .filter(lineItem => lineItem.orderId === cart.id)
         .map(lineItem => {
@@ -106,9 +114,7 @@ const Mycart = ({
                   type="submit"
                   value="Save for later"
                   onClick={e => {
-                    //e.preventDefault();
                     addToSaveForLater(product.id)
-                    //removeFromCart(lineItem.id);
                   }}
                 ></input>
                 <div>${Number(product.price).toFixed(2)}</div>
@@ -116,7 +122,7 @@ const Mycart = ({
             </div>
           )
         })}
-
+      <h2>Your cart total: ${cartTotal.toFixed(2)}</h2>
       <hr></hr>
 
       <SaveForLater
@@ -135,34 +141,6 @@ const Mycart = ({
       />
     </div>
   )
-}
-
-{
-  /* <h2>Cart - {cart.id && cart.id.slice(0, 4)}</h2>
-<button
-  disabled={!lineItems.find(lineItem => lineItem.orderId === cart.id)}
-  onClick={createOrder}
->
-  Create Order
-</button>
-<ul>
-  {lineItems
-    .filter(lineItem => lineItem.orderId === cart.id)
-    .map(lineItem => {
-      const product = products.find(
-        product => product.id === lineItem.productId
-      );
-      return (
-        <li key={lineItem.id}>
-          {product && product.name}{' '}
-          <span className="quantity">Quantity: {lineItem.quantity}</span>
-          <button onClick={() => removeFromCart(lineItem.id)}>
-            Remove From Cart
-          </button>
-        </li>
-      );
-    })}
-</ul> */
 }
 
 export default Mycart
