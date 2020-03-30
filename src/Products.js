@@ -1,11 +1,5 @@
 import React, { useState } from 'react';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useParams,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Link } from 'react-router-dom';
 
 const Products = ({ products, addToCart, getProductDetail }) => {
   const [productQty, setProductQty] = useState(1);
@@ -31,27 +25,8 @@ const Products = ({ products, addToCart, getProductDetail }) => {
                 >
                   {product.name}
                 </Link>
-
-                {/* <select
-                  defaultValue={1}
-                  onChange={e => {
-                    setProductQty(e.target.value)
-                  }}
-                >
-                  {numArr.map(num => {
-                    return (
-                      <option key={num} value={num}>
-                        {num}
-                      </option>
-                    )
-                  })}
-                </select> */}
               </span>
-
               <span>${Number(product.price).toFixed(2)}</span>
-              {/* <button onClick={() => addToCart(product.id, productQty)}>
-                Add to Cart
-              </button> */}
             </li>
           );
         })}

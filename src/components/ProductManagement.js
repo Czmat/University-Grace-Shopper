@@ -8,8 +8,6 @@ import {
 } from 'react-router-dom';
 
 const ProductManagement = ({ auth, users }) => {
-  console.log(users);
-
   return (
     <div>
       <h1>Product Management</h1>

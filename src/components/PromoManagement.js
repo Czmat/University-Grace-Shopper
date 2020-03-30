@@ -19,13 +19,6 @@ const PromoManagement = ({
   const [createForm, setCreateForm] = useState(false);
   const [promo, setPromo] = useState({});
   const [revisedPromo, setRevisedPromo] = useState(promo);
-  console.log(promos);
-  //console.log(promo, 'one');
-  //const promo = managedPromos.find(p => p.id === promoId);
-
-  // const onClick = promoClicked => {
-  //   setPromoId(promoClicked.id);
-  // };
 
   return (
     <div>
@@ -40,7 +33,6 @@ const PromoManagement = ({
         />
       )}
       <h1>Promo Management</h1>
-      {/* <button onClick={console.log('Update')}>Update Promos</button> */}
       <h5>Update existing promos</h5>
       <ul>
         {promos.map(promo => {
@@ -49,7 +41,6 @@ const PromoManagement = ({
               <Link
                 to="/promo/management"
                 onClick={() => {
-                  //setPromo(promo);
                   setRevisedPromo(promo);
                 }}
               >

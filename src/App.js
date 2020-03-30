@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useParams,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import qs from 'qs';
 import axios from 'axios';
 import Login from './Login';
@@ -45,7 +39,6 @@ const App = () => {
   const [products, setProducts] = useState([]);
   const [productDetail, setProductDetail] = useState({});
   const [lineItems, setLineItems] = useState([]);
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const [message, setMessage] = useState('');
   const [managedUsers, setManagedUsers] = useState([]);
   const [returnedManagedUser, setReturnedManagedUser] = useState({});
@@ -53,19 +46,10 @@ const App = () => {
   const [promos, setPromos] = useState([]);
   const [err, setErr] = useState('');
 
-  // const [checkoutOrder, setCheckoutOrder] = useState()
-
-  //not sure if I need it
-  //const [userAccount, setUserAccount] = useState({});
-  //console.log(orders, 'orders', cart, 'cart', lineItems, 'lineItems');
-  //let cartTotal = 0;
-
   useEffect(() => {
     console.log('useEffect works');
     axios.get('/api/products').then(response => setProducts(response.data));
     axios.get('/api/promos').then(response => {
-      console.log('in use', response.data);
-      //debugger;
       setPromos(response.data);
     });
   }, []);
@@ -73,10 +57,8 @@ const App = () => {
   useEffect(() => {
     if (auth.role === 'ADMIN') {
       axios.get('/api/users', headers()).then(response => {
-        //  console.log(response.data, "wow", promos)
         setManagedUsers(response.data);
       });
-      // axios.get('api/promos').then(response => setPromos(response.data));
     }
   }, [auth, returnedManagedUser]);
 
@@ -115,18 +97,14 @@ const App = () => {
 
   const login = async credentials => {
     const token = (await axios.post('/api/auth', credentials)).data.token;
-    //console.log(credentials);
-    //console.log('token', token);
     window.localStorage.setItem('token', token);
     exchangeTokenForAuth().catch(e => {
-      //console.log(e.response.data.message, 'inside');
       setErr(e.response.data.message);
     });
   };
 
   const exchangeTokenForAuth = async () => {
     const response = await axios.get('/api/auth', headers());
-    //console.log('exch', response.data);
     setAuth(response.data);
   };
 
@@ -139,10 +117,7 @@ const App = () => {
     const tokenToValidate = (await axios.post('/api/auth/validate', creds)).data
       .token;
     const token = window.localStorage.getItem('token');
-    //console.log(credentials);
-
     if (tokenToValidate === token) {
-      console.log('if token');
       changePassword(credentials.newPassword);
     }
   };
@@ -154,32 +129,20 @@ const App = () => {
   };
 
   useEffect(() => {
-    //console.log('when this hits?');
     exchangeTokenForAuth();
   }, []);
 
-  // useEffect(() => {
-  //   //console.log('when this hits?');
-  //   setMessage('');
-  // }, []);
-
   const createOrder = () => {
     const token = window.localStorage.getItem('token');
-    console.log('first I hit createOrder');
     axios
       .post('/api/createOrder', null, headers())
       .then(response => {
-        console.log('2 I hit createOrder to setOrders', response.data);
         setOrders([response.data, ...orders]);
         window.localStorage.setItem('storedOrder', response.data);
         const token = window.localStorage.getItem('token');
         return axios.get('/api/getCart', headers());
       })
       .then(response => {
-        console.log(
-          '3 I hit createOrder to setCart to status order',
-          response.data
-        );
         setCart(response.data);
       });
   };
@@ -188,6 +151,14 @@ const App = () => {
     axios.get(`/api/products/${productId}`).then(response => {
       setProductDetail(response.data);
     });
+  };
+
+  const updateProductDetail = revisedProduct => {
+    axios
+      .get(`/api/products/${revisedProduct.id}`, revisedProduct)
+      .then(response => {
+        setProductDetail(response.data);
+      });
   };
 
   const addToCart = (productId, quantity) => {
@@ -226,10 +197,8 @@ const App = () => {
 
   // updating cart total amount to use later
   const updateCartTotal = (id, total) => {
-    console.log((id, total, 'this is cart.id-->', cart.id));
     axios.put(`/api/cart/total/${id}`, { id, total }).then(response => {
       setCart(response.data);
-      //console.log(response.data, 'update cart total response');
     });
   };
 
@@ -247,30 +216,12 @@ const App = () => {
     axios
       .post('/api/addToSaveForLater', { productId }, headers())
       .then(response => {
-        // debugger;
         const lineItem = response.data;
-
         const found = lineItems.find(
           _lineItem =>
             _lineItem.productId === lineItem.productId &&
             _lineItem.orderId === cart.id
         );
-
-        //console.log(found, 'found', lineItem, 'lineitem');
-        // if (!found) {
-        //   setLineItems([...lineItems, lineItem]);
-        // } else {
-
-        // const updated = lineItems.map(_lineItem => {
-        //   //console.log(_lineItem);
-        //   return _lineItem.id === lineItem.id ? lineItem : _lineItem;
-        // });
-        // const test = updated.filter(li => li.id !== found.id);
-        // console.log(found, 'wow', test);
-        // console.log(updated, 'updated');
-        // setLineItems(test);
-        //setLineItems(lineItems.filter(_lineItem => _lineItem.id !== found.id));
-        //}
         axios.get('/api/getLineItems', headers()).then(response => {
           setLineItems(response.data);
         });
@@ -291,23 +242,18 @@ const App = () => {
 
   //creating user account
   const createUser = user => {
-    console.log(user, 'first in crate user');
     axios.post('/api/user', user).then(response => {
       login({ username: user.username, password: user.password });
-      //setUserAccount(response.data);
     });
   };
 
   const updateUser = user => {
-    console.log(user);
     axios.put(`/api/user/${user.id}`, user).then(response => {
-      console.log(response.data.username, 'update response');
       exchangeTokenForAuth();
     });
   };
 
   const manageUser = isBlockedUser => {
-    console.log(isBlockedUser, 'put is blocked');
     axios
       .put(`/api/manage/user/${isBlockedUser.id}`, isBlockedUser)
       .then(response => {
@@ -316,11 +262,8 @@ const App = () => {
           id: responseUser.id,
           isBlocked: responseUser.isBlocked,
         });
-        console.log(response.data, 'isblocked response');
       });
   };
-
-  //console.log(auth, 'to check if it reset after updateUser');
 
   const changePassword = password => {
     const userPassword = { id: auth.id, password };
@@ -334,15 +277,12 @@ const App = () => {
   const createPromo = madePromo => {
     axios.post('/api/promos', madePromo).then(response => {
       const returnedPromo = response.data;
-      // console.log(returnedPromo, 'returned');
       setPromos([...promos, returnedPromo]);
     });
   };
 
   const updatePromo = revisedPromo => {
-    console.log(revisedPromo);
     axios.put(`/api/promos/${revisedPromo.id}`, revisedPromo).then(response => {
-      console.log(response.data, 'returned revised promo');
       const returnedPromo = response.data;
       const updated = promos.map(_promo =>
         _promo.id === returnedPromo.id ? returnedPromo : _promo
@@ -350,8 +290,6 @@ const App = () => {
       setPromos(updated);
     });
   };
-
-  console.log('outside in app cart', cart);
 
   ///return
   const userCart = lineItems.filter(lineItem => lineItem.orderId === cart.id);
@@ -410,6 +348,17 @@ const App = () => {
               productDetail={productDetail}
             />
           </Route>
+          <Route path="/productDetails">
+            <ProductDetail
+              cartItems={lineItems}
+              products={products}
+              orders={orders}
+              productDetail={productDetail}
+              addToCart={addToCart}
+              changeQtyInCart={changeQtyInCart}
+              updateProductDetail={updateProductDetail}
+            />
+          </Route>
           <Route path="/register">
             <CreateUser login={login} createUser={createUser} />
           </Route>
@@ -419,16 +368,18 @@ const App = () => {
               removeFromCart={removeFromCart}
               cart={cart}
               createOrder={createOrder}
-              orders={orders}
               products={products}
               addToCart={addToCart}
               saveForLater={saveForLater}
               addToSaveForLater={addToSaveForLater}
-              removeFromSave={removeFromSave}
               changeQtyInCart={changeQtyInCart}
-              addBackToCart={addBackToCart}
+              productDetail={productDetail}
               getProductDetail={getProductDetail}
-              //cartTotal={cartTotal}
+              removeFromSave={removeFromSave}
+              addBackToCart={addBackToCart}
+              auth={auth}
+              updateCartTotal={updateCartTotal}
+              updateProductDetail={updateProductDetail}
             />
           </Route>
         </Switch>
@@ -464,9 +415,6 @@ const App = () => {
             <Link className={'button'} to="/products" onClick={logout}>
               Logout {auth.firstname} {auth.lastname}
             </Link>
-            {/* <button onClick={logout}>
-              Logout {auth.firstname} {auth.lastname}
-            </button> */}
           </nav>
           <Link to="/products"></Link>
         </div>
@@ -478,11 +426,6 @@ const App = () => {
                 getProductDetail={getProductDetail}
                 productDetail={productDetail}
               />
-              {/* <Products
-                addToCart={addToCart}
-                products={products}
-                getProductDetail={getProductDetail}
-              /> */}
             </div>
           </Route>
           <Route path="/login">
@@ -513,7 +456,6 @@ const App = () => {
               managedUsers={managedUsers}
               manageUser={manageUser}
               returnedManagedUser={returnedManagedUser}
-              // setIsBlockedUser={setIsBlockedUser}
             />
           </Route>
           <Route path="/promo/management">
@@ -569,6 +511,7 @@ const App = () => {
               addBackToCart={addBackToCart}
               auth={auth}
               updateCartTotal={updateCartTotal}
+              updateProductDetail={updateProductDetail}
             />
           </Route>
           <Route path="/orders">
@@ -607,7 +550,6 @@ const App = () => {
           </Route>
           <Route path="/checkout">
             <Checkout
-              // cartItems={lineItems}
               orders={orders}
               order={order}
               products={products}
@@ -618,15 +560,11 @@ const App = () => {
               lineItems={lineItems}
             />
           </Route>
-
           <Route path="/productDetails">
             <ProductDetail
-              cartItems={lineItems}
-              products={products}
-              orders={orders}
               productDetail={productDetail}
               addToCart={addToCart}
-              changeQtyInCart={changeQtyInCart}
+              updateProductDetail={updateProductDetail}
             />
           </Route>
           <Route path="/checkout/completed">

@@ -9,8 +9,6 @@ const ManagedPromo = ({
   setRevisedPromo,
   managedUsers,
 }) => {
-  // const [revisedPromo, setRevisedPromo] = useState(promo);
-
   const onChange = ev => {
     const change = {};
     change[ev.target.name] =
@@ -20,25 +18,9 @@ const ManagedPromo = ({
 
   const onSubmit = e => {
     e.preventDefault(e);
-    console.log(revisedPromo, 'in after Change promo');
     updatePromo(revisedPromo);
     setRevisedPromo({});
   };
-
-  //   <form onSubmit={onSubmit}>
-
-  // <div>
-  //   <select name="type" value={word.type} onChange={onChange}>
-  //     <option>verb</option>
-  //     <option>noun</option>
-  //     <option>adjective</option>
-  //   </select>
-  //   {word.type}
-  // </div>
-  //   <div>
-  //     <button disabled={!word.text}>Click me</button>
-  //   </div>
-  // </form>
 
   return (
     <div className="cart-container">

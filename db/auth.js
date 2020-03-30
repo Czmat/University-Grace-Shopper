@@ -23,7 +23,6 @@ const hash = password => {
 };
 
 const compare = ({ plain, hashed }) => {
-  //console.log('compare func');
   return new Promise((resolve, reject) => {
     bcrypt.compare(plain, hashed, (err, verified) => {
       if (err) {
@@ -38,7 +37,6 @@ const compare = ({ plain, hashed }) => {
 };
 
 const authenticate = async ({ username, password }) => {
-  //console.log('authenticate func');
   const user = (
     await client.query('SELECT * FROM users WHERE username=$1', [username])
   ).rows[0];

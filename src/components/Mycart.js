@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SaveForLater from './SaveForLater';
 
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useParams,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Link } from 'react-router-dom';
 
 const numArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
@@ -26,8 +20,6 @@ const Mycart = ({
   addBackToCart,
   params,
   getProductDetail,
-  orders,
-  auth,
   updateCartTotal,
 }) => {
   const [cartTotal, setCartTotal] = useState(0);
@@ -41,7 +33,6 @@ const Mycart = ({
           product => product.id === lineItem.productId
         );
         cartTotalAmount += Number(product.price * lineItem.quantity);
-        console.log(cartTotal, 'in find');
       });
     setCartTotal(cartTotalAmount);
   };
@@ -50,13 +41,11 @@ const Mycart = ({
     findCartTotal();
   }, [cart, lineItems]);
 
-  //console.log(cartTotal, 'outside');
   return (
     <div className="cart-container">
       <h2>Your cart total: ${cartTotal.toFixed(2)}</h2>
       <Link
         to="/checkout"
-        // style={cart ? '' : { pointerEvents: 'none' }}
         onClick={e => {
           if (!lineItems.length) {
             e.preventDefault();
@@ -100,7 +89,6 @@ const Mycart = ({
                 <select
                   defaultValue={lineItem.quantity}
                   onChange={e => {
-                    //console.log(e.target.value);
                     e.target.value === '0'
                       ? removeFromCart(lineItem.id)
                       : changeQtyInCart(product.id, e.target.value);
