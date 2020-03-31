@@ -256,7 +256,6 @@ app.delete('/api/promos/:id', (req, res, next) => {
 });
 
 Object.keys(models).forEach(key => {
-  console.log(key);
   app.get(`/api/${key}`, isLoggedIn, isAdmin, (req, res, next) => {
     models[key]
       .read({ user: req.user })
@@ -291,7 +290,6 @@ app.post('/api/postRating/:id/:rating', (req, res, next) => {
 
 //post for the saved addresses
 app.post('/api/address/:id', (req, res, next) => {
-  console.log(req.body);
   db.addAddress(
     req.params.id,
     req.body[0][0],

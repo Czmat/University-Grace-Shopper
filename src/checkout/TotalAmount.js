@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Link } from 'react-router-dom';
 
 const TotalAmount = ({ cart, totalIncludesPromo, lineItems, createOrder }) => {
-  console.log(lineItems, 'in totalAmount lineItems');
   return (
     <div className="cart-container">
       <div className="product-card">
@@ -12,7 +11,7 @@ const TotalAmount = ({ cart, totalIncludesPromo, lineItems, createOrder }) => {
             disabled={!lineItems.find(lineItem => lineItem.orderId === cart.id)}
             onClick={createOrder}
           >
-            Apply
+            Create Order
           </button>
         </Link>
       </div>

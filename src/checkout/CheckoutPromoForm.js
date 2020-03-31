@@ -20,14 +20,11 @@ const CheckoutPromoForm = ({
 
   const onSubmit = e => {
     e.preventDefault(e);
-
     const found = promos.find(promo => promo.name === promoInput);
-
     setMatchedPromo(found);
     setFailMessage(['No such promo code', ...failMessage]);
     let totalWithPromo = cart.total;
     if (found.isDollar && found.isActive) {
-      console.log('dollar');
     }
     if (!found.isActive) {
       totalWithPromo -= cart.total * (found.discount / 100);

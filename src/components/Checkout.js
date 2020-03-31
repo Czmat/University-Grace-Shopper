@@ -7,7 +7,7 @@ import {
   Link,
   useParams,
   Redirect,
-  useHistory
+  useHistory,
 } from 'react-router-dom';
 import address from '../address';
 import axios from 'axios';
@@ -21,7 +21,7 @@ const Checkout = ({
   updateCartTotal,
   promos,
   lineItems,
-  createOrder
+  createOrder,
 }) => {
   const [totalIncludesPromo, setTotalIncludesPromo] = useState();
   const [save, setSave] = useState(false);
@@ -38,8 +38,8 @@ const Checkout = ({
     const token = window.localStorage.getItem('token');
     return {
       headers: {
-        authorization: token
-      }
+        authorization: token,
+      },
     };
   };
 
@@ -89,30 +89,12 @@ const Checkout = ({
     let zip = e.target[4].value;
     const fullAddress = [street, city, state, zip];
     if (save === true) {
-      console.log(auth.id);
       axios
         .post(`/api/address/${auth.id}/`, [fullAddress])
         .then(response => setUserSavedAddress(response.data));
     }
     setIsSubmitted(true);
-    createOrder();
-
-    history.push('/orders');
   };
-
-  // const findCartTotal = () => {
-  //   let cartTotal = 0;
-  //   lineItems
-  //     .filter(lineItem => lineItem.orderId === cart.id)
-  //     .forEach(lineItem => {
-  //       const product = products.find(
-  //         product => product.id === lineItem.productId
-  //       );
-  //       cartTotal += Number(product.price * lineItem.quantity);
-  //       // console.log(cartTotal);
-  //     });
-  //   return cartTotal.toFixed(2);
-  // };
 
   const handleAddress = e => {
     axios
@@ -124,9 +106,6 @@ const Checkout = ({
   useEffect(() => {
     setTotalIncludesPromo(cart.total);
   }, [cart, lineItems]);
-
-  console.log(cart.total, 'in checkout outside cart.total');
-  console.log(totalIncludesPromo, 'in checkout outside totalInPromo');
 
   return (
     <div className="cart-container">
@@ -174,7 +153,6 @@ const Checkout = ({
         <input placeholder="Zip" value={userAddress.zip} />
         <button type="submit">submit</button>
       </form>
-
       <input
         type="checkbox"
         name="address"
