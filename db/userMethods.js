@@ -131,7 +131,7 @@ const createOrder = async userId => {
   return (
     await client.query(`UPDATE orders SET status=$1 WHERE id=$2 returning *`, [
       'ORDER',
-      cart.id
+      cart.id,
     ])
   ).rows[0];
 };
@@ -264,7 +264,7 @@ const createPromo = async ({
   isActive,
   isDollar,
   text,
-  userId
+  userId,
 }) => {
   return (
     await client.query(
@@ -282,7 +282,7 @@ const updatePromo = async ({
   isDollar,
   userId,
   text,
-  id
+  id,
 }) => {
   return (
     await client.query(
@@ -352,7 +352,7 @@ const addAddress = async (userID, street, city, state, zip) => {
 
 const deleteAddress = async id => {
   const response = await client.query(`DELETE FROM addresses WHERE id = $1`, [
-    id
+    id,
   ]);
   return response.rows[0];
 };
@@ -386,5 +386,5 @@ module.exports = {
   removePromo,
   updateCartTotal,
   getCartTotal,
-  updateProductDetail
+  updateProductDetail,
 };

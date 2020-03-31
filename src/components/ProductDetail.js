@@ -24,7 +24,7 @@ const ProductDetail = ({ updateProductDetail, addToCart, productDetail }) => {
         defaultValue={1}
         onChange={e => {
           setProductQty(e.target.value);
-          setLeftOVerQty(productDetail.quantity - productQty);
+          //setLeftOVerQty(productDetail.quantity - productQty);
         }}
       >
         {inStockQty.map(num => {
